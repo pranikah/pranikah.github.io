@@ -13,7 +13,7 @@ A few resources to get you started if this is your first Flutter project:
 ```bash
 flutter clean
 flutter pub get
-flutter build web --base-href /pranikah/ --release
+flutter build web --base-href / --release
 ```
 
 > ⚠️ If using Git Bash, prefix with `MSYS_NO_PATHCONV=1` to avoid path conversion.
