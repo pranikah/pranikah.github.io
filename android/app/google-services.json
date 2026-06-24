@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "373730537373",
+    "project_id": "iconicapp-447005",
+    "storage_bucket": "iconicapp-447005.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:373730537373:android:8b3964b23b742be5eb8974",
+        "android_client_info": {
+          "package_name": "com.pranikah.pra_nikah_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "373730537373-9o0k0cfc2rqskjjogq2c8p73n8qj5gr8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhSFzN2-FmYOSJn7P86bewYUoyDxdWNAU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "373730537373-9o0k0cfc2rqskjjogq2c8p73n8qj5gr8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

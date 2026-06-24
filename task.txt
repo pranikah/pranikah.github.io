@@ -1,0 +1,118 @@
+Buat dari aplikasi flutter
+database free firebase
+app free tapi donasi, bayar seikhlas nya
+buat tampilan yang menarik, responsive, enak, compact dan elegant.
+penggunaan color sesuai theme Aplikasi
+
+Task: Aplikasi Persiapan Nikah (Wedding Preparation Planner)
+🎯 Tujuan
+
+Membuat aplikasi yang membantu calon pengantin mengatur:
+
+Timeline persiapan nikah
+Durasi tiap tahap
+Estimasi & tracking biaya
+📌 Fitur Utama (Core Features)
+1. 📅 Setup Rencana Pernikahan
+
+Task:
+
+Input tanggal target pernikahan
+Input tanggal mulai persiapan
+Sistem menghitung total durasi (hari/bulan)
+
+Output:
+
+Countdown ke hari H
+Total waktu persiapan
+2. 🗂️ Timeline Persiapan Otomatis
+
+Task:
+
+Generate timeline berdasarkan tanggal nikah
+Bagi menjadi fase:
+12 bulan sebelum
+6 bulan sebelum
+3 bulan sebelum
+1 bulan sebelum
+1 minggu sebelum
+
+Contoh item:
+
+Cari venue
+Tentukan vendor
+Foto prewedding
+Urus dokumen
+3. 💰 Manajemen Budget
+
+Task:
+
+Input total budget pernikahan
+Kategori biaya:
+Venue
+Catering
+Dekorasi
+Dokumentasi
+Busana
+Undangan
+Lain-lain
+
+Fitur tambahan:
+
+Estimasi otomatis (opsional default range)
+Input real spending
+Sisa budget (remaining balance)
+Progress bar per kategori
+4. 📊 Dashboard Ringkasan
+
+Task:
+
+Menampilkan:
+Countdown hari H
+Progress persiapan (%)
+Total budget vs real cost
+Task yang belum selesai
+5. ✅ Checklist Task
+
+Task:
+
+Checklist per fase waktu
+Status:
+Belum mulai
+Sedang proses
+Selesai
+🧠 Logika Sistem (Backend Logic)
+
+Hitung durasi:
+
+duration = wedding_date - start_date
+
+Auto generate milestone:
+
+milestone_date = wedding_date - X bulan
+
+Budget tracking:
+
+remaining = total_budget - spent
+🖥️ Struktur Data (Sederhana)
+User Wedding Plan
+id
+wedding_date
+start_date
+total_duration
+Tasks
+id
+title
+due_date
+status
+phase (12mo/6mo/3mo/etc)
+Budget
+category
+planned_cost
+actual_cost
+🚀 Optional Upgrade (Kalau mau lebih advanced)
+Reminder notifikasi (push/email)
+
+Template budget otomatis (hemat / medium / luxury)
+Sharing plan ke pasangan
+Multi-user (couple mode)

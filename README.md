@@ -8,10 +8,21 @@ This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+## Build & Deploy
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter clean
+flutter pub get
+flutter build web --base-href /pranikah/ --release
+```
+
+> ⚠️ If using Git Bash, prefix with `MSYS_NO_PATHCONV=1` to avoid path conversion.
+
+### Deploy to GitHub Pages
+
+```bash
+robocopy build\web docs /MIR
+git add .
+git commit -m "deploy web"
+git push
+```
