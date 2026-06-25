@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,9 +47,19 @@ class _PraNikahAppState extends State<PraNikahApp> {
     return ChangeNotifierProvider(
       create: (_) => WeddingProvider(FirebaseService())..loadPlan('default_plan'),
       child: MaterialApp(
-        title: 'Persiapan Nikah',
+        title: 'PraNikah',
         theme: AppTheme.theme,
         debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: const [
+          Locale('en'),
+          Locale('id'),
+        ],
         home: _showOnboarding
             ? OnboardingScreen(onComplete: () => setState(() => _showOnboarding = false))
             : const AppShell(),
@@ -73,10 +85,11 @@ class _AppShellState extends State<AppShell> {
     VendorListScreen(),
   ];
 
-  final _titles = const ['Dashboard', 'Timeline', 'Budget', 'Vendor'];
-
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    final titles = [l.dashboard, l.timeline, l.budget, l.vendor];
+
     return Consumer<WeddingProvider>(
       builder: (context, provider, _) {
         if (provider.isLoading) {
@@ -95,20 +108,20 @@ class _AppShellState extends State<AppShell> {
         if (!provider.hasPlan) return const SetupScreen();
 
         return Scaffold(
-          appBar: AppBar(title: Text(_titles[_currentIndex])),
+          appBar: AppBar(title: Text(titles[_currentIndex])),
           body: _screens[_currentIndex],
           bottomNavigationBar: NavigationBar(
             selectedIndex: _currentIndex,
             onDestinationSelected: (i) => setState(() => _currentIndex = i),
-            destinations: const [
-              NavigationDestination(icon: Icon(Icons.dashboard_outlined),
-                selectedIcon: Icon(Icons.dashboard), label: 'Dashboard'),
-              NavigationDestination(icon: Icon(Icons.timeline_outlined),
-                selectedIcon: Icon(Icons.timeline), label: 'Timeline'),
-              NavigationDestination(icon: Icon(Icons.account_balance_wallet_outlined),
-                selectedIcon: Icon(Icons.account_balance_wallet), label: 'Budget'),
-              NavigationDestination(icon: Icon(Icons.store_outlined),
-                selectedIcon: Icon(Icons.store), label: 'Vendor'),
+            destinations: [
+              NavigationDestination(icon: const Icon(Icons.dashboard_outlined),
+                selectedIcon: const Icon(Icons.dashboard), label: l.dashboard),
+              NavigationDestination(icon: const Icon(Icons.timeline_outlined),
+                selectedIcon: const Icon(Icons.timeline), label: l.timeline),
+              NavigationDestination(icon: const Icon(Icons.account_balance_wallet_outlined),
+                selectedIcon: const Icon(Icons.account_balance_wallet), label: l.budget),
+              NavigationDestination(icon: const Icon(Icons.store_outlined),
+                selectedIcon: const Icon(Icons.store), label: l.vendor),
             ],
           ),
         );

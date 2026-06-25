@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/wedding_task.dart';
@@ -15,16 +16,16 @@ class TimelineScreen extends StatelessWidget {
         final tasks = provider.tasks;
 
         if (tasks.isEmpty) {
+          final l = AppLocalizations.of(context)!;
           return Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 const Icon(Icons.timeline_outlined, size: 64, color: Colors.grey),
                 const SizedBox(height: 16),
-                const Text('Belum ada tugas', style: TextStyle(fontSize: 16, color: Colors.grey)),
+                Text(l.noTasks, style: const TextStyle(fontSize: 16, color: Colors.grey)),
                 const SizedBox(height: 8),
-                const Text('Tugas akan muncul setelah setup selesai',
-                  style: TextStyle(color: Colors.grey)),
+                Text(l.tasksAppearAfterSetup, style: const TextStyle(color: Colors.grey)),
               ],
             ),
           );
@@ -59,6 +60,7 @@ class TimelineScreen extends StatelessWidget {
   }
 
   void _showAddTaskDialog(BuildContext context, WeddingProvider provider) {
+    final l = AppLocalizations.of(context)!;
     final titleCtrl = TextEditingController();
     TaskPhase selectedPhase = TaskPhase.month3;
 
@@ -66,27 +68,27 @@ class TimelineScreen extends StatelessWidget {
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Tambah Tugas'),
+          title: Text(l.addTask),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: titleCtrl,
-                decoration: const InputDecoration(labelText: 'Nama tugas'),
+                decoration: InputDecoration(labelText: l.taskName),
               ),
               const SizedBox(height: 12),
               DropdownButtonFormField<TaskPhase>(
                 initialValue: selectedPhase,
-                decoration: const InputDecoration(labelText: 'Fase'),
+                decoration: InputDecoration(labelText: l.phase),
                 items: TaskPhase.values.map((p) => DropdownMenuItem(
-                  value: p, child: Text(p.label),
+                  value: p, child: Text(phaseLabel(context, p)),
                 )).toList(),
                 onChanged: (v) => setState(() => selectedPhase = v!),
               ),
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
+            TextButton(onPressed: () => Navigator.pop(context), child: Text(l.cancel)),
             ElevatedButton(
               onPressed: () {
                 if (titleCtrl.text.trim().isEmpty) return;
@@ -104,7 +106,7 @@ class TimelineScreen extends StatelessWidget {
                 ));
                 Navigator.pop(context);
               },
-              child: const Text('Tambah'),
+              child: Text(l.add),
             ),
           ],
         ),
@@ -128,7 +130,7 @@ class TimelineScreen extends StatelessWidget {
             children: [
               const Icon(Icons.calendar_month, size: 16, color: AppTheme.primary),
               const SizedBox(width: 6),
-              Text(phase.label,
+              Text(phaseLabel(context, phase),
                 style: const TextStyle(fontWeight: FontWeight.w600, color: AppTheme.primaryDark)),
               const SizedBox(width: 8),
               Text('($completed/${tasks.length})',
@@ -161,7 +163,7 @@ class TimelineScreen extends StatelessWidget {
                 child: Row(children: [
                   Icon(Icons.flag, size: 14, color: _priorityColor(p)),
                   const SizedBox(width: 6),
-                  Text(p.label),
+                  Text(priorityLabel(context, p)),
                 ]),
               )).toList(),
               child: Container(
@@ -173,14 +175,14 @@ class TimelineScreen extends StatelessWidget {
                 child: Row(mainAxisSize: MainAxisSize.min, children: [
                   Icon(Icons.flag, size: 12, color: _priorityColor(task.priority)),
                   const SizedBox(width: 3),
-                  Text(task.priority.label,
+                  Text(priorityLabel(context, task.priority),
                     style: TextStyle(fontSize: 10, color: _priorityColor(task.priority), fontWeight: FontWeight.w500)),
                 ]),
               ),
             ),
           ],
         ),
-        subtitle: Text(DateFormat('d MMM yyyy', 'id').format(task.dueDate),
+        subtitle: Text(DateFormat('d MMM yyyy').format(task.dueDate),
           style: const TextStyle(fontSize: 12, color: AppTheme.textLight)),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
@@ -188,7 +190,7 @@ class TimelineScreen extends StatelessWidget {
             PopupMenuButton<TaskStatus>(
               onSelected: (status) => provider.updateTaskStatus(task.id, status),
               itemBuilder: (_) => TaskStatus.values.map((s) => PopupMenuItem(
-                value: s, child: Text(s.label),
+                value: s, child: Text(statusLabel(context, s)),
               )).toList(),
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -196,7 +198,7 @@ class TimelineScreen extends StatelessWidget {
                   color: _statusColor(task.status).withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(task.status.label,
+                child: Text(statusLabel(context, task.status),
                   style: TextStyle(fontSize: 11, color: _statusColor(task.status), fontWeight: FontWeight.w500)),
               ),
             ),
@@ -234,6 +236,35 @@ class TimelineScreen extends StatelessWidget {
       case TaskPriority.high: return Colors.red;
       case TaskPriority.medium: return Colors.orange;
       case TaskPriority.low: return Colors.blue;
+    }
+  }
+
+  String phaseLabel(BuildContext context, TaskPhase phase) {
+    final l = AppLocalizations.of(context)!;
+    switch (phase) {
+      case TaskPhase.month12: return l.phase12Months;
+      case TaskPhase.month6: return l.phase6Months;
+      case TaskPhase.month3: return l.phase3Months;
+      case TaskPhase.month1: return l.phase1Month;
+      case TaskPhase.week1: return l.phase1Week;
+    }
+  }
+
+  String statusLabel(BuildContext context, TaskStatus status) {
+    final l = AppLocalizations.of(context)!;
+    switch (status) {
+      case TaskStatus.belumMulai: return l.statusNotStarted;
+      case TaskStatus.sedangProses: return l.statusInProgress;
+      case TaskStatus.selesai: return l.statusDone;
+    }
+  }
+
+  String priorityLabel(BuildContext context, TaskPriority priority) {
+    final l = AppLocalizations.of(context)!;
+    switch (priority) {
+      case TaskPriority.high: return l.priorityHigh;
+      case TaskPriority.medium: return l.priorityMedium;
+      case TaskPriority.low: return l.priorityLow;
     }
   }
 }

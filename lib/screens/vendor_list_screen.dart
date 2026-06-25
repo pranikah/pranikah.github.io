@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../models/vendor.dart';
 import '../services/firebase_service.dart';
@@ -30,7 +31,7 @@ class _VendorListScreenState extends State<VendorListScreen> {
                 Padding(
                   padding: const EdgeInsets.only(right: 8),
                   child: FilterChip(
-                    label: const Text('Semua'),
+                    label: Text(AppLocalizations.of(context)!.all),
                     selected: _selectedCategory == null,
                     onSelected: (_) => setState(() => _selectedCategory = null),
                   ),
@@ -56,7 +57,7 @@ class _VendorListScreenState extends State<VendorListScreen> {
                 }
                 final vendors = snapshot.data ?? [];
                 if (vendors.isEmpty) {
-                  return const Center(child: Text('Belum ada vendor.'));
+                  return Center(child: Text(AppLocalizations.of(context)!.noVendors));
                 }
                 return ListView.builder(
                   padding: const EdgeInsets.all(12),

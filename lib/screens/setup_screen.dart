@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -22,6 +23,7 @@ class _SetupScreenState extends State<SetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return Scaffold(
       body: SafeArea(
         child: SingleChildScrollView(
@@ -33,41 +35,41 @@ class _SetupScreenState extends State<SetupScreen> {
               Center(child: Text('💍', style: const TextStyle(fontSize: 48))),
               const SizedBox(height: 16),
               Center(
-                child: Text('Persiapan Nikah',
+                child: Text(l.appTitle,
                   style: GoogleFonts.playfairDisplay(fontSize: 28, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 8),
               Center(
-                child: Text('Isi data untuk memulai persiapan',
+                child: Text(l.completeAllData,
                   style: TextStyle(color: AppTheme.textLight)),
               ),
               const SizedBox(height: 40),
               TextField(
                 controller: _groomCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Calon Suami',
-                  prefixIcon: Icon(Icons.person_outline),
+                decoration: InputDecoration(
+                  labelText: l.groomName,
+                  prefixIcon: const Icon(Icons.person_outline),
                 ),
               ),
               const SizedBox(height: 16),
               TextField(
                 controller: _brideCtrl,
-                decoration: const InputDecoration(
-                  labelText: 'Nama Calon Istri',
-                  prefixIcon: Icon(Icons.person_outline),
+                decoration: InputDecoration(
+                  labelText: l.brideName,
+                  prefixIcon: const Icon(Icons.person_outline),
                 ),
               ),
               const SizedBox(height: 16),
-              _buildDatePicker('Tanggal Pernikahan', _weddingDate, (d) => setState(() => _weddingDate = d)),
+              _buildDatePicker(l.weddingDate, _weddingDate, (d) => setState(() => _weddingDate = d)),
               const SizedBox(height: 16),
-              _buildDatePicker('Mulai Persiapan', _startDate, (d) => setState(() => _startDate = d)),
+              _buildDatePicker(l.startDate, _startDate, (d) => setState(() => _startDate = d)),
               const SizedBox(height: 16),
               TextField(
                 controller: _budgetCtrl,
                 keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  labelText: 'Total Budget (Rp)',
-                  prefixIcon: Icon(Icons.account_balance_wallet_outlined),
+                decoration: InputDecoration(
+                  labelText: l.totalBudgetLabel,
+                  prefixIcon: const Icon(Icons.account_balance_wallet_outlined),
                 ),
               ),
               if (_weddingDate != null && _startDate != null) ...[
@@ -82,7 +84,7 @@ class _SetupScreenState extends State<SetupScreen> {
                     children: [
                       const Icon(Icons.info_outline, size: 18, color: AppTheme.primaryDark),
                       const SizedBox(width: 8),
-                      Text('Durasi persiapan: ${_weddingDate!.difference(_startDate!).inDays} hari',
+                      Text(l.preparationDuration(_weddingDate!.difference(_startDate!).inDays.toString()),
                         style: const TextStyle(color: AppTheme.primaryDark)),
                     ],
                   ),
@@ -96,7 +98,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   child: _loading
                       ? const SizedBox(height: 20, width: 20,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
-                      : const Text('Mulai Persiapan'),
+                      : Text(l.startPreparation),
                 ),
               ),
             ],
@@ -107,6 +109,7 @@ class _SetupScreenState extends State<SetupScreen> {
   }
 
   Widget _buildDatePicker(String label, DateTime? value, ValueChanged<DateTime> onPicked) {
+    final l = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () async {
         final picked = await showDatePicker(
@@ -123,7 +126,7 @@ class _SetupScreenState extends State<SetupScreen> {
           prefixIcon: const Icon(Icons.calendar_today_outlined),
         ),
         child: Text(
-          value != null ? DateFormat('d MMMM yyyy', 'id').format(value) : 'Pilih tanggal',
+          value != null ? DateFormat('d MMMM yyyy').format(value) : l.selectDate,
           style: TextStyle(color: value != null ? AppTheme.textDark : AppTheme.textLight),
         ),
       ),
@@ -131,9 +134,10 @@ class _SetupScreenState extends State<SetupScreen> {
   }
 
   Future<void> _onSubmit() async {
+    final l = AppLocalizations.of(context)!;
     if (_weddingDate == null || _startDate == null || _budgetCtrl.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Lengkapi semua data')),
+        SnackBar(content: Text(l.completeAllData)),
       );
       return;
     }

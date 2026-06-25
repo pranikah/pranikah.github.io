@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import '../services/premium_service.dart';
 import '../services/auth_service.dart';
 
@@ -42,6 +43,7 @@ class PremiumGate extends StatelessWidget {
   }
 
   Widget _buildDefaultLock(BuildContext context, {required bool loggedIn}) {
+    final l = AppLocalizations.of(context)!;
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(32),
@@ -50,16 +52,10 @@ class PremiumGate extends StatelessWidget {
           children: [
             const Icon(Icons.lock_outline, size: 64, color: Colors.grey),
             const SizedBox(height: 16),
-            const Text(
-              'Fitur Premium',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            Text(l.premiumFeature,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
-            const Text(
-              'Fitur ini tersedia untuk pengguna premium.\n'
-              'Hubungi admin untuk aktivasi setelah donasi.',
-              textAlign: TextAlign.center,
-            ),
+            Text(l.premiumDescription, textAlign: TextAlign.center),
             const SizedBox(height: 24),
             if (!loggedIn)
               ElevatedButton.icon(
@@ -69,13 +65,13 @@ class PremiumGate extends StatelessWidget {
                   } catch (e) {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Gagal login: $e')),
+                        SnackBar(content: Text(l.loginFailed(e.toString()))),
                       );
                     }
                   }
                 },
                 icon: const Icon(Icons.login),
-                label: const Text('Login dengan Google'),
+                label: Text(l.loginWithGoogle),
               ),
           ],
         ),

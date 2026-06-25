@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
@@ -25,11 +26,11 @@ class DashboardScreen extends StatelessWidget {
             children: [
               _buildCountdownCard(context, plan, provider),
               const SizedBox(height: 20),
-              _buildProgressCard(provider),
+              _buildProgressCard(context, provider),
               const SizedBox(height: 20),
-              _buildBudgetSummaryCard(provider),
+              _buildBudgetSummaryCard(context, provider),
               const SizedBox(height: 20),
-              _buildPendingTasksCard(provider),
+              _buildPendingTasksCard(context, provider),
             ],
           ),
         );
@@ -70,12 +71,12 @@ class DashboardScreen extends StatelessWidget {
                 ),
               ),
               Text(
-                'Hari Menuju Hari H',
+                AppLocalizations.of(context)!.daysToGo,
                 style: GoogleFonts.poppins(fontSize: 16, color: Colors.white70),
               ),
               const SizedBox(height: 8),
               Text(
-                DateFormat('d MMMM yyyy', 'id').format(plan.weddingDate),
+                DateFormat('d MMMM yyyy').format(plan.weddingDate),
                 style: GoogleFonts.poppins(fontSize: 14, color: Colors.white60),
               ),
             ],
@@ -86,6 +87,7 @@ class DashboardScreen extends StatelessWidget {
   }
 
   void _showEditProfileDialog(BuildContext context, WeddingPlan plan, WeddingProvider provider) {
+    final l = AppLocalizations.of(context)!;
     final groomCtrl = TextEditingController(text: plan.groomName);
     final brideCtrl = TextEditingController(text: plan.brideName);
     DateTime selectedDate = plan.weddingDate;
@@ -94,24 +96,24 @@ class DashboardScreen extends StatelessWidget {
       context: context,
       builder: (_) => StatefulBuilder(
         builder: (context, setState) => AlertDialog(
-          title: const Text('Edit Profil'),
+          title: Text(l.editProfile),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: groomCtrl,
-                decoration: const InputDecoration(labelText: 'Nama Calon Suami'),
+                decoration: InputDecoration(labelText: l.groomName),
               ),
               const SizedBox(height: 12),
               TextField(
                 controller: brideCtrl,
-                decoration: const InputDecoration(labelText: 'Nama Calon Istri'),
+                decoration: InputDecoration(labelText: l.brideName),
               ),
               const SizedBox(height: 12),
               ListTile(
                 contentPadding: EdgeInsets.zero,
-                title: const Text('Tanggal Nikah', style: TextStyle(fontSize: 12)),
-                subtitle: Text(DateFormat('d MMMM yyyy', 'id').format(selectedDate)),
+                title: Text(l.weddingDate, style: const TextStyle(fontSize: 12)),
+                subtitle: Text(DateFormat('d MMMM yyyy').format(selectedDate)),
                 trailing: const Icon(Icons.calendar_today, size: 18),
                 onTap: () async {
                   final picked = await showDatePicker(
@@ -126,7 +128,7 @@ class DashboardScreen extends StatelessWidget {
             ],
           ),
           actions: [
-            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
+            TextButton(onPressed: () => Navigator.pop(context), child: Text(l.cancel)),
             ElevatedButton(
               onPressed: () {
                 provider.updateProfile(
@@ -136,7 +138,7 @@ class DashboardScreen extends StatelessWidget {
                 );
                 Navigator.pop(context);
               },
-              child: const Text('Simpan'),
+              child: Text(l.save),
             ),
           ],
         ),
@@ -144,7 +146,8 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProgressCard(WeddingProvider provider) {
+  Widget _buildProgressCard(BuildContext context, WeddingProvider provider) {
+    final l = AppLocalizations.of(context)!;
     final tasks = provider.tasks;
     final completed = tasks.where((t) => t.status == TaskStatus.selesai).length;
     final percent = tasks.isEmpty ? 0.0 : completed / tasks.length;
@@ -169,10 +172,10 @@ class DashboardScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('Progress Persiapan',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                  Text(l.preparationProgress,
+                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                   const SizedBox(height: 4),
-                  Text('$completed dari ${tasks.length} tugas selesai',
+                  Text(l.tasksCompleted(completed.toString(), tasks.length.toString()),
                     style: const TextStyle(color: AppTheme.textLight)),
                 ],
               ),
@@ -183,12 +186,13 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBudgetSummaryCard(WeddingProvider provider) {
+  Widget _buildBudgetSummaryCard(BuildContext context, WeddingProvider provider) {
+    final l = AppLocalizations.of(context)!;
     final plan = provider.plan!;
     final items = provider.budgetItems;
     final totalSpent = items.fold<double>(0, (sum, i) => sum + i.actualCost);
     final remaining = plan.totalBudget - totalSpent;
-    final f = NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
+    final f = NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toString(), decimalDigits: 0);
 
     return Card(
       child: Padding(
@@ -196,12 +200,12 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('💰 Ringkasan Budget',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+            Text('💰 ${l.budgetSummary}',
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
             const SizedBox(height: 16),
-            _budgetRow('Total Budget', f.format(plan.totalBudget), AppTheme.textDark),
-            _budgetRow('Terpakai', f.format(totalSpent), AppTheme.accent),
-            _budgetRow('Sisa', f.format(remaining),
+            _budgetRow(l.totalBudget, f.format(plan.totalBudget), AppTheme.textDark),
+            _budgetRow(l.spent, f.format(totalSpent), AppTheme.accent),
+            _budgetRow(l.remaining, f.format(remaining),
               remaining >= 0 ? AppTheme.success : Colors.red),
           ],
         ),
@@ -222,7 +226,8 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildPendingTasksCard(WeddingProvider provider) {
+  Widget _buildPendingTasksCard(BuildContext context, WeddingProvider provider) {
+    final l = AppLocalizations.of(context)!;
     final pending = provider.tasks
         .where((t) => t.status != TaskStatus.selesai)
         .take(5)
@@ -234,12 +239,12 @@ class DashboardScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('📋 Tugas Mendatang',
-              style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+            Text('📋 ${l.upcomingTasks}',
+              style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
             const SizedBox(height: 12),
             if (pending.isEmpty)
-              const Text('Semua tugas selesai! 🎉',
-                style: TextStyle(color: AppTheme.textLight))
+              Text(l.allTasksDone,
+                style: const TextStyle(color: AppTheme.textLight))
             else
               ...pending.map((task) => Padding(
                 padding: const EdgeInsets.symmetric(vertical: 6),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -11,7 +12,7 @@ class BudgetScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final f = NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
+    final f = NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toString(), decimalDigits: 0);
 
     return Consumer<WeddingProvider>(
       builder: (context, provider, _) {
@@ -52,6 +53,7 @@ class BudgetScreen extends StatelessWidget {
   }
 
   Widget _buildSummaryHeader(BuildContext context, NumberFormat f, double total, double planned, double spent, double remaining, WeddingProvider provider) {
+    final l = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(20),
@@ -66,7 +68,7 @@ class BudgetScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text('Total Budget', style: TextStyle(color: Colors.white70, fontSize: 13)),
+              Text(l.totalBudget, style: TextStyle(color: Colors.white70, fontSize: 13)),
               const SizedBox(width: 4),
               GestureDetector(
                 onTap: () => _showEditTotalBudget(context, total, provider),
@@ -80,9 +82,9 @@ class BudgetScreen extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _summaryCol('Dialokasi', f.format(planned), Colors.white70),
-              _summaryCol('Terpakai', f.format(spent), AppTheme.accent),
-              _summaryCol('Sisa', f.format(remaining),
+              _summaryCol(l.allocated, f.format(planned), Colors.white70),
+              _summaryCol(l.spent, f.format(spent), AppTheme.accent),
+              _summaryCol(l.remaining, f.format(remaining),
                 remaining >= 0 ? AppTheme.success : Colors.redAccent),
             ],
           ),
@@ -151,25 +153,26 @@ class BudgetScreen extends StatelessWidget {
   }
 
   void _showEditTotalBudget(BuildContext context, double current, WeddingProvider provider) {
+    final l = AppLocalizations.of(context)!;
     final ctrl = TextEditingController(text: current.toInt().toString());
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        title: const Text('Edit Total Budget'),
+        title: Text(l.editTotalBudget),
         content: TextField(
           controller: ctrl,
           keyboardType: TextInputType.number,
-          decoration: const InputDecoration(labelText: 'Total Budget (Rp)'),
+          decoration: InputDecoration(labelText: l.totalBudgetLabel),
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l.cancel)),
           ElevatedButton(
             onPressed: () {
               final val = double.tryParse(ctrl.text.replaceAll('.', ''));
               if (val != null) provider.updateTotalBudget(val);
               Navigator.pop(context);
             },
-            child: const Text('Simpan'),
+            child: Text(l.save),
           ),
         ],
       ),
@@ -177,6 +180,7 @@ class BudgetScreen extends StatelessWidget {
   }
 
   void _showEditDialog(BuildContext context, BudgetItem item, WeddingProvider provider) {
+    final l = AppLocalizations.of(context)!;
     final plannedCtrl = TextEditingController(text: item.plannedCost.toInt().toString());
     final actualCtrl = TextEditingController(text: item.actualCost.toInt().toString());
 
@@ -190,18 +194,18 @@ class BudgetScreen extends StatelessWidget {
             TextField(
               controller: plannedCtrl,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Budget Dialokasi'),
+              decoration: InputDecoration(labelText: l.budgetAllocated),
             ),
             const SizedBox(height: 12),
             TextField(
               controller: actualCtrl,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(labelText: 'Biaya Aktual'),
+              decoration: InputDecoration(labelText: l.actualCost),
             ),
           ],
         ),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
+          TextButton(onPressed: () => Navigator.pop(context), child: Text(l.cancel)),
           ElevatedButton(
             onPressed: () {
               provider.updateBudgetItem(item.copyWith(
@@ -210,7 +214,7 @@ class BudgetScreen extends StatelessWidget {
               ));
               Navigator.pop(context);
             },
-            child: const Text('Simpan'),
+            child: Text(l.save),
           ),
         ],
       ),
