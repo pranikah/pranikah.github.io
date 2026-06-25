@@ -35,11 +35,19 @@ class PraNikahApp extends StatefulWidget {
 
 class _PraNikahAppState extends State<PraNikahApp> {
   late bool _showOnboarding;
+  Locale? _locale;
 
   @override
   void initState() {
     super.initState();
     _showOnboarding = widget.showOnboarding;
+    _loadLocale();
+  }
+
+  Future<void> _loadLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    final code = prefs.getString('user_locale');
+    if (code != null) setState(() => _locale = Locale(code));
   }
 
   @override
@@ -50,6 +58,7 @@ class _PraNikahAppState extends State<PraNikahApp> {
         title: 'PraNikah',
         theme: AppTheme.theme,
         debugShowCheckedModeBanner: false,
+        locale: _locale,
         localizationsDelegates: const [
           AppLocalizations.delegate,
           GlobalMaterialLocalizations.delegate,
@@ -61,7 +70,10 @@ class _PraNikahAppState extends State<PraNikahApp> {
           Locale('id'),
         ],
         home: _showOnboarding
-            ? OnboardingScreen(onComplete: () => setState(() => _showOnboarding = false))
+            ? OnboardingScreen(
+                onComplete: () => setState(() => _showOnboarding = false),
+                onLocaleChanged: (locale) => setState(() => _locale = locale),
+              )
             : const AppShell(),
       ),
     );

@@ -4,13 +4,34 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/wedding_plan.dart';
 import '../models/wedding_task.dart';
 import '../providers/wedding_provider.dart';
+import '../services/currency_helper.dart';
 import '../theme/app_theme.dart';
 
-class DashboardScreen extends StatelessWidget {
+class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
+
+  @override
+  State<DashboardScreen> createState() => _DashboardScreenState();
+}
+
+class _DashboardScreenState extends State<DashboardScreen> {
+  NumberFormat _f = NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrency();
+  }
+
+  Future<void> _loadCurrency() async {
+    final prefs = await SharedPreferences.getInstance();
+    final code = prefs.getString(kCurrencyKey) ?? 'IDR';
+    setState(() => _f = getCurrencyFormatSync(code));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,7 +213,7 @@ class DashboardScreen extends StatelessWidget {
     final items = provider.budgetItems;
     final totalSpent = items.fold<double>(0, (sum, i) => sum + i.actualCost);
     final remaining = plan.totalBudget - totalSpent;
-    final f = NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toString(), decimalDigits: 0);
+    final f = _f;
 
     return Card(
       child: Padding(

@@ -3,16 +3,37 @@ import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/budget_item.dart';
 import '../providers/wedding_provider.dart';
+import '../services/currency_helper.dart';
 import '../theme/app_theme.dart';
 
-class BudgetScreen extends StatelessWidget {
+class BudgetScreen extends StatefulWidget {
   const BudgetScreen({super.key});
 
   @override
+  State<BudgetScreen> createState() => _BudgetScreenState();
+}
+
+class _BudgetScreenState extends State<BudgetScreen> {
+  NumberFormat _f = NumberFormat.currency(locale: 'id', symbol: 'Rp ', decimalDigits: 0);
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCurrency();
+  }
+
+  Future<void> _loadCurrency() async {
+    final prefs = await SharedPreferences.getInstance();
+    final code = prefs.getString(kCurrencyKey) ?? 'IDR';
+    setState(() => _f = getCurrencyFormatSync(code));
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final f = NumberFormat.simpleCurrency(locale: Localizations.localeOf(context).toString(), decimalDigits: 0);
+    final f = _f;
 
     return Consumer<WeddingProvider>(
       builder: (context, provider, _) {

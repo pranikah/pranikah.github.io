@@ -3,7 +3,9 @@ import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/wedding_provider.dart';
+import '../services/currency_helper.dart';
 import '../theme/app_theme.dart';
 
 class SetupScreen extends StatefulWidget {
@@ -20,6 +22,7 @@ class _SetupScreenState extends State<SetupScreen> {
   DateTime? _weddingDate;
   DateTime? _startDate;
   bool _loading = false;
+  String _selectedCurrency = 'IDR';
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,18 @@ class _SetupScreenState extends State<SetupScreen> {
               _buildDatePicker(l.weddingDate, _weddingDate, (d) => setState(() => _weddingDate = d)),
               const SizedBox(height: 16),
               _buildDatePicker(l.startDate, _startDate, (d) => setState(() => _startDate = d)),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                initialValue: _selectedCurrency,
+                decoration: const InputDecoration(
+                  labelText: 'Currency',
+                  prefixIcon: Icon(Icons.monetization_on_outlined),
+                ),
+                items: currencies.map((c) => DropdownMenuItem(
+                  value: c['code'], child: Text(c['label']!),
+                )).toList(),
+                onChanged: (v) => setState(() => _selectedCurrency = v!),
+              ),
               const SizedBox(height: 16),
               TextField(
                 controller: _budgetCtrl,
@@ -144,6 +159,9 @@ class _SetupScreenState extends State<SetupScreen> {
 
     setState(() => _loading = true);
     try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(kCurrencyKey, _selectedCurrency);
+      if (!mounted) return;
       await context.read<WeddingProvider>().createPlan(
         groomName: _groomCtrl.text.trim(),
         brideName: _brideCtrl.text.trim(),

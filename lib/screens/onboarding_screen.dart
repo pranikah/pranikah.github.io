@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../services/currency_helper.dart';
 
 class OnboardingScreen extends StatefulWidget {
   final VoidCallback onComplete;
-  const OnboardingScreen({super.key, required this.onComplete});
+  final ValueChanged<Locale>? onLocaleChanged;
+  const OnboardingScreen({super.key, required this.onComplete, this.onLocaleChanged});
 
   @override
   State<OnboardingScreen> createState() => _OnboardingScreenState();
@@ -13,6 +15,18 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final _controller = PageController();
   int _currentPage = 0;
+  String _selectedLocale = 'en';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLocale();
+  }
+
+  Future<void> _loadLocale() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() => _selectedLocale = prefs.getString(kLocaleKey) ?? 'en');
+  }
 
   List<_PageData> _pages(BuildContext context) {
     final l = AppLocalizations.of(context)!;
@@ -50,10 +64,29 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // Skip button
-            Align(
-              alignment: Alignment.topRight,
-              child: TextButton(onPressed: _finish, child: Text(l.skip)),
+            // Language + Skip row
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                children: [
+                  ToggleButtons(
+                    isSelected: [_selectedLocale == 'en', _selectedLocale == 'id'],
+                    borderRadius: BorderRadius.circular(8),
+                    constraints: const BoxConstraints(minWidth: 48, minHeight: 32),
+                    textStyle: const TextStyle(fontSize: 12),
+                    onPressed: (i) async {
+                      final locale = i == 0 ? 'en' : 'id';
+                      final prefs = await SharedPreferences.getInstance();
+                      await prefs.setString(kLocaleKey, locale);
+                      setState(() => _selectedLocale = locale);
+                      widget.onLocaleChanged?.call(Locale(locale));
+                    },
+                    children: const [Text('EN'), Text('ID')],
+                  ),
+                  const Spacer(),
+                  TextButton(onPressed: _finish, child: Text(l.skip)),
+                ],
+              ),
             ),
             // Pages
             Expanded(
