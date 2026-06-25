@@ -90,9 +90,9 @@ class _DonationScreenState extends State<DonationScreen> {
                   SizedBox(
                     width: double.infinity,
                     child: OutlinedButton.icon(
-                      onPressed: () => launchUrl(Uri.parse('https://ko-fi.com/mohamadsoleh')),
+                      onPressed: () => launchUrl(Uri.parse('https://ko-fi.com/mohamadsoleh'), mode: LaunchMode.externalApplication),
                       icon: const Text('☕', style: TextStyle(fontSize: 18)),
-                      label: const Text('Support on Ko-fi (PayPal/Card)'),
+                      label: const Text('Tips via Ko-fi (PayPal/Card)'),
                     ),
                   ),
                 ],
