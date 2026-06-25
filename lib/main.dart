@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -8,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'providers/wedding_provider.dart';
 import 'services/firebase_service.dart';
+import 'screens/admin_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/timeline_screen.dart';
 import 'screens/budget_screen.dart';
@@ -90,17 +92,23 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _currentIndex = 0;
 
-  final _screens = const [
-    DashboardScreen(),
-    TimelineScreen(),
-    BudgetScreen(),
-    VendorListScreen(),
+  bool get _isAdmin {
+    final user = FirebaseAuth.instance.currentUser;
+    return user != null && adminEmails.contains(user.email);
+  }
+
+  List<Widget> get _screens => [
+    const DashboardScreen(),
+    const TimelineScreen(),
+    const BudgetScreen(),
+    const VendorListScreen(),
+    if (_isAdmin) AdminScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    final titles = [l.dashboard, l.timeline, l.budget, l.vendor];
+    final titles = [l.dashboard, l.timeline, l.budget, l.vendor, if (_isAdmin) 'Admin'];
 
     return Consumer<WeddingProvider>(
       builder: (context, provider, _) {
@@ -134,6 +142,9 @@ class _AppShellState extends State<AppShell> {
                 selectedIcon: const Icon(Icons.account_balance_wallet), label: l.budget),
               NavigationDestination(icon: const Icon(Icons.store_outlined),
                 selectedIcon: const Icon(Icons.store), label: l.vendor),
+              if (_isAdmin)
+                const NavigationDestination(icon: Icon(Icons.admin_panel_settings_outlined),
+                  selectedIcon: Icon(Icons.admin_panel_settings), label: 'Admin'),
             ],
           ),
         );

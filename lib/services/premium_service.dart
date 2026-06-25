@@ -46,4 +46,14 @@ class PremiumService {
   /// Admin: deactivate premium
   Future<void> deactivatePremium(String uid) =>
       _db.collection(_col).doc(uid).update({'is_active': false});
+
+  /// Notify admin: tulis ke collection notifications untuk trigger email
+  Future<void> notifyAdmin(String userEmail, String userName) =>
+      _db.collection('admin_notifications').add({
+        'type': 'premium_request',
+        'user_email': userEmail,
+        'user_name': userName,
+        'created_at': FieldValue.serverTimestamp(),
+        'read': false,
+      });
 }

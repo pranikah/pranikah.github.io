@@ -75,14 +75,51 @@
   </script>
 </head>
 <body>
-  <!--
-    You can customize the "flutter_bootstrap.js" script.
-    This is useful to provide a custom configuration to the Flutter loader
-    or to give the user feedback during the initialization process.
+  <!-- Loading splash -->
+  <style>
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      flex-direction: column;
+      background: #fff;
+    }
+    .loading img {
+      width: 120px;
+      height: 120px;
+    }
+  </style>
+  <div class="loading" id="splash">
+    <img src="icons/Icon-512.png" alt="PraNikah">
+  </div>
 
-    For more details:
-    * https://docs.flutter.dev/platform-integration/web/initialization
-  -->
+  <!-- SEO: Hidden content for crawlers/AI that can't run JavaScript -->
+  <div id="seo-content" style="position:absolute;left:-9999px">
+    <h1>PraNikah - Wedding Preparation App</h1>
+    <p>Plan your wedding easily with PraNikah. Manage timeline, budget, and vendors in one free app.</p>
+    <h2>Features</h2>
+    <ul>
+      <li>Timeline & Checklist - Track every preparation stage from 12 months to 1 week before</li>
+      <li>Budget Management - Set total budget, allocate per category, track actual spending</li>
+      <li>Vendor Directory - Browse and filter wedding vendors by category</li>
+      <li>Priority System - Set task priority (High/Medium/Low) to auto-adjust timeline</li>
+      <li>Multi-language - English and Bahasa Indonesia</li>
+      <li>Multi-currency - IDR, USD, MYR, VND, GBP, EUR, SGD</li>
+    </ul>
+    <h2>Persiapan Nikah</h2>
+    <p>Aplikasi persiapan nikah gratis - kelola timeline, budget, vendor, dan checklist pernikahan. Cocok untuk pasangan yang akan menikah.</p>
+  </div>
+  <noscript>
+    <h1>PraNikah - Wedding Preparation App</h1>
+    <p>PraNikah helps you plan your wedding. Manage timeline, budget, and vendors. Enable JavaScript to use the app.</p>
+  </noscript>
+  <script>
+    window.addEventListener('flutter-first-frame', function () {
+      var splash = document.getElementById('splash');
+      if (splash) splash.remove();
+    });
+  </script>
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>

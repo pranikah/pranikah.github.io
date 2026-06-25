@@ -89,6 +89,7 @@ class FirebaseService implements DataService {
   // Generate default tasks
   @override
   Future<void> generateDefaultTasks(String planId, DateTime weddingDate) async {
+    final now = DateTime.now();
     final defaultTasks = <Map<String, dynamic>>[
       {'title': 'Tentukan budget keseluruhan', 'phase': TaskPhase.month12},
       {'title': 'Cari dan booking venue', 'phase': TaskPhase.month12},
@@ -116,6 +117,8 @@ class FirebaseService implements DataService {
       final dueDate = phase == TaskPhase.week1
           ? weddingDate.subtract(const Duration(days: 7))
           : DateTime(weddingDate.year, weddingDate.month - phase.monthsBefore, weddingDate.day);
+      // Skip phase yang due date-nya sudah lewat
+      if (dueDate.isBefore(now)) continue;
       final ref = _db.collection(_plansCol).doc(planId).collection(_tasksCol).doc();
       batch.set(ref, WeddingTask(
         id: ref.id,
