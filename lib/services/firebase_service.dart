@@ -37,6 +37,13 @@ class FirebaseService implements DataService {
       _db.collection(_plansCol).doc(planId).collection(_tasksCol).doc(taskId).update({'status': status.index});
 
   @override
+  Future<void> updateTaskPriority(String planId, String taskId, TaskPriority priority, DateTime newDueDate) =>
+      _db.collection(_plansCol).doc(planId).collection(_tasksCol).doc(taskId).update({
+        'priority': priority.index,
+        'dueDate': Timestamp.fromDate(newDueDate),
+      });
+
+  @override
   Future<void> deleteTask(String planId, String taskId) =>
       _db.collection(_plansCol).doc(planId).collection(_tasksCol).doc(taskId).delete();
 
@@ -44,7 +51,11 @@ class FirebaseService implements DataService {
   Stream<List<WeddingTask>> getTasks(String planId) =>
       _db.collection(_plansCol).doc(planId).collection(_tasksCol).snapshots().map(
         (snap) => snap.docs.map((d) => WeddingTask.fromFirestore(d)).toList()
-          ..sort((a, b) => a.phase.index.compareTo(b.phase.index)),
+          ..sort((a, b) {
+            final phaseComp = a.phase.index.compareTo(b.phase.index);
+            if (phaseComp != 0) return phaseComp;
+            return a.priority.sortOrder.compareTo(b.priority.sortOrder);
+          }),
       );
 
   // Budget
@@ -65,6 +76,15 @@ class FirebaseService implements DataService {
   @override
   Future<void> deleteBudgetItem(String planId, String itemId) =>
       _db.collection(_plansCol).doc(planId).collection(_budgetCol).doc(itemId).delete();
+
+  // Ensure tasks exist (auto-generate if empty)
+  @override
+  Future<void> ensureTasksExist(String planId, DateTime weddingDate) async {
+    final snap = await _db.collection(_plansCol).doc(planId).collection(_tasksCol).limit(1).get();
+    if (snap.docs.isEmpty) {
+      await generateDefaultTasks(planId, weddingDate);
+    }
+  }
 
   // Generate default tasks
   @override

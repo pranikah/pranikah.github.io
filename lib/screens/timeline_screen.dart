@@ -148,10 +148,38 @@ class TimelineScreen extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       child: ListTile(
         leading: _statusIcon(task.status),
-        title: Text(task.title, style: TextStyle(
-          decoration: task.status == TaskStatus.selesai ? TextDecoration.lineThrough : null,
-          color: task.status == TaskStatus.selesai ? AppTheme.textLight : AppTheme.textDark,
-        )),
+        title: Row(
+          children: [
+            Expanded(child: Text(task.title, style: TextStyle(
+              decoration: task.status == TaskStatus.selesai ? TextDecoration.lineThrough : null,
+              color: task.status == TaskStatus.selesai ? AppTheme.textLight : AppTheme.textDark,
+            ))),
+            PopupMenuButton<TaskPriority>(
+              onSelected: (p) => provider.updateTaskPriority(task, p),
+              itemBuilder: (_) => TaskPriority.values.map((p) => PopupMenuItem(
+                value: p,
+                child: Row(children: [
+                  Icon(Icons.flag, size: 14, color: _priorityColor(p)),
+                  const SizedBox(width: 6),
+                  Text(p.label),
+                ]),
+              )).toList(),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: _priorityColor(task.priority).withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Row(mainAxisSize: MainAxisSize.min, children: [
+                  Icon(Icons.flag, size: 12, color: _priorityColor(task.priority)),
+                  const SizedBox(width: 3),
+                  Text(task.priority.label,
+                    style: TextStyle(fontSize: 10, color: _priorityColor(task.priority), fontWeight: FontWeight.w500)),
+                ]),
+              ),
+            ),
+          ],
+        ),
         subtitle: Text(DateFormat('d MMM yyyy', 'id').format(task.dueDate),
           style: const TextStyle(fontSize: 12, color: AppTheme.textLight)),
         trailing: Row(
@@ -198,6 +226,14 @@ class TimelineScreen extends StatelessWidget {
       case TaskStatus.selesai: return AppTheme.success;
       case TaskStatus.sedangProses: return AppTheme.warning;
       case TaskStatus.belumMulai: return AppTheme.textLight;
+    }
+  }
+
+  Color _priorityColor(TaskPriority priority) {
+    switch (priority) {
+      case TaskPriority.high: return Colors.red;
+      case TaskPriority.medium: return Colors.orange;
+      case TaskPriority.low: return Colors.blue;
     }
   }
 }

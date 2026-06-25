@@ -15,6 +15,7 @@ class WeddingProvider extends ChangeNotifier {
   List<BudgetItem> _budgetItems = [];
   String? _planId;
   bool _isLoading = true;
+  bool _tasksChecked = false;
   String? _error;
 
   StreamSubscription? _planSub;
@@ -31,6 +32,7 @@ class WeddingProvider extends ChangeNotifier {
   void loadPlan(String planId) {
     _planId = planId;
     _isLoading = true;
+    _tasksChecked = false;
     _error = null;
     _planSub?.cancel();
     _tasksSub?.cancel();
@@ -40,6 +42,10 @@ class WeddingProvider extends ChangeNotifier {
       _plan = p;
       _isLoading = false;
       notifyListeners();
+      if (p != null && !_tasksChecked) {
+        _tasksChecked = true;
+        _service.ensureTasksExist(planId, p.weddingDate);
+      }
     }, onError: (e) {
       _error = 'Gagal memuat data: $e';
       _isLoading = false;
@@ -108,6 +114,18 @@ class WeddingProvider extends ChangeNotifier {
   Future<void> updateTaskStatus(String taskId, TaskStatus status) async {
     if (_planId == null) return;
     await _service.updateTaskStatus(_planId!, taskId, status);
+  }
+
+  Future<void> updateTaskPriority(WeddingTask task, TaskPriority priority) async {
+    if (_planId == null || _plan == null) return;
+    // Hitung due date baru berdasar priority
+    final baseDueDate = task.phase == TaskPhase.week1
+        ? _plan!.weddingDate.subtract(const Duration(days: 7))
+        : DateTime(_plan!.weddingDate.year,
+            _plan!.weddingDate.month - task.phase.monthsBefore,
+            _plan!.weddingDate.day);
+    final newDueDate = baseDueDate.add(Duration(days: priority.dayOffset));
+    await _service.updateTaskPriority(_planId!, task.id, priority, newDueDate);
   }
 
   Future<void> addTask(WeddingTask task) async {

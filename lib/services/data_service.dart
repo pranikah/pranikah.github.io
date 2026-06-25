@@ -15,9 +15,11 @@ abstract class DataService {
   // Tasks
   Future<void> addTask(String planId, WeddingTask task);
   Future<void> updateTaskStatus(String planId, String taskId, TaskStatus status);
+  Future<void> updateTaskPriority(String planId, String taskId, TaskPriority priority, DateTime newDueDate);
   Future<void> deleteTask(String planId, String taskId);
   Stream<List<WeddingTask>> getTasks(String planId);
   Future<void> generateDefaultTasks(String planId, DateTime weddingDate);
+  Future<void> ensureTasksExist(String planId, DateTime weddingDate);
 
   // Budget
   Future<void> addBudgetItem(String planId, BudgetItem item);

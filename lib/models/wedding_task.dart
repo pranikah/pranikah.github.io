@@ -2,6 +2,34 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 enum TaskStatus { belumMulai, sedangProses, selesai }
 enum TaskPhase { month12, month6, month3, month1, week1 }
+enum TaskPriority { high, medium, low }
+
+extension TaskPriorityExt on TaskPriority {
+  String get label {
+    switch (this) {
+      case TaskPriority.high: return 'High';
+      case TaskPriority.medium: return 'Medium';
+      case TaskPriority.low: return 'Low';
+    }
+  }
+
+  int get sortOrder {
+    switch (this) {
+      case TaskPriority.high: return 0;
+      case TaskPriority.medium: return 1;
+      case TaskPriority.low: return 2;
+    }
+  }
+
+  /// Offset hari dalam fase: high = awal, medium = tengah, low = akhir
+  int get dayOffset {
+    switch (this) {
+      case TaskPriority.high: return 0;
+      case TaskPriority.medium: return 7;
+      case TaskPriority.low: return 14;
+    }
+  }
+}
 
 extension TaskPhaseExt on TaskPhase {
   String get label {
@@ -41,6 +69,7 @@ class WeddingTask {
   final DateTime dueDate;
   final TaskStatus status;
   final TaskPhase phase;
+  final TaskPriority priority;
 
   WeddingTask({
     required this.id,
@@ -48,6 +77,7 @@ class WeddingTask {
     required this.dueDate,
     this.status = TaskStatus.belumMulai,
     required this.phase,
+    this.priority = TaskPriority.medium,
   });
 
   factory WeddingTask.fromFirestore(DocumentSnapshot doc) {
@@ -58,6 +88,7 @@ class WeddingTask {
       dueDate: (data['dueDate'] as Timestamp).toDate(),
       status: TaskStatus.values[data['status'] ?? 0],
       phase: TaskPhase.values[data['phase'] ?? 0],
+      priority: TaskPriority.values[data['priority'] ?? 1],
     );
   }
 
@@ -66,13 +97,15 @@ class WeddingTask {
     'dueDate': Timestamp.fromDate(dueDate),
     'status': status.index,
     'phase': phase.index,
+    'priority': priority.index,
   };
 
-  WeddingTask copyWith({TaskStatus? status}) => WeddingTask(
+  WeddingTask copyWith({TaskStatus? status, TaskPriority? priority, DateTime? dueDate}) => WeddingTask(
     id: id,
     title: title,
-    dueDate: dueDate,
+    dueDate: dueDate ?? this.dueDate,
     status: status ?? this.status,
     phase: phase,
+    priority: priority ?? this.priority,
   );
 }
