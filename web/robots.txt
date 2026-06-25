@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://leimportant.github.io/sitemap.xml
+Sitemap: https://pranikah.github.io/sitemap.xml
