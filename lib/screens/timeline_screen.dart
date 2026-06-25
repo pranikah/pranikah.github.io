@@ -148,68 +148,102 @@ class TimelineScreen extends StatelessWidget {
   Widget _buildTaskTile(BuildContext context, WeddingTask task, WeddingProvider provider) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 4),
-      child: ListTile(
-        leading: _statusIcon(task.status),
-        title: Row(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(child: Text(task.title, style: TextStyle(
-              decoration: task.status == TaskStatus.selesai ? TextDecoration.lineThrough : null,
-              color: task.status == TaskStatus.selesai ? AppTheme.textLight : AppTheme.textDark,
-            ))),
-            PopupMenuButton<TaskPriority>(
-              onSelected: (p) => provider.updateTaskPriority(task, p),
-              itemBuilder: (_) => TaskPriority.values.map((p) => PopupMenuItem(
-                value: p,
-                child: Row(children: [
-                  Icon(Icons.flag, size: 14, color: _priorityColor(p)),
-                  const SizedBox(width: 6),
-                  Text(priorityLabel(context, p)),
-                ]),
-              )).toList(),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: _priorityColor(task.priority).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(6),
+            Row(
+              children: [
+                _statusIcon(task.status),
+                const SizedBox(width: 10),
+                Expanded(
+                  child: Text(task.title, style: TextStyle(
+                    fontSize: 14,
+                    decoration: task.status == TaskStatus.selesai ? TextDecoration.lineThrough : null,
+                    color: task.status == TaskStatus.selesai ? AppTheme.textLight : AppTheme.textDark,
+                  )),
                 ),
-                child: Row(mainAxisSize: MainAxisSize.min, children: [
-                  Icon(Icons.flag, size: 12, color: _priorityColor(task.priority)),
-                  const SizedBox(width: 3),
-                  Text(priorityLabel(context, task.priority),
-                    style: TextStyle(fontSize: 10, color: _priorityColor(task.priority), fontWeight: FontWeight.w500)),
-                ]),
-              ),
-            ),
-          ],
-        ),
-        subtitle: Text(DateFormat('d MMM yyyy').format(task.dueDate),
-          style: const TextStyle(fontSize: 12, color: AppTheme.textLight)),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            PopupMenuButton<TaskStatus>(
-              onSelected: (status) => provider.updateTaskStatus(task.id, status),
-              itemBuilder: (_) => TaskStatus.values.map((s) => PopupMenuItem(
-                value: s, child: Text(statusLabel(context, s)),
-              )).toList(),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                decoration: BoxDecoration(
-                  color: _statusColor(task.status).withValues(alpha: 0.1),
-                  borderRadius: BorderRadius.circular(8),
+                PopupMenuButton<String>(
+                  icon: const Icon(Icons.more_vert, size: 18),
+                  onSelected: (val) {
+                    if (val == 'delete') {
+                      provider.deleteTask(task.id);
+                    }
+                  },
+                  itemBuilder: (_) => [
+                    ...TaskStatus.values.map((s) => PopupMenuItem(
+                      onTap: () => provider.updateTaskStatus(task.id, s),
+                      child: Row(children: [
+                        Icon(_statusIconData(s), size: 16, color: _statusColor(s)),
+                        const SizedBox(width: 8),
+                        Text(statusLabel(context, s)),
+                      ]),
+                    )),
+                    const PopupMenuDivider(),
+                    ...TaskPriority.values.map((p) => PopupMenuItem(
+                      onTap: () => provider.updateTaskPriority(task, p),
+                      child: Row(children: [
+                        Icon(Icons.flag, size: 16, color: _priorityColor(p)),
+                        const SizedBox(width: 8),
+                        Text(priorityLabel(context, p)),
+                      ]),
+                    )),
+                    const PopupMenuDivider(),
+                    const PopupMenuItem(value: 'delete', child: Row(children: [
+                      Icon(Icons.delete_outline, size: 16, color: Colors.red),
+                      SizedBox(width: 8),
+                      Text('Delete', style: TextStyle(color: Colors.red)),
+                    ])),
+                  ],
                 ),
-                child: Text(statusLabel(context, task.status),
-                  style: TextStyle(fontSize: 11, color: _statusColor(task.status), fontWeight: FontWeight.w500)),
-              ),
+              ],
             ),
-            IconButton(
-              icon: const Icon(Icons.delete_outline, size: 18, color: Colors.red),
-              onPressed: () => provider.deleteTask(task.id),
+            Padding(
+              padding: const EdgeInsets.only(left: 34, top: 4),
+              child: Row(
+                children: [
+                  Text(DateFormat('d MMM yyyy').format(task.dueDate),
+                    style: const TextStyle(fontSize: 11, color: AppTheme.textLight)),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: _priorityColor(task.priority).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Row(mainAxisSize: MainAxisSize.min, children: [
+                      Icon(Icons.flag, size: 10, color: _priorityColor(task.priority)),
+                      const SizedBox(width: 2),
+                      Text(priorityLabel(context, task.priority),
+                        style: TextStyle(fontSize: 9, color: _priorityColor(task.priority), fontWeight: FontWeight.w500)),
+                    ]),
+                  ),
+                  const SizedBox(width: 8),
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: _statusColor(task.status).withValues(alpha: 0.1),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: Text(statusLabel(context, task.status),
+                      style: TextStyle(fontSize: 9, color: _statusColor(task.status), fontWeight: FontWeight.w500)),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  IconData _statusIconData(TaskStatus status) {
+    switch (status) {
+      case TaskStatus.selesai: return Icons.check_circle;
+      case TaskStatus.sedangProses: return Icons.timelapse;
+      case TaskStatus.belumMulai: return Icons.circle_outlined;
+    }
   }
 
   Widget _statusIcon(TaskStatus status) {
