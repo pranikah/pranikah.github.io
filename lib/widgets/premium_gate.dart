@@ -15,24 +15,28 @@ class PremiumGate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = _authService.currentUser;
+    return StreamBuilder<User?>(
+      stream: _authService.authStateChanges,
+      builder: (context, authSnapshot) {
+        final user = authSnapshot.data;
 
-    // Belum login → tampilkan lock
-    if (user == null) {
-      return lockedChild ?? _buildDefaultLock(context, loggedIn: false);
-    }
-
-    return StreamBuilder<bool>(
-      stream: _premiumService
-          .getPremiumStatus(user.uid)
-          .map((p) => p?.isActive ?? false),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
+        if (user == null) {
+          return lockedChild ?? _buildDefaultLock(context, loggedIn: false);
         }
-        final isPremium = snapshot.data ?? false;
-        if (isPremium) return child;
-        return lockedChild ?? _buildDefaultLock(context, loggedIn: true);
+
+        return StreamBuilder<bool>(
+          stream: _premiumService
+              .getPremiumStatus(user.uid)
+              .map((p) => p?.isActive ?? false),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            final isPremium = snapshot.data ?? false;
+            if (isPremium) return child;
+            return lockedChild ?? _buildDefaultLock(context, loggedIn: true);
+          },
+        );
       },
     );
   }
@@ -59,7 +63,17 @@ class PremiumGate extends StatelessWidget {
             const SizedBox(height: 24),
             if (!loggedIn)
               ElevatedButton.icon(
-                onPressed: () => _authService.signInWithGoogle(),
+                onPressed: () async {
+                  try {
+                    await _authService.signInWithGoogle();
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Gagal login: $e')),
+                      );
+                    }
+                  }
+                },
                 icon: const Icon(Icons.login),
                 label: const Text('Login dengan Google'),
               ),

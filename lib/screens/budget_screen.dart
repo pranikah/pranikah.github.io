@@ -25,7 +25,7 @@ class BudgetScreen extends StatelessWidget {
 
         return Column(
           children: [
-            _buildSummaryHeader(f, plan.totalBudget, totalPlanned, totalSpent, remaining),
+            _buildSummaryHeader(context, f, plan.totalBudget, totalPlanned, totalSpent, remaining, provider),
             Expanded(
               child: items.isEmpty
                   ? Center(
@@ -51,7 +51,7 @@ class BudgetScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSummaryHeader(NumberFormat f, double total, double planned, double spent, double remaining) {
+  Widget _buildSummaryHeader(BuildContext context, NumberFormat f, double total, double planned, double spent, double remaining, WeddingProvider provider) {
     return Container(
       margin: const EdgeInsets.all(16),
       padding: const EdgeInsets.all(20),
@@ -63,7 +63,17 @@ class BudgetScreen extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Text('Total Budget', style: TextStyle(color: Colors.white70, fontSize: 13)),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text('Total Budget', style: TextStyle(color: Colors.white70, fontSize: 13)),
+              const SizedBox(width: 4),
+              GestureDetector(
+                onTap: () => _showEditTotalBudget(context, total, provider),
+                child: const Icon(Icons.edit, size: 14, color: Colors.white70),
+              ),
+            ],
+          ),
           Text(f.format(total),
             style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
           const SizedBox(height: 12),
@@ -136,6 +146,32 @@ class BudgetScreen extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showEditTotalBudget(BuildContext context, double current, WeddingProvider provider) {
+    final ctrl = TextEditingController(text: current.toInt().toString());
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Edit Total Budget'),
+        content: TextField(
+          controller: ctrl,
+          keyboardType: TextInputType.number,
+          decoration: const InputDecoration(labelText: 'Total Budget (Rp)'),
+        ),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
+          ElevatedButton(
+            onPressed: () {
+              final val = double.tryParse(ctrl.text.replaceAll('.', ''));
+              if (val != null) provider.updateTotalBudget(val);
+              Navigator.pop(context);
+            },
+            child: const Text('Simpan'),
+          ),
+        ],
       ),
     );
   }

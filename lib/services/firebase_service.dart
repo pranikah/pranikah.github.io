@@ -18,6 +18,10 @@ class FirebaseService implements DataService {
       _db.collection(_plansCol).doc(plan.id).set(plan.toMap());
 
   @override
+  Future<void> updatePlan(String planId, Map<String, dynamic> data) =>
+      _db.collection(_plansCol).doc(planId).update(data);
+
+  @override
   Stream<WeddingPlan?> getPlan(String planId) =>
       _db.collection(_plansCol).doc(planId).snapshots().map(
         (doc) => doc.exists ? WeddingPlan.fromFirestore(doc) : null,
@@ -31,6 +35,10 @@ class FirebaseService implements DataService {
   @override
   Future<void> updateTaskStatus(String planId, String taskId, TaskStatus status) =>
       _db.collection(_plansCol).doc(planId).collection(_tasksCol).doc(taskId).update({'status': status.index});
+
+  @override
+  Future<void> deleteTask(String planId, String taskId) =>
+      _db.collection(_plansCol).doc(planId).collection(_tasksCol).doc(taskId).delete();
 
   @override
   Stream<List<WeddingTask>> getTasks(String planId) =>

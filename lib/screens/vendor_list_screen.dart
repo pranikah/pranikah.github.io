@@ -17,59 +17,56 @@ class _VendorListScreenState extends State<VendorListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Vendor')),
-      body: PremiumGate(
-        child: Column(
-          children: [
-            // Filter chips
-            SizedBox(
-              height: 50,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: FilterChip(
-                      label: const Text('Semua'),
-                      selected: _selectedCategory == null,
-                      onSelected: (_) => setState(() => _selectedCategory = null),
-                    ),
+    return PremiumGate(
+      child: Column(
+        children: [
+          // Filter chips
+          SizedBox(
+            height: 50,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: FilterChip(
+                    label: const Text('Semua'),
+                    selected: _selectedCategory == null,
+                    onSelected: (_) => setState(() => _selectedCategory = null),
                   ),
-                  ...VendorCategory.values.map((c) => Padding(
-                    padding: const EdgeInsets.only(right: 8),
-                    child: FilterChip(
-                      label: Text(c.label),
-                      selected: _selectedCategory == c,
-                      onSelected: (_) => setState(() => _selectedCategory = c),
-                    ),
-                  )),
-                ],
-              ),
+                ),
+                ...VendorCategory.values.map((c) => Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: FilterChip(
+                    label: Text(c.label),
+                    selected: _selectedCategory == c,
+                    onSelected: (_) => setState(() => _selectedCategory = c),
+                  ),
+                )),
+              ],
             ),
-            // Vendor list
-            Expanded(
-              child: StreamBuilder<List<Vendor>>(
-                stream: _service.getVendors(category: _selectedCategory),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-                  final vendors = snapshot.data ?? [];
-                  if (vendors.isEmpty) {
-                    return const Center(child: Text('Belum ada vendor.'));
-                  }
-                  return ListView.builder(
-                    padding: const EdgeInsets.all(12),
-                    itemCount: vendors.length,
-                    itemBuilder: (_, i) => _VendorCard(vendor: vendors[i]),
-                  );
-                },
-              ),
+          ),
+          // Vendor list
+          Expanded(
+            child: StreamBuilder<List<Vendor>>(
+              stream: _service.getVendors(category: _selectedCategory),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                final vendors = snapshot.data ?? [];
+                if (vendors.isEmpty) {
+                  return const Center(child: Text('Belum ada vendor.'));
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.all(12),
+                  itemCount: vendors.length,
+                  itemBuilder: (_, i) => _VendorCard(vendor: vendors[i]),
+                );
+              },
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

@@ -23,7 +23,7 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _buildCountdownCard(plan),
+              _buildCountdownCard(context, plan, provider),
               const SizedBox(height: 20),
               _buildProgressCard(provider),
               const SizedBox(height: 20),
@@ -37,7 +37,7 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCountdownCard(WeddingPlan plan) {
+  Widget _buildCountdownCard(BuildContext context, WeddingPlan plan, WeddingProvider provider) {
     final days = plan.daysRemaining;
     return Container(
       width: double.infinity,
@@ -50,26 +50,96 @@ class DashboardScreen extends StatelessWidget {
         ),
         borderRadius: BorderRadius.circular(20),
       ),
-      child: Column(
+      child: Stack(
         children: [
-          Text('💍', style: const TextStyle(fontSize: 32)),
-          const SizedBox(height: 8),
-          Text(
-            '$days',
-            style: GoogleFonts.playfairDisplay(
-              fontSize: 56, fontWeight: FontWeight.bold, color: Colors.white,
+          Positioned(
+            top: 0, right: 0,
+            child: GestureDetector(
+              onTap: () => _showEditProfileDialog(context, plan, provider),
+              child: const Icon(Icons.edit, size: 18, color: Colors.white54),
             ),
           ),
-          Text(
-            'Hari Menuju Hari H',
-            style: GoogleFonts.poppins(fontSize: 16, color: Colors.white70),
-          ),
-          const SizedBox(height: 8),
-          Text(
-            DateFormat('d MMMM yyyy', 'id').format(plan.weddingDate),
-            style: GoogleFonts.poppins(fontSize: 14, color: Colors.white60),
+          Column(
+            children: [
+              Text('💍', style: const TextStyle(fontSize: 32)),
+              const SizedBox(height: 8),
+              Text(
+                '$days',
+                style: GoogleFonts.playfairDisplay(
+                  fontSize: 56, fontWeight: FontWeight.bold, color: Colors.white,
+                ),
+              ),
+              Text(
+                'Hari Menuju Hari H',
+                style: GoogleFonts.poppins(fontSize: 16, color: Colors.white70),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                DateFormat('d MMMM yyyy', 'id').format(plan.weddingDate),
+                style: GoogleFonts.poppins(fontSize: 14, color: Colors.white60),
+              ),
+            ],
           ),
         ],
+      ),
+    );
+  }
+
+  void _showEditProfileDialog(BuildContext context, WeddingPlan plan, WeddingProvider provider) {
+    final groomCtrl = TextEditingController(text: plan.groomName);
+    final brideCtrl = TextEditingController(text: plan.brideName);
+    DateTime selectedDate = plan.weddingDate;
+
+    showDialog(
+      context: context,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          title: const Text('Edit Profil'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: groomCtrl,
+                decoration: const InputDecoration(labelText: 'Nama Calon Suami'),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: brideCtrl,
+                decoration: const InputDecoration(labelText: 'Nama Calon Istri'),
+              ),
+              const SizedBox(height: 12),
+              ListTile(
+                contentPadding: EdgeInsets.zero,
+                title: const Text('Tanggal Nikah', style: TextStyle(fontSize: 12)),
+                subtitle: Text(DateFormat('d MMMM yyyy', 'id').format(selectedDate)),
+                trailing: const Icon(Icons.calendar_today, size: 18),
+                onTap: () async {
+                  final picked = await showDatePicker(
+                    context: context,
+                    initialDate: selectedDate,
+                    firstDate: DateTime.now(),
+                    lastDate: DateTime.now().add(const Duration(days: 730)),
+                  );
+                  if (picked != null) setState(() => selectedDate = picked);
+                },
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: const Text('Batal')),
+            ElevatedButton(
+              onPressed: () {
+                provider.updateProfile(
+                  groomName: groomCtrl.text.trim(),
+                  brideName: brideCtrl.text.trim(),
+                  weddingDate: selectedDate,
+                );
+                Navigator.pop(context);
+              },
+              child: const Text('Simpan'),
+            ),
+          ],
+        ),
       ),
     );
   }

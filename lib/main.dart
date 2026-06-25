@@ -79,6 +79,19 @@ class _AppShellState extends State<AppShell> {
   Widget build(BuildContext context) {
     return Consumer<WeddingProvider>(
       builder: (context, provider, _) {
+        if (provider.isLoading) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        if (provider.error != null) {
+          return Scaffold(body: Center(child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const SizedBox(height: 12),
+              Text(provider.error!, textAlign: TextAlign.center),
+            ],
+          )));
+        }
         if (!provider.hasPlan) return const SetupScreen();
 
         return Scaffold(

@@ -14,6 +14,8 @@ class WeddingProvider extends ChangeNotifier {
   List<WeddingTask> _tasks = [];
   List<BudgetItem> _budgetItems = [];
   String? _planId;
+  bool _isLoading = true;
+  String? _error;
 
   StreamSubscription? _planSub;
   StreamSubscription? _tasksSub;
@@ -23,27 +25,42 @@ class WeddingProvider extends ChangeNotifier {
   List<WeddingTask> get tasks => _tasks;
   List<BudgetItem> get budgetItems => _budgetItems;
   bool get hasPlan => _plan != null;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
 
   void loadPlan(String planId) {
     _planId = planId;
+    _isLoading = true;
+    _error = null;
     _planSub?.cancel();
     _tasksSub?.cancel();
     _budgetSub?.cancel();
 
     _planSub = _service.getPlan(planId).listen((p) {
       _plan = p;
+      _isLoading = false;
       notifyListeners();
-    }, onError: (_) {});
+    }, onError: (e) {
+      _error = 'Gagal memuat data: $e';
+      _isLoading = false;
+      notifyListeners();
+    });
 
     _tasksSub = _service.getTasks(planId).listen((t) {
       _tasks = t;
       notifyListeners();
-    }, onError: (_) {});
+    }, onError: (e) {
+      _error = 'Gagal memuat tugas: $e';
+      notifyListeners();
+    });
 
     _budgetSub = _service.getBudgetItems(planId).listen((b) {
       _budgetItems = b;
       notifyListeners();
-    }, onError: (_) {});
+    }, onError: (e) {
+      _error = 'Gagal memuat budget: $e';
+      notifyListeners();
+    });
   }
 
   Future<void> createPlan({
@@ -93,9 +110,35 @@ class WeddingProvider extends ChangeNotifier {
     await _service.updateTaskStatus(_planId!, taskId, status);
   }
 
+  Future<void> addTask(WeddingTask task) async {
+    if (_planId == null) return;
+    await _service.addTask(_planId!, task);
+  }
+
+  Future<void> deleteTask(String taskId) async {
+    if (_planId == null) return;
+    await _service.deleteTask(_planId!, taskId);
+  }
+
   Future<void> updateBudgetItem(BudgetItem item) async {
     if (_planId == null) return;
     await _service.updateBudgetItem(_planId!, item);
+  }
+
+  Future<void> updateTotalBudget(double newBudget) async {
+    if (_planId == null) return;
+    await _service.updatePlan(_planId!, {'totalBudget': newBudget});
+  }
+
+  Future<void> updateProfile({String? groomName, String? brideName, DateTime? weddingDate}) async {
+    if (_planId == null) return;
+    final data = <String, dynamic>{};
+    if (groomName != null) data['groomName'] = groomName;
+    if (brideName != null) data['brideName'] = brideName;
+    if (weddingDate != null) {
+      data['weddingDate'] = weddingDate;
+    }
+    await _service.updatePlan(_planId!, data);
   }
 
   @override

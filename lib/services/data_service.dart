@@ -9,11 +9,13 @@ import '../models/vendor.dart';
 abstract class DataService {
   // Wedding Plan
   Future<void> savePlan(WeddingPlan plan);
+  Future<void> updatePlan(String planId, Map<String, dynamic> data);
   Stream<WeddingPlan?> getPlan(String planId);
 
   // Tasks
   Future<void> addTask(String planId, WeddingTask task);
   Future<void> updateTaskStatus(String planId, String taskId, TaskStatus status);
+  Future<void> deleteTask(String planId, String taskId);
   Stream<List<WeddingTask>> getTasks(String planId);
   Future<void> generateDefaultTasks(String planId, DateTime weddingDate);
 
