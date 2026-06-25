@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../services/premium_service.dart';
 import '../theme/app_theme.dart';
 
@@ -58,6 +59,34 @@ class _DonationScreenState extends State<DonationScreen> {
                   _infoRow(l.accountNumber, '1300 0166 5999 0'),
                   _infoRow(l.accountName, 'MOHAMAD SOLEH'),
                   _infoRow(l.amount, l.donationAmount),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 16),
+          // International payment
+          Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.language, color: Color(0xFF29ABE0)),
+                      SizedBox(width: 8),
+                      Text('International Payment', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                    ],
+                  ),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton.icon(
+                      onPressed: () => launchUrl(Uri.parse('https://ko-fi.com/mohamadsoleh')),
+                      icon: const Text('☕', style: TextStyle(fontSize: 18)),
+                      label: const Text('Support on Ko-fi (PayPal/Card)'),
+                    ),
+                  ),
                 ],
               ),
             ),
