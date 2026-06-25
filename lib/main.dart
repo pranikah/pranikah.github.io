@@ -9,12 +9,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'providers/wedding_provider.dart';
 import 'services/firebase_service.dart';
-import 'screens/admin_screen.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/timeline_screen.dart';
 import 'screens/budget_screen.dart';
+import 'screens/login_screen.dart';
 import 'screens/setup_screen.dart';
 import 'screens/onboarding_screen.dart';
+import 'screens/profile_screen.dart';
 import 'screens/vendor_list_screen.dart';
 import 'theme/app_theme.dart';
 
@@ -71,19 +72,40 @@ class _PraNikahAppState extends State<PraNikahApp> {
           Locale('en'),
           Locale('id'),
         ],
-        home: _showOnboarding
-            ? OnboardingScreen(
-                onComplete: () => setState(() => _showOnboarding = false),
-                onLocaleChanged: (locale) => setState(() => _locale = locale),
-              )
-            : const AppShell(),
+        home: _buildHome(),
       ),
+    );
+  }
+
+  Widget _buildHome() {
+    // Step 1: Onboarding
+    if (_showOnboarding) {
+      return OnboardingScreen(
+        onComplete: () => setState(() => _showOnboarding = false),
+        onLocaleChanged: (locale) => setState(() => _locale = locale),
+      );
+    }
+
+    // Step 2: Check login — jika belum login, tampilkan LoginScreen
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Scaffold(body: Center(child: CircularProgressIndicator()));
+        }
+        if (snapshot.data == null) {
+          return LoginScreen(onLoginSuccess: () => setState(() {}));
+        }
+        // Step 3: Sudah login → AppShell (setup atau app)
+        return AppShell(onLocaleChanged: (locale) => setState(() => _locale = locale));
+      },
     );
   }
 }
 
 class AppShell extends StatefulWidget {
-  const AppShell({super.key});
+  final ValueChanged<Locale>? onLocaleChanged;
+  const AppShell({super.key, this.onLocaleChanged});
 
   @override
   State<AppShell> createState() => _AppShellState();
@@ -92,23 +114,21 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _currentIndex = 0;
 
-  bool get _isAdmin {
-    final user = FirebaseAuth.instance.currentUser;
-    return user != null && adminEmails.contains(user.email);
-  }
-
-  List<Widget> get _screens => [
-    const DashboardScreen(),
-    const TimelineScreen(),
-    const BudgetScreen(),
-    const VendorListScreen(),
-    if (_isAdmin) AdminScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    final titles = [l.dashboard, l.timeline, l.budget, l.vendor, if (_isAdmin) 'Admin'];
+    final titles = [l.dashboard, l.timeline, l.budget, l.vendor, l.profile];
+
+    final screens = [
+      const DashboardScreen(),
+      const TimelineScreen(),
+      const BudgetScreen(),
+      const VendorListScreen(),
+      ProfileScreen(
+        onLocaleChanged: widget.onLocaleChanged,
+        onCurrencyChanged: () => setState(() {}),
+      ),
+    ];
 
     return Consumer<WeddingProvider>(
       builder: (context, provider, _) {
@@ -116,12 +136,15 @@ class _AppShellState extends State<AppShell> {
           return const Scaffold(body: Center(child: CircularProgressIndicator()));
         }
         if (provider.error != null) {
+          final errorMsg = provider.error == 'error_load_data'
+              ? l.errorLoadData
+              : provider.error!;
           return Scaffold(body: Center(child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(Icons.error_outline, size: 48, color: Colors.red),
               const SizedBox(height: 12),
-              Text(provider.error!, textAlign: TextAlign.center),
+              Text(errorMsg, textAlign: TextAlign.center),
             ],
           )));
         }
@@ -129,7 +152,7 @@ class _AppShellState extends State<AppShell> {
 
         return Scaffold(
           appBar: AppBar(title: Text(titles[_currentIndex])),
-          body: _screens[_currentIndex],
+          body: screens[_currentIndex],
           bottomNavigationBar: NavigationBar(
             selectedIndex: _currentIndex,
             onDestinationSelected: (i) => setState(() => _currentIndex = i),
@@ -142,9 +165,8 @@ class _AppShellState extends State<AppShell> {
                 selectedIcon: const Icon(Icons.account_balance_wallet), label: l.budget),
               NavigationDestination(icon: const Icon(Icons.store_outlined),
                 selectedIcon: const Icon(Icons.store), label: l.vendor),
-              if (_isAdmin)
-                const NavigationDestination(icon: Icon(Icons.admin_panel_settings_outlined),
-                  selectedIcon: Icon(Icons.admin_panel_settings), label: 'Admin'),
+              NavigationDestination(icon: const Icon(Icons.person_outline),
+                selectedIcon: const Icon(Icons.person), label: l.profile),
             ],
           ),
         );

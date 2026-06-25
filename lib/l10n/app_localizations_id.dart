@@ -24,6 +24,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get vendor => 'Vendor';
 
   @override
+  String get profile => 'Profil';
+
+  @override
   String get daysToGo => 'Hari Menuju Hari H';
 
   @override
@@ -215,56 +218,80 @@ class AppLocalizationsId extends AppLocalizations {
   String get getStarted => 'Mulai';
 
   @override
-  String get taskDetermBudget => 'Tentukan budget keseluruhan';
+  String get donationTitle => 'Donasi & Aktivasi Premium';
 
   @override
-  String get taskFindVenue => 'Cari dan booking venue';
+  String get donationDescription =>
+      'Transfer ke rekening di bawah, lalu klik \'Request Premium\' untuk aktivasi.';
 
   @override
-  String get taskGuestList => 'Buat daftar tamu undangan';
+  String get bankInfo => 'Informasi Rekening';
 
   @override
-  String get taskFindWO => 'Cari wedding organizer';
+  String get bank => 'Bank';
 
   @override
-  String get taskBookCatering => 'Pilih dan booking vendor catering';
+  String get accountNumber => 'No. Rekening';
 
   @override
-  String get taskDecorVendor => 'Pilih vendor dekorasi';
+  String get accountName => 'Atas Nama';
 
   @override
-  String get taskBookPhotographer => 'Booking fotografer & videografer';
+  String get amount => 'Nominal';
 
   @override
-  String get taskInvitationDesign => 'Pilih desain undangan';
+  String get donationAmount => 'Rp 50.000 (seikhlasnya)';
 
   @override
-  String get taskFittingDress => 'Fitting baju pengantin';
+  String get yourAccount => 'Akun Kamu';
 
   @override
-  String get taskPrewedding => 'Sesi foto prewedding';
+  String get email => 'Email';
 
   @override
-  String get taskSendInvitations => 'Kirim undangan';
+  String get name => 'Nama';
 
   @override
-  String get taskMarriageDocs => 'Urus dokumen pernikahan';
+  String get requestPremium => 'Request Premium';
 
   @override
-  String get taskConfirmVendors => 'Konfirmasi semua vendor';
+  String get requestSent =>
+      'Request premium terkirim! Admin akan mereview dan mengaktifkan akunmu.';
 
   @override
-  String get taskFinalFitting => 'Fitting baju final';
+  String get requestNote =>
+      '* Setelah transfer, klik tombol di atas. Admin akan menerima notifikasi dan mengaktifkan akun premium kamu.';
 
   @override
-  String get taskRundown => 'Rundown acara detail';
+  String get profileTitle => 'Profil';
 
   @override
-  String get taskTechMeeting => 'Technical meeting vendor';
+  String get language => 'Bahasa';
 
   @override
-  String get taskSeserahan => 'Persiapan seserahan/hantaran';
+  String get currency => 'Mata Uang';
 
   @override
-  String get taskRehearsal => 'Rehearsal & doa bersama';
+  String get accountInfo => 'Info Akun';
+
+  @override
+  String get notLoggedIn => 'Belum login';
+
+  @override
+  String get logout => 'Keluar';
+
+  @override
+  String get adminPanel => 'Panel Admin';
+
+  @override
+  String get settings => 'Pengaturan';
+
+  @override
+  String get errorLoadData =>
+      'Data tidak dapat dimuat. Periksa koneksi internet.';
+
+  @override
+  String errorGeneric(Object error) {
+    return 'Error: $error';
+  }
 }

@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
+import '../screens/admin_screen.dart';
 import '../screens/donation_screen.dart';
 import '../services/premium_service.dart';
 import '../services/auth_service.dart';
 
 /// Wrap fitur premium dengan widget ini.
-/// Jika user bukan premium, tampilkan DonationScreen atau lock screen.
+/// Admin bypass langsung. User biasa harus premium.
 class PremiumGate extends StatelessWidget {
   final Widget child;
   final Widget? lockedChild;
@@ -26,6 +27,11 @@ class PremiumGate extends StatelessWidget {
           return _buildDefaultLock(context);
         }
 
+        // Admin bypass — langsung tampilkan content
+        if (adminEmails.contains(user.email)) {
+          return child;
+        }
+
         return StreamBuilder<bool>(
           stream: _premiumService
               .getPremiumStatus(user.uid)
@@ -36,7 +42,6 @@ class PremiumGate extends StatelessWidget {
             }
             final isPremium = snapshot.data ?? false;
             if (isPremium) return child;
-            // Logged in tapi belum premium → tampilkan DonationScreen
             return DonationScreen(user: user);
           },
         );

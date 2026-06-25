@@ -23,6 +23,6 @@ flutter build web --base-href / --release
 ```bash
 robocopy build\web docs /MIR
 git add .
-git commit -m "fix admin vendor"
+git commit -m "fix admin bank account"
 git push
 ```

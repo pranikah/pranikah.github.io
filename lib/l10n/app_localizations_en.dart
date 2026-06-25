@@ -24,6 +24,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get vendor => 'Vendor';
 
   @override
+  String get profile => 'Profile';
+
+  @override
   String get daysToGo => 'Days To Go';
 
   @override
@@ -216,56 +219,80 @@ class AppLocalizationsEn extends AppLocalizations {
   String get getStarted => 'Get Started';
 
   @override
-  String get taskDetermBudget => 'Determine overall budget';
+  String get donationTitle => 'Donate & Activate Premium';
 
   @override
-  String get taskFindVenue => 'Find and book venue';
+  String get donationDescription =>
+      'Transfer to the account below, then tap \'Request Premium\' to activate.';
 
   @override
-  String get taskGuestList => 'Create guest list';
+  String get bankInfo => 'Bank Information';
 
   @override
-  String get taskFindWO => 'Find wedding organizer';
+  String get bank => 'Bank';
 
   @override
-  String get taskBookCatering => 'Book catering vendor';
+  String get accountNumber => 'Account Number';
 
   @override
-  String get taskDecorVendor => 'Choose decoration vendor';
+  String get accountName => 'Account Name';
 
   @override
-  String get taskBookPhotographer => 'Book photographer & videographer';
+  String get amount => 'Amount';
 
   @override
-  String get taskInvitationDesign => 'Choose invitation design';
+  String get donationAmount => 'Rp 50,000 (or any amount)';
 
   @override
-  String get taskFittingDress => 'Wedding dress fitting';
+  String get yourAccount => 'Your Account';
 
   @override
-  String get taskPrewedding => 'Prewedding photo session';
+  String get email => 'Email';
 
   @override
-  String get taskSendInvitations => 'Send invitations';
+  String get name => 'Name';
 
   @override
-  String get taskMarriageDocs => 'Handle marriage documents';
+  String get requestPremium => 'Request Premium';
 
   @override
-  String get taskConfirmVendors => 'Confirm all vendors';
+  String get requestSent =>
+      'Premium request sent! Admin will review and activate your account.';
 
   @override
-  String get taskFinalFitting => 'Final fitting';
+  String get requestNote =>
+      '* After transfer, tap the button above. Admin will receive a notification and activate your premium account.';
 
   @override
-  String get taskRundown => 'Detailed event rundown';
+  String get profileTitle => 'Profile';
 
   @override
-  String get taskTechMeeting => 'Technical meeting with vendors';
+  String get language => 'Language';
 
   @override
-  String get taskSeserahan => 'Prepare seserahan/hantaran';
+  String get currency => 'Currency';
 
   @override
-  String get taskRehearsal => 'Rehearsal & prayer together';
+  String get accountInfo => 'Account Info';
+
+  @override
+  String get notLoggedIn => 'Not logged in';
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get adminPanel => 'Admin Panel';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get errorLoadData =>
+      'Cannot load data. Check your internet connection.';
+
+  @override
+  String errorGeneric(Object error) {
+    return 'Error: $error';
+  }
 }

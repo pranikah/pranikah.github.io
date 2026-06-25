@@ -128,6 +128,12 @@ abstract class AppLocalizations {
   /// **'Vendor'**
   String get vendor;
 
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
   /// No description provided for @daysToGo.
   ///
   /// In en, this message translates to:
@@ -488,113 +494,149 @@ abstract class AppLocalizations {
   /// **'Get Started'**
   String get getStarted;
 
-  /// No description provided for @taskDetermBudget.
+  /// No description provided for @donationTitle.
   ///
   /// In en, this message translates to:
-  /// **'Determine overall budget'**
-  String get taskDetermBudget;
+  /// **'Donate & Activate Premium'**
+  String get donationTitle;
 
-  /// No description provided for @taskFindVenue.
+  /// No description provided for @donationDescription.
   ///
   /// In en, this message translates to:
-  /// **'Find and book venue'**
-  String get taskFindVenue;
+  /// **'Transfer to the account below, then tap \'Request Premium\' to activate.'**
+  String get donationDescription;
 
-  /// No description provided for @taskGuestList.
+  /// No description provided for @bankInfo.
   ///
   /// In en, this message translates to:
-  /// **'Create guest list'**
-  String get taskGuestList;
+  /// **'Bank Information'**
+  String get bankInfo;
 
-  /// No description provided for @taskFindWO.
+  /// No description provided for @bank.
   ///
   /// In en, this message translates to:
-  /// **'Find wedding organizer'**
-  String get taskFindWO;
+  /// **'Bank'**
+  String get bank;
 
-  /// No description provided for @taskBookCatering.
+  /// No description provided for @accountNumber.
   ///
   /// In en, this message translates to:
-  /// **'Book catering vendor'**
-  String get taskBookCatering;
+  /// **'Account Number'**
+  String get accountNumber;
 
-  /// No description provided for @taskDecorVendor.
+  /// No description provided for @accountName.
   ///
   /// In en, this message translates to:
-  /// **'Choose decoration vendor'**
-  String get taskDecorVendor;
+  /// **'Account Name'**
+  String get accountName;
 
-  /// No description provided for @taskBookPhotographer.
+  /// No description provided for @amount.
   ///
   /// In en, this message translates to:
-  /// **'Book photographer & videographer'**
-  String get taskBookPhotographer;
+  /// **'Amount'**
+  String get amount;
 
-  /// No description provided for @taskInvitationDesign.
+  /// No description provided for @donationAmount.
   ///
   /// In en, this message translates to:
-  /// **'Choose invitation design'**
-  String get taskInvitationDesign;
+  /// **'Rp 50,000 (or any amount)'**
+  String get donationAmount;
 
-  /// No description provided for @taskFittingDress.
+  /// No description provided for @yourAccount.
   ///
   /// In en, this message translates to:
-  /// **'Wedding dress fitting'**
-  String get taskFittingDress;
+  /// **'Your Account'**
+  String get yourAccount;
 
-  /// No description provided for @taskPrewedding.
+  /// No description provided for @email.
   ///
   /// In en, this message translates to:
-  /// **'Prewedding photo session'**
-  String get taskPrewedding;
+  /// **'Email'**
+  String get email;
 
-  /// No description provided for @taskSendInvitations.
+  /// No description provided for @name.
   ///
   /// In en, this message translates to:
-  /// **'Send invitations'**
-  String get taskSendInvitations;
+  /// **'Name'**
+  String get name;
 
-  /// No description provided for @taskMarriageDocs.
+  /// No description provided for @requestPremium.
   ///
   /// In en, this message translates to:
-  /// **'Handle marriage documents'**
-  String get taskMarriageDocs;
+  /// **'Request Premium'**
+  String get requestPremium;
 
-  /// No description provided for @taskConfirmVendors.
+  /// No description provided for @requestSent.
   ///
   /// In en, this message translates to:
-  /// **'Confirm all vendors'**
-  String get taskConfirmVendors;
+  /// **'Premium request sent! Admin will review and activate your account.'**
+  String get requestSent;
 
-  /// No description provided for @taskFinalFitting.
+  /// No description provided for @requestNote.
   ///
   /// In en, this message translates to:
-  /// **'Final fitting'**
-  String get taskFinalFitting;
+  /// **'* After transfer, tap the button above. Admin will receive a notification and activate your premium account.'**
+  String get requestNote;
 
-  /// No description provided for @taskRundown.
+  /// No description provided for @profileTitle.
   ///
   /// In en, this message translates to:
-  /// **'Detailed event rundown'**
-  String get taskRundown;
+  /// **'Profile'**
+  String get profileTitle;
 
-  /// No description provided for @taskTechMeeting.
+  /// No description provided for @language.
   ///
   /// In en, this message translates to:
-  /// **'Technical meeting with vendors'**
-  String get taskTechMeeting;
+  /// **'Language'**
+  String get language;
 
-  /// No description provided for @taskSeserahan.
+  /// No description provided for @currency.
   ///
   /// In en, this message translates to:
-  /// **'Prepare seserahan/hantaran'**
-  String get taskSeserahan;
+  /// **'Currency'**
+  String get currency;
 
-  /// No description provided for @taskRehearsal.
+  /// No description provided for @accountInfo.
   ///
   /// In en, this message translates to:
-  /// **'Rehearsal & prayer together'**
-  String get taskRehearsal;
+  /// **'Account Info'**
+  String get accountInfo;
+
+  /// No description provided for @notLoggedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Not logged in'**
+  String get notLoggedIn;
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @adminPanel.
+  ///
+  /// In en, this message translates to:
+  /// **'Admin Panel'**
+  String get adminPanel;
+
+  /// No description provided for @settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settings;
+
+  /// No description provided for @errorLoadData.
+  ///
+  /// In en, this message translates to:
+  /// **'Cannot load data. Check your internet connection.'**
+  String get errorLoadData;
+
+  /// No description provided for @errorGeneric.
+  ///
+  /// In en, this message translates to:
+  /// **'Error: {error}'**
+  String errorGeneric(Object error);
 }
 
 class _AppLocalizationsDelegate

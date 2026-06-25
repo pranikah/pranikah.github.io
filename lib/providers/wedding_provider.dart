@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/wedding_plan.dart';
 import '../models/wedding_task.dart';
 import '../models/budget_item.dart';
@@ -41,10 +42,22 @@ class WeddingProvider extends ChangeNotifier {
     _planSub = _service.getPlan(planId).listen((p) {
       _plan = p;
       _isLoading = false;
-      notifyListeners();
-      if (p != null && !_tasksChecked) {
-        _tasksChecked = true;
-        _service.ensureTasksExist(planId, p.weddingDate);
+      if (p == null) {
+        SharedPreferences.getInstance().then((prefs) {
+          if (prefs.getBool('plan_created') == true) {
+            _error = 'error_load_data'; // key for localization in UI
+            notifyListeners();
+          } else {
+            notifyListeners();
+          }
+        });
+      } else {
+        _error = null;
+        notifyListeners();
+        if (!_tasksChecked) {
+          _tasksChecked = true;
+          _service.ensureTasksExist(planId, p.weddingDate);
+        }
       }
     }, onError: (e) {
       _error = 'Gagal memuat data: $e';
@@ -109,6 +122,9 @@ class WeddingProvider extends ChangeNotifier {
     }
 
     loadPlan(planId);
+    // Simpan flag bahwa plan sudah dibuat
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('plan_created', true);
   }
 
   Future<void> updateTaskStatus(String taskId, TaskStatus status) async {

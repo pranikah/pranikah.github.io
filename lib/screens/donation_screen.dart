@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import '../services/premium_service.dart';
 import '../theme/app_theme.dart';
 
@@ -18,6 +19,7 @@ class _DonationScreenState extends State<DonationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -25,68 +27,67 @@ class _DonationScreenState extends State<DonationScreen> {
         children: [
           const Center(child: Icon(Icons.volunteer_activism, size: 64, color: AppTheme.primary)),
           const SizedBox(height: 16),
-          const Center(child: Text('Donasi & Aktivasi Premium',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
+          Center(child: Text(l.donationTitle,
+            style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold))),
           const SizedBox(height: 8),
-          const Center(child: Text(
-            'Transfer ke rekening di bawah, lalu klik "Request Premium" untuk aktivasi.',
-            textAlign: TextAlign.center,
-            style: TextStyle(color: AppTheme.textLight),
-          )),
+          Center(child: Text(l.donationDescription,
+            textAlign: TextAlign.center, style: const TextStyle(color: AppTheme.textLight))),
           const SizedBox(height: 24),
-
-          // Info Rekening
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('💳 Informasi Rekening',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                  const SizedBox(height: 12),
-                  _infoRow('Bank', 'BCA'),
-                  _infoRow('No. Rekening', '8310774334'),
-                  _infoRow('Atas Nama', 'Mohamad Hadi'),
-                  _infoRow('Nominal', 'Rp 50.000 (seikhlasnya)'),
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF003580),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Text('mandiri',
+                          style: TextStyle(color: Color(0xFFFFCC00), fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 1)),
+                      ),
+                      const SizedBox(width: 10),
+                      Text(l.bankInfo, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  _infoRow(l.accountNumber, '1300 0166 5999 0'),
+                  _infoRow(l.accountName, 'MOHAMAD SOLEH'),
+                  _infoRow(l.amount, l.donationAmount),
                 ],
               ),
             ),
           ),
           const SizedBox(height: 16),
-
-          // Info User
           Card(
             child: Padding(
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text('👤 Akun Kamu',
-                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                  Text('👤 ${l.yourAccount}', style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                   const SizedBox(height: 12),
-                  _infoRow('Email', widget.user.email ?? '-'),
-                  _infoRow('Nama', widget.user.displayName ?? '-'),
+                  _infoRow(l.email, widget.user.email ?? '-'),
+                  _infoRow(l.name, widget.user.displayName ?? '-'),
                 ],
               ),
             ),
           ),
           const SizedBox(height: 24),
-
-          // Submit Button
           if (_submitted)
-            const Card(
-              color: Color(0xFFE8F5E9),
+            Card(
+              color: const Color(0xFFE8F5E9),
               child: Padding(
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 child: Row(
                   children: [
-                    Icon(Icons.check_circle, color: Colors.green),
-                    SizedBox(width: 12),
-                    Expanded(child: Text(
-                      'Request premium terkirim! Admin akan mereview dan mengaktifkan akunmu.',
-                      style: TextStyle(color: Colors.green),
-                    )),
+                    const Icon(Icons.check_circle, color: Colors.green),
+                    const SizedBox(width: 12),
+                    Expanded(child: Text(l.requestSent, style: const TextStyle(color: Colors.green))),
                   ],
                 ),
               ),
@@ -100,14 +101,11 @@ class _DonationScreenState extends State<DonationScreen> {
                     ? const SizedBox(width: 16, height: 16,
                         child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
                     : const Icon(Icons.send),
-                label: const Text('Request Premium'),
+                label: Text(l.requestPremium),
               ),
             ),
           const SizedBox(height: 12),
-          const Text(
-            '* Setelah transfer, klik tombol di atas. Admin akan menerima notifikasi email dan mengaktifkan akun premium kamu.',
-            style: TextStyle(fontSize: 12, color: AppTheme.textLight),
-          ),
+          Text(l.requestNote, style: const TextStyle(fontSize: 12, color: AppTheme.textLight)),
         ],
       ),
     );
@@ -119,10 +117,8 @@ class _DonationScreenState extends State<DonationScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(width: 100, child: Text(label,
-            style: const TextStyle(color: AppTheme.textLight))),
-          Expanded(child: Text(value,
-            style: const TextStyle(fontWeight: FontWeight.w500))),
+          SizedBox(width: 100, child: Text(label, style: const TextStyle(color: AppTheme.textLight))),
+          Expanded(child: Text(value, style: const TextStyle(fontWeight: FontWeight.w500))),
         ],
       ),
     );
@@ -132,20 +128,13 @@ class _DonationScreenState extends State<DonationScreen> {
     setState(() => _loading = true);
     try {
       await _premiumService.requestPremium(
-        widget.user.uid,
-        widget.user.email ?? '',
-        widget.user.displayName ?? '',
-      );
-      // Send notification email to admin via Firestore trigger
-      await _premiumService.notifyAdmin(
-        widget.user.email ?? '',
-        widget.user.displayName ?? '',
-      );
+        widget.user.uid, widget.user.email ?? '', widget.user.displayName ?? '');
+      await _premiumService.notifyAdmin(widget.user.email ?? '', widget.user.displayName ?? '');
       setState(() => _submitted = true);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(content: Text(AppLocalizations.of(context)!.errorGeneric(e.toString()))),
         );
       }
     }
