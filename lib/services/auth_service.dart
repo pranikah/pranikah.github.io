@@ -4,16 +4,26 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  // Untuk web, clientId HARUS dari project Google Cloud yang sama dengan Firebase
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    clientId: kIsWeb ? '373730537373-s109l7j2pl108j21apv4c8903faj5m6l.apps.googleusercontent.com' : null,
-  );
 
   User? get currentUser => _auth.currentUser;
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
   Future<User?> signInWithGoogle() async {
-    final googleUser = await _googleSignIn.signIn();
+    if (kIsWeb) {
+      return _signInWithGoogleWeb();
+    }
+    return _signInWithGoogleMobile();
+  }
+
+  Future<User?> _signInWithGoogleWeb() async {
+    final provider = GoogleAuthProvider();
+    final result = await _auth.signInWithPopup(provider);
+    return result.user;
+  }
+
+  Future<User?> _signInWithGoogleMobile() async {
+    final googleSignIn = GoogleSignIn();
+    final googleUser = await googleSignIn.signIn();
     if (googleUser == null) return null;
 
     final googleAuth = await googleUser.authentication;
@@ -27,7 +37,9 @@ class AuthService {
   }
 
   Future<void> signOut() async {
-    await _googleSignIn.signOut();
+    if (!kIsWeb) {
+      await GoogleSignIn().signOut();
+    }
     await _auth.signOut();
   }
 }
