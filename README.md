@@ -23,6 +23,6 @@ flutter build web --base-href / --release
 ```bash
 robocopy build\web docs /MIR
 git add .
-git commit -m "deploy web"
+git commit -m "fix simulation and signin"
 git push
 ```
