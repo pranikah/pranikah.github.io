@@ -79,17 +79,17 @@ class FirebaseService implements DataService {
 
   // Ensure tasks exist (auto-generate if empty)
   @override
-  Future<void> ensureTasksExist(String planId, DateTime weddingDate) async {
+  Future<void> ensureTasksExist(String planId, DateTime weddingDate, {DateTime? startDate}) async {
     final snap = await _db.collection(_plansCol).doc(planId).collection(_tasksCol).limit(1).get();
     if (snap.docs.isEmpty) {
-      await generateDefaultTasks(planId, weddingDate);
+      await generateDefaultTasks(planId, weddingDate, startDate: startDate);
     }
   }
 
-  // Generate default tasks
+  // Generate default tasks — only phases that fit within startDate..weddingDate
   @override
-  Future<void> generateDefaultTasks(String planId, DateTime weddingDate) async {
-    final now = DateTime.now();
+  Future<void> generateDefaultTasks(String planId, DateTime weddingDate, {DateTime? startDate}) async {
+    final cutoff = startDate ?? DateTime.now();
     final defaultTasks = <Map<String, dynamic>>[
       {'title': 'Tentukan budget keseluruhan', 'phase': TaskPhase.month12},
       {'title': 'Cari dan booking venue', 'phase': TaskPhase.month12},
@@ -117,8 +117,8 @@ class FirebaseService implements DataService {
       final dueDate = phase == TaskPhase.week1
           ? weddingDate.subtract(const Duration(days: 7))
           : DateTime(weddingDate.year, weddingDate.month - phase.monthsBefore, weddingDate.day);
-      // Skip phase yang due date-nya sudah lewat
-      if (dueDate.isBefore(now)) continue;
+      // Skip phase yang due date-nya sebelum startDate
+      if (dueDate.isBefore(cutoff)) continue;
       final ref = _db.collection(_plansCol).doc(planId).collection(_tasksCol).doc();
       batch.set(ref, WeddingTask(
         id: ref.id,

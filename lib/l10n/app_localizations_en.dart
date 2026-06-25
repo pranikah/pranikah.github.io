@@ -12,6 +12,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appTitle => 'Wedding Preparation';
 
   @override
+  String get appDescription =>
+      'Plan your dream wedding from start to finish. Manage timeline, budget, vendors, and checklist — all in one app.';
+
+  @override
   String get dashboard => 'Dashboard';
 
   @override

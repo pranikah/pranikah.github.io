@@ -56,7 +56,7 @@ class _PraNikahAppState extends State<PraNikahApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => WeddingProvider(FirebaseService())..loadPlan('default_plan'),
+      create: (_) => WeddingProvider(FirebaseService()),
       child: MaterialApp(
         title: 'PraNikah',
         theme: AppTheme.theme,
@@ -113,6 +113,15 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final uid = FirebaseAuth.instance.currentUser!.uid;
+      context.read<WeddingProvider>().loadPlan(uid);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -30,9 +30,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 24),
                 Text(l.appTitle,
                   style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
-                Text(l.loginWithGoogle,
-                  style: const TextStyle(color: AppTheme.textLight)),
+                const SizedBox(height: 12),
+                Text(l.appDescription,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(color: AppTheme.textLight, fontSize: 14)),
                 const SizedBox(height: 40),
                 SizedBox(
                   width: double.infinity,

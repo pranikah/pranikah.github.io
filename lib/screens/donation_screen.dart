@@ -42,14 +42,18 @@ class _DonationScreenState extends State<DonationScreen> {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF003580),
-                          borderRadius: BorderRadius.circular(4),
+                      Image.network(
+                        'https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Bank_Mandiri_logo_2016.svg/200px-Bank_Mandiri_logo_2016.svg.png',
+                        height: 24,
+                        errorBuilder: (_, __, ___) => Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF003580),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: const Text('mandiri',
+                            style: TextStyle(color: Color(0xFFFFCC00), fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 1)),
                         ),
-                        child: const Text('mandiri',
-                          style: TextStyle(color: Color(0xFFFFCC00), fontWeight: FontWeight.bold, fontSize: 13, letterSpacing: 1)),
                       ),
                       const SizedBox(width: 10),
                       Text(l.bankInfo, style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
@@ -71,11 +75,15 @@ class _DonationScreenState extends State<DonationScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
+                  Row(
                     children: [
-                      Icon(Icons.language, color: Color(0xFF29ABE0)),
-                      SizedBox(width: 8),
-                      Text('International Payment', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
+                      Image.network(
+                        'https://www.paypalobjects.com/webstatic/icon/pp258.png',
+                        width: 28, height: 28,
+                        errorBuilder: (_, __, ___) => const Icon(Icons.payment, color: Color(0xFF003087)),
+                      ),
+                      const SizedBox(width: 8),
+                      const Text('PayPal', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                     ],
                   ),
                   const SizedBox(height: 12),

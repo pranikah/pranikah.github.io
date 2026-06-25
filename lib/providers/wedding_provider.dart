@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/wedding_plan.dart';
@@ -44,7 +45,7 @@ class WeddingProvider extends ChangeNotifier {
       _isLoading = false;
       if (p == null) {
         SharedPreferences.getInstance().then((prefs) {
-          if (prefs.getBool('plan_created') == true) {
+          if (prefs.getBool('plan_created_$planId') == true) {
             _error = 'error_load_data'; // key for localization in UI
             notifyListeners();
           } else {
@@ -56,7 +57,7 @@ class WeddingProvider extends ChangeNotifier {
         notifyListeners();
         if (!_tasksChecked) {
           _tasksChecked = true;
-          _service.ensureTasksExist(planId, p.weddingDate);
+          _service.ensureTasksExist(planId, p.weddingDate, startDate: p.startDate);
         }
       }
     }, onError: (e) {
@@ -89,7 +90,7 @@ class WeddingProvider extends ChangeNotifier {
     required DateTime startDate,
     required double totalBudget,
   }) async {
-    const planId = 'default_plan';
+    final planId = FirebaseAuth.instance.currentUser!.uid;
     final plan = WeddingPlan(
       id: planId,
       weddingDate: weddingDate,
@@ -100,7 +101,7 @@ class WeddingProvider extends ChangeNotifier {
     );
 
     await _service.savePlan(plan);
-    await _service.generateDefaultTasks(planId, weddingDate);
+    await _service.generateDefaultTasks(planId, weddingDate, startDate: startDate);
 
     // Generate default budget items
     final defaultBudget = {
@@ -124,7 +125,7 @@ class WeddingProvider extends ChangeNotifier {
     loadPlan(planId);
     // Simpan flag bahwa plan sudah dibuat
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('plan_created', true);
+    await prefs.setBool('plan_created_$planId', true);
   }
 
   Future<void> updateTaskStatus(String taskId, TaskStatus status) async {

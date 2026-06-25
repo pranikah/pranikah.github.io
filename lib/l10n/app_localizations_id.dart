@@ -12,6 +12,10 @@ class AppLocalizationsId extends AppLocalizations {
   String get appTitle => 'Persiapan Nikah';
 
   @override
+  String get appDescription =>
+      'Rencanakan pernikahanmu dari awal hingga akhir. Kelola timeline, budget, vendor, dan checklist — semua dalam satu aplikasi.';
+
+  @override
   String get dashboard => 'Dashboard';
 
   @override

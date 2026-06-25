@@ -104,6 +104,12 @@ abstract class AppLocalizations {
   /// **'Wedding Preparation'**
   String get appTitle;
 
+  /// No description provided for @appDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Plan your dream wedding from start to finish. Manage timeline, budget, vendors, and checklist — all in one app.'**
+  String get appDescription;
+
   /// No description provided for @dashboard.
   ///
   /// In en, this message translates to:
