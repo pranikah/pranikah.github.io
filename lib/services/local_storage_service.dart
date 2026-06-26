@@ -317,8 +317,8 @@ class LocalStorageService implements DataService {
 
   WeddingPlan _planFromJson(Map<String, dynamic> m) => WeddingPlan(
     id: m['id'],
-    weddingDate: DateTime.parse(m['weddingDate']),
-    startDate: DateTime.parse(m['startDate']),
+    weddingDate: _parseDate(m['weddingDate']),
+    startDate: _parseDate(m['startDate']),
     totalBudget: (m['totalBudget'] as num).toDouble(),
     groomName: m['groomName'] ?? '',
     brideName: m['brideName'] ?? '',
@@ -336,7 +336,7 @@ class LocalStorageService implements DataService {
   WeddingTask _taskFromJson(Map<String, dynamic> m) => WeddingTask(
     id: m['id'],
     title: m['title'],
-    dueDate: DateTime.parse(m['dueDate']),
+    dueDate: _parseDate(m['dueDate']),
     status: TaskStatus.values[m['status'] ?? 0],
     phase: TaskPhase.values[m['phase'] ?? 0],
     priority: TaskPriority.values[m['priority'] ?? 1],
@@ -377,4 +377,10 @@ class LocalStorageService implements DataService {
     priceRange: m['priceRange'] ?? '',
     instagram: m['instagram'],
   );
+
+  /// Parse date string as local DateTime (avoids UTC issue with DateTime.parse on date-only strings)
+  DateTime _parseDate(String s) {
+    final parts = s.split('T')[0].split('-');
+    return DateTime(int.parse(parts[0]), int.parse(parts[1]), int.parse(parts[2]));
+  }
 }

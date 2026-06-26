@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../providers/wedding_provider.dart';
 import '../services/currency_helper.dart';
+import '../services/email_connect_service.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ValueChanged<Locale>? onLocaleChanged;
@@ -15,8 +16,11 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  final _emailService = EmailConnectService();
   String _selectedLocale = 'en';
   String _selectedCurrency = 'IDR';
+  String? _connectedEmail;
+  String? _connectedName;
 
   @override
   void initState() {
@@ -26,9 +30,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
+    final info = await _emailService.getConnectedInfo();
     setState(() {
       _selectedLocale = prefs.getString(kLocaleKey) ?? 'en';
       _selectedCurrency = prefs.getString(kCurrencyKey) ?? 'IDR';
+      _connectedEmail = info['email'];
+      _connectedName = info['name'];
     });
   }
 
@@ -39,20 +46,54 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return ListView(
       padding: const EdgeInsets.all(20),
       children: [
-        // User Info Card
+        // Connect Email Card
         Card(
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                const CircleAvatar(radius: 28, child: Icon(Icons.person, size: 28)),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: Text(l.profile,
-                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                ),
-              ],
-            ),
+            child: _connectedEmail != null
+                ? Row(
+                    children: [
+                      const CircleAvatar(radius: 24, child: Icon(Icons.person, size: 24)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(_connectedName ?? '',
+                              style: const TextStyle(fontWeight: FontWeight.w600)),
+                            Text(_connectedEmail!,
+                              style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                          ],
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.link_off, size: 20),
+                        tooltip: 'Disconnect',
+                        onPressed: _disconnect,
+                      ),
+                    ],
+                  )
+                : Row(
+                    children: [
+                      const CircleAvatar(radius: 24, child: Icon(Icons.email_outlined, size: 24)),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text('Connect Email',
+                              style: TextStyle(fontWeight: FontWeight.w600)),
+                            Text('Untuk fitur request & feedback nanti',
+                              style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                          ],
+                        ),
+                      ),
+                      FilledButton.tonal(
+                        onPressed: _connectEmail,
+                        child: const Text('Connect'),
+                      ),
+                    ],
+                  ),
           ),
         ),
         const SizedBox(height: 20),
@@ -109,6 +150,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> _connectEmail() async {
+    try {
+      final email = await _emailService.connectEmail();
+      if (email != null) {
+        final info = await _emailService.getConnectedInfo();
+        setState(() {
+          _connectedEmail = info['email'];
+          _connectedName = info['name'];
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Gagal connect: $e')),
+        );
+      }
+    }
+  }
+
+  Future<void> _disconnect() async {
+    await _emailService.disconnectEmail();
+    setState(() {
+      _connectedEmail = null;
+      _connectedName = null;
+    });
   }
 
   void _confirmReset(BuildContext context) {

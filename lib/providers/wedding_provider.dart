@@ -177,6 +177,11 @@ class WeddingProvider extends ChangeNotifier {
 
   Future<void> resetPlan() async {
     if (_planId == null) return;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove('plan_created_$_planId');
+    _error = null;
+    _tasks = [];
+    _budgetItems = [];
     await _service.deletePlan(_planId!);
   }
 
