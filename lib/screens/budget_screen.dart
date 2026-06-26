@@ -38,7 +38,19 @@ class _BudgetScreenState extends State<BudgetScreen> {
       builder: (context, provider, _) {
         final items = provider.budgetItems;
         final plan = provider.plan;
-        if (plan == null) return const Center(child: CircularProgressIndicator());
+        if (plan == null) {
+          return const Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('💰', style: TextStyle(fontSize: 48)),
+                SizedBox(height: 12),
+                Text('Buat persiapan dulu untuk kelola budget',
+                  style: TextStyle(color: Colors.grey)),
+              ],
+            ),
+          );
+        }
 
         final totalPlanned = items.fold<double>(0, (s, i) => s + i.plannedCost);
         final totalSpent = items.fold<double>(0, (s, i) => s + i.actualCost);

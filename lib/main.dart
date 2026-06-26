@@ -91,16 +91,27 @@ class AppShell extends StatefulWidget {
   State<AppShell> createState() => _AppShellState();
 }
 
-class _AppShellState extends State<AppShell> {
+class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin {
   int _currentIndex = 0;
   static const _localUserId = 'local_user';
+  late final AnimationController _bannerAnim;
 
   @override
   void initState() {
     super.initState();
+    _bannerAnim = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true);
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<WeddingProvider>().loadPlan(_localUserId);
     });
+  }
+
+  @override
+  void dispose() {
+    _bannerAnim.dispose();
+    super.dispose();
   }
 
   @override
@@ -181,23 +192,37 @@ class _AppShellState extends State<AppShell> {
         Uri.parse('https://ko-fi.com/mohamadsoleh'),
         mode: LaunchMode.externalApplication,
       ),
-      child: Container(
-        width: double.infinity,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-        decoration: BoxDecoration(
-          gradient: LinearGradient(colors: [Colors.pink.shade50, Colors.orange.shade50]),
-        ),
-        child: Row(
-          children: [
-            const Text('☕', style: TextStyle(fontSize: 18)),
-            const SizedBox(width: 8),
-            const Expanded(
-              child: Text('Gratis selamanya! Traktir kami kopi untuk support 💕',
-                style: TextStyle(fontSize: 12)),
+      child: AnimatedBuilder(
+        animation: _bannerAnim,
+        builder: (context, child) {
+          final glow = 0.3 + (_bannerAnim.value * 0.7);
+          return Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  Colors.pink.shade50,
+                  Color.lerp(Colors.orange.shade50, Colors.amber.shade100, _bannerAnim.value)!,
+                ],
+              ),
             ),
-            Icon(Icons.arrow_forward_ios, size: 12, color: Colors.pink.shade300),
-          ],
-        ),
+            child: Row(
+              children: [
+                Opacity(
+                  opacity: glow,
+                  child: const Text('☕', style: TextStyle(fontSize: 18)),
+                ),
+                const SizedBox(width: 8),
+                const Expanded(
+                  child: Text('Gratis selamanya! Traktir kami kopi untuk support 💕',
+                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+                ),
+                Icon(Icons.arrow_forward_ios, size: 12, color: Colors.pink.shade300),
+              ],
+            ),
+          );
+        },
       ),
     );
   }
