@@ -37,6 +37,16 @@ class _SetupScreenState extends State<SetupScreen> {
   String get _currencySymbol =>
     currencies.firstWhere((c) => c['code'] == _selectedCurrency, orElse: () => currencies[0])['symbol']!;
 
+  void _formatBudget() {
+    final text = _budgetCtrl.text.replaceAll(RegExp(r'[^0-9]'), '');
+    if (text.isEmpty) return;
+    final formatted = NumberFormat('#,###').format(int.parse(text));
+    _budgetCtrl.value = TextEditingValue(
+      text: formatted,
+      selection: TextSelection.collapsed(offset: formatted.length),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
@@ -100,6 +110,7 @@ class _SetupScreenState extends State<SetupScreen> {
                   prefixIcon: const Icon(Icons.account_balance_wallet_outlined),
                   prefixText: '$_currencySymbol ',
                 ),
+                onChanged: (_) => _formatBudget(),
               ),
               if (_weddingDate != null && _startDate != null) ...[
                 const SizedBox(height: 16),
@@ -181,7 +192,7 @@ class _SetupScreenState extends State<SetupScreen> {
         brideName: _brideCtrl.text.trim(),
         weddingDate: _weddingDate!,
         startDate: _startDate!,
-        totalBudget: double.tryParse(_budgetCtrl.text.replaceAll('.', '')) ?? 0,
+        totalBudget: double.tryParse(_budgetCtrl.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
       );
       if (mounted) Navigator.pop(context);
     } catch (e) {

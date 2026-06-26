@@ -127,24 +127,33 @@ class LocalStorageService implements DataService {
   Future<void> generateDefaultTasks(String planId, DateTime weddingDate, {DateTime? startDate}) async {
     final cutoff = startDate ?? DateTime.now();
     final defaultTasks = <Map<String, dynamic>>[
+      // 12 bulan sebelum
       {'title': 'Tentukan budget keseluruhan', 'phase': TaskPhase.month12},
-      {'title': 'Cari dan booking venue', 'phase': TaskPhase.month12},
-      {'title': 'Buat daftar tamu undangan', 'phase': TaskPhase.month12},
-      {'title': 'Cari wedding organizer', 'phase': TaskPhase.month12},
-      {'title': 'Pilih dan booking vendor catering', 'phase': TaskPhase.month6},
-      {'title': 'Pilih vendor dekorasi', 'phase': TaskPhase.month6},
+      {'title': 'Daftar & konsultasi ke KUA', 'phase': TaskPhase.month12},
+      {'title': 'Ikut kursus pra-nikah (suscatin)', 'phase': TaskPhase.month12},
+      {'title': 'Cari dan booking gedung/venue', 'phase': TaskPhase.month12},
+      // 6 bulan sebelum
+      {'title': 'Siapkan mahar & mas kawin', 'phase': TaskPhase.month6},
+      {'title': 'Booking catering & dekorasi', 'phase': TaskPhase.month6},
       {'title': 'Booking fotografer & videografer', 'phase': TaskPhase.month6},
+      {'title': 'Buat daftar tamu undangan', 'phase': TaskPhase.month6},
       {'title': 'Pilih desain undangan', 'phase': TaskPhase.month6},
-      {'title': 'Fitting baju pengantin', 'phase': TaskPhase.month3},
+      // 3 bulan sebelum
+      {'title': 'Lengkapi berkas nikah ke KUA (N1, N2, N4)', 'phase': TaskPhase.month3},
+      {'title': 'Fitting baju pengantin & akad', 'phase': TaskPhase.month3},
       {'title': 'Sesi foto prewedding', 'phase': TaskPhase.month3},
       {'title': 'Kirim undangan', 'phase': TaskPhase.month3},
-      {'title': 'Urus dokumen pernikahan', 'phase': TaskPhase.month3},
+      {'title': 'Siapkan seserahan/hantaran', 'phase': TaskPhase.month3},
+      // 1 bulan sebelum
+      {'title': 'Konfirmasi penghulu & saksi nikah', 'phase': TaskPhase.month1},
       {'title': 'Konfirmasi semua vendor', 'phase': TaskPhase.month1},
       {'title': 'Fitting baju final', 'phase': TaskPhase.month1},
-      {'title': 'Rundown acara detail', 'phase': TaskPhase.month1},
+      {'title': 'Buat rundown acara (akad & resepsi)', 'phase': TaskPhase.month1},
+      // 1 minggu sebelum
+      {'title': 'Pengajian / doa bersama', 'phase': TaskPhase.week1},
+      {'title': 'Siraman / midodareni (opsional)', 'phase': TaskPhase.week1},
       {'title': 'Technical meeting vendor', 'phase': TaskPhase.week1},
-      {'title': 'Persiapan seserahan/hantaran', 'phase': TaskPhase.week1},
-      {'title': 'Rehearsal & doa bersama', 'phase': TaskPhase.week1},
+      {'title': 'Cek kesiapan mahar & seserahan', 'phase': TaskPhase.week1},
     ];
 
     final tasks = <WeddingTask>[];
