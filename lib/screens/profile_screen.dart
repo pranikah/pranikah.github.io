@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../providers/wedding_provider.dart';
 import '../services/currency_helper.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -92,7 +94,44 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
+        const SizedBox(height: 32),
+
+        // Reset persiapan
+        Card(
+          color: Colors.red.shade50,
+          child: ListTile(
+            leading: Icon(Icons.restart_alt, color: Colors.red.shade700),
+            title: Text('Reset Persiapan',
+              style: TextStyle(color: Colors.red.shade700, fontWeight: FontWeight.w600)),
+            subtitle: const Text('Hapus semua data dan mulai dari awal', style: TextStyle(fontSize: 12)),
+            onTap: () => _confirmReset(context),
+          ),
+        ),
       ],
+    );
+  }
+
+  void _confirmReset(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Reset Persiapan?'),
+        content: const Text('Semua data persiapan nikah akan dihapus dan tidak bisa dikembalikan. Yakin ingin reset?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Batal'),
+          ),
+          FilledButton(
+            onPressed: () {
+              Navigator.pop(context);
+              context.read<WeddingProvider>().resetPlan();
+            },
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            child: const Text('Ya, Reset'),
+          ),
+        ],
+      ),
     );
   }
 

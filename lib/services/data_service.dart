@@ -10,6 +10,7 @@ abstract class DataService {
   // Wedding Plan
   Future<void> savePlan(WeddingPlan plan);
   Future<void> updatePlan(String planId, Map<String, dynamic> data);
+  Future<void> deletePlan(String planId);
   Stream<WeddingPlan?> getPlan(String planId);
 
   // Tasks

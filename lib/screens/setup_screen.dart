@@ -24,6 +24,20 @@ class _SetupScreenState extends State<SetupScreen> {
   String _selectedCurrency = 'IDR';
 
   @override
+  void initState() {
+    super.initState();
+    _loadCurrency();
+  }
+
+  Future<void> _loadCurrency() async {
+    final prefs = await SharedPreferences.getInstance();
+    setState(() => _selectedCurrency = prefs.getString(kCurrencyKey) ?? 'IDR');
+  }
+
+  String get _currencySymbol =>
+    currencies.firstWhere((c) => c['code'] == _selectedCurrency, orElse: () => currencies[0])['symbol']!;
+
+  @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     return Scaffold(
@@ -67,7 +81,7 @@ class _SetupScreenState extends State<SetupScreen> {
               _buildDatePicker(l.startDate, _startDate, (d) => setState(() => _startDate = d)),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                initialValue: _selectedCurrency,
+                value: _selectedCurrency,
                 decoration: const InputDecoration(
                   labelText: 'Currency',
                   prefixIcon: Icon(Icons.monetization_on_outlined),
@@ -84,6 +98,7 @@ class _SetupScreenState extends State<SetupScreen> {
                 decoration: InputDecoration(
                   labelText: l.totalBudgetLabel,
                   prefixIcon: const Icon(Icons.account_balance_wallet_outlined),
+                  prefixText: '$_currencySymbol ',
                 ),
               ),
               if (_weddingDate != null && _startDate != null) ...[

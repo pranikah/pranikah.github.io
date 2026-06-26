@@ -148,7 +148,12 @@ class _AppShellState extends State<AppShell> {
               ),
             ],
           ),
-          body: screens[_currentIndex],
+          body: Column(
+            children: [
+              _buildTopBanner(context),
+              Expanded(child: screens[_currentIndex]),
+            ],
+          ),
           bottomNavigationBar: NavigationBar(
             selectedIndex: _currentIndex,
             onDestinationSelected: (i) => setState(() => _currentIndex = i),
@@ -167,6 +172,33 @@ class _AppShellState extends State<AppShell> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildTopBanner(BuildContext context) {
+    return GestureDetector(
+      onTap: () => launchUrl(
+        Uri.parse('https://ko-fi.com/mohamadsoleh'),
+        mode: LaunchMode.externalApplication,
+      ),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(colors: [Colors.pink.shade50, Colors.orange.shade50]),
+        ),
+        child: Row(
+          children: [
+            const Text('☕', style: TextStyle(fontSize: 18)),
+            const SizedBox(width: 8),
+            const Expanded(
+              child: Text('Gratis selamanya! Traktir kami kopi untuk support 💕',
+                style: TextStyle(fontSize: 12)),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 12, color: Colors.pink.shade300),
+          ],
+        ),
+      ),
     );
   }
 

@@ -45,7 +45,8 @@ class LocalStorageService implements DataService {
     if (data.containsKey('brideName')) map['brideName'] = data['brideName'];
     if (data.containsKey('totalBudget')) map['totalBudget'] = data['totalBudget'];
     if (data.containsKey('weddingDate')) {
-      map['weddingDate'] = (data['weddingDate'] as DateTime).toIso8601String();
+      final d = data['weddingDate'] as DateTime;
+      map['weddingDate'] = '${d.year}-${d.month.toString().padLeft(2,'0')}-${d.day.toString().padLeft(2,'0')}';
     }
     await prefs.setString(_planKey + planId, jsonEncode(map));
     _emitPlan(planId);
@@ -54,9 +55,19 @@ class LocalStorageService implements DataService {
   @override
   Stream<WeddingPlan?> getPlan(String planId) {
     _planControllers[planId] ??= StreamController<WeddingPlan?>.broadcast();
-    // Emit current value after microtask
     Future.microtask(() => _emitPlan(planId));
     return _planControllers[planId]!.stream;
+  }
+
+  @override
+  Future<void> deletePlan(String planId) async {
+    final prefs = await _prefs;
+    await prefs.remove(_planKey + planId);
+    await prefs.remove(_tasksKey + planId);
+    await prefs.remove(_budgetKey + planId);
+    _planControllers[planId]?.add(null);
+    _tasksControllers[planId]?.add([]);
+    _budgetControllers[planId]?.add([]);
   }
 
   Future<void> _emitPlan(String planId) async {
@@ -297,8 +308,8 @@ class LocalStorageService implements DataService {
 
   Map<String, dynamic> _planToJson(WeddingPlan p) => {
     'id': p.id,
-    'weddingDate': p.weddingDate.toIso8601String(),
-    'startDate': p.startDate.toIso8601String(),
+    'weddingDate': '${p.weddingDate.year}-${p.weddingDate.month.toString().padLeft(2,'0')}-${p.weddingDate.day.toString().padLeft(2,'0')}',
+    'startDate': '${p.startDate.year}-${p.startDate.month.toString().padLeft(2,'0')}-${p.startDate.day.toString().padLeft(2,'0')}',
     'totalBudget': p.totalBudget,
     'groomName': p.groomName,
     'brideName': p.brideName,
@@ -316,7 +327,7 @@ class LocalStorageService implements DataService {
   Map<String, dynamic> _taskToJson(WeddingTask t) => {
     'id': t.id,
     'title': t.title,
-    'dueDate': t.dueDate.toIso8601String(),
+    'dueDate': '${t.dueDate.year}-${t.dueDate.month.toString().padLeft(2,'0')}-${t.dueDate.day.toString().padLeft(2,'0')}',
     'status': t.status.index,
     'phase': t.phase.index,
     'priority': t.priority.index,

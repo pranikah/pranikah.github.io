@@ -175,6 +175,11 @@ class WeddingProvider extends ChangeNotifier {
     await _service.updatePlan(_planId!, data);
   }
 
+  Future<void> resetPlan() async {
+    if (_planId == null) return;
+    await _service.deletePlan(_planId!);
+  }
+
   @override
   void dispose() {
     _planSub?.cancel();
