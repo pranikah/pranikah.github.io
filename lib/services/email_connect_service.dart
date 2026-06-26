@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,7 +7,10 @@ const _kName = 'connected_name';
 const _kPhoto = 'connected_photo';
 
 class EmailConnectService {
-  final _googleSignIn = GoogleSignIn(scopes: ['email']);
+  final _googleSignIn = GoogleSignIn(
+    scopes: ['email'],
+    clientId: kIsWeb ? '373730537373-s109l7j2pl108j21apv4c8903faj5m6l.apps.googleusercontent.com' : null,
+  );
 
   Future<String?> connectEmail() async {
     final account = await _googleSignIn.signIn();
@@ -15,7 +19,7 @@ class EmailConnectService {
     await prefs.setString(_kEmail, account.email);
     await prefs.setString(_kName, account.displayName ?? '');
     if (account.photoUrl != null) await prefs.setString(_kPhoto, account.photoUrl!);
-    await _googleSignIn.disconnect();
+    await _googleSignIn.signOut();
     return account.email;
   }
 

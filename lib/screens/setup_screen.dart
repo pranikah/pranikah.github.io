@@ -183,6 +183,7 @@ class _SetupScreenState extends State<SetupScreen> {
         startDate: _startDate!,
         totalBudget: double.tryParse(_budgetCtrl.text.replaceAll('.', '')) ?? 0,
       );
+      if (mounted) Navigator.pop(context);
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
