@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../models/wedding_plan.dart';
 import '../models/wedding_task.dart';
 import '../providers/wedding_provider.dart';
+import '../screens/setup_screen.dart';
 import '../services/currency_helper.dart';
 import '../theme/app_theme.dart';
 
@@ -37,7 +38,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     return Consumer<WeddingProvider>(
       builder: (context, provider, _) {
         final plan = provider.plan;
-        if (plan == null) return const Center(child: CircularProgressIndicator());
+        if (plan == null) return _buildEmptyState(context);
 
         return SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -293,6 +294,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEmptyState(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('💍', style: TextStyle(fontSize: 64)),
+            const SizedBox(height: 24),
+            Text(l.appTitle,
+              style: const TextStyle(fontFamily: 'Georgia', fontSize: 24, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 12),
+            Text(l.onboardingDesc1,
+              textAlign: TextAlign.center,
+              style: const TextStyle(color: Colors.grey, fontSize: 14)),
+            const SizedBox(height: 32),
+            FilledButton.icon(
+              onPressed: () => Navigator.push(context,
+                MaterialPageRoute(builder: (_) => const SetupScreen())),
+              icon: const Icon(Icons.add),
+              label: Text(l.startPreparation),
+              style: FilledButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+              ),
+            ),
           ],
         ),
       ),

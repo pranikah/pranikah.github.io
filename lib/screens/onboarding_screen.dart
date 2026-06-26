@@ -16,16 +16,20 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   final _controller = PageController();
   int _currentPage = 0;
   String _selectedLocale = 'en';
+  String _selectedCurrency = 'IDR';
 
   @override
   void initState() {
     super.initState();
-    _loadLocale();
+    _loadSettings();
   }
 
-  Future<void> _loadLocale() async {
+  Future<void> _loadSettings() async {
     final prefs = await SharedPreferences.getInstance();
-    setState(() => _selectedLocale = prefs.getString(kLocaleKey) ?? 'en');
+    setState(() {
+      _selectedLocale = prefs.getString(kLocaleKey) ?? 'en';
+      _selectedCurrency = prefs.getString(kCurrencyKey) ?? 'IDR';
+    });
   }
 
   List<_PageData> _pages(BuildContext context) {
@@ -37,13 +41,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         description: l.onboardingDesc2, color: const Color(0xFF9C27B0)),
       _PageData(icon: Icons.account_balance_wallet, title: l.onboardingTitle3,
         description: l.onboardingDesc3, color: const Color(0xFF3F51B5)),
-      _PageData(icon: Icons.star_outline, title: l.onboardingTitle4,
-        description: l.onboardingDesc4, color: const Color(0xFFFF9800)),
     ];
   }
 
   void _next() {
-    if (_currentPage < 3) {
+    final totalPages = _pages(context).length + 1; // +1 for settings page
+    if (_currentPage < totalPages - 1) {
       _controller.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.ease);
     } else {
       _finish();
@@ -53,6 +56,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _finish() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('onboarding_done', true);
+    await prefs.setString(kLocaleKey, _selectedLocale);
+    await prefs.setString(kCurrencyKey, _selectedCurrency);
     widget.onComplete();
   }
 
@@ -60,72 +65,101 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
     final pages = _pages(context);
+    final totalPages = pages.length + 1;
+
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            // Language + Skip row
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
+                children: [const Spacer(), TextButton(onPressed: _finish, child: Text(l.skip))],
+              ),
+            ),
+            Expanded(
+              child: PageView(
+                controller: _controller,
+                onPageChanged: (i) => setState(() => _currentPage = i),
                 children: [
-                  ToggleButtons(
-                    isSelected: [_selectedLocale == 'en', _selectedLocale == 'id'],
-                    borderRadius: BorderRadius.circular(8),
-                    constraints: const BoxConstraints(minWidth: 48, minHeight: 32),
-                    textStyle: const TextStyle(fontSize: 12),
-                    onPressed: (i) async {
-                      final locale = i == 0 ? 'en' : 'id';
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.setString(kLocaleKey, locale);
-                      setState(() => _selectedLocale = locale);
-                      widget.onLocaleChanged?.call(Locale(locale));
-                    },
-                    children: const [Text('EN'), Text('ID')],
-                  ),
-                  const Spacer(),
-                  TextButton(onPressed: _finish, child: Text(l.skip)),
+                  ...pages.map(_buildPage),
+                  _buildSettingsPage(context),
                 ],
               ),
             ),
-            // Pages
-            Expanded(
-              child: PageView.builder(
-                controller: _controller,
-                itemCount: pages.length,
-                onPageChanged: (i) => setState(() => _currentPage = i),
-                itemBuilder: (_, i) => _buildPage(pages[i]),
-              ),
-            ),
-            // Dots indicator
+            // Dots
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(pages.length, (i) => AnimatedContainer(
+              children: List.generate(totalPages, (i) => AnimatedContainer(
                 duration: const Duration(milliseconds: 300),
                 margin: const EdgeInsets.symmetric(horizontal: 4),
                 width: _currentPage == i ? 24 : 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: _currentPage == i ? pages[i].color : Colors.grey.shade300,
+                  color: _currentPage == i ? const Color(0xFFE91E63) : Colors.grey.shade300,
                   borderRadius: BorderRadius.circular(4),
                 ),
               )),
             ),
             const SizedBox(height: 32),
-            // Button
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: SizedBox(
                 width: double.infinity,
                 child: FilledButton(
                   onPressed: _next,
-                  child: Text(_currentPage == pages.length - 1 ? l.getStarted : l.next),
+                  child: Text(_currentPage == totalPages - 1 ? l.getStarted : l.next),
                 ),
               ),
             ),
             const SizedBox(height: 32),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildSettingsPage(BuildContext context) {
+    final l = AppLocalizations.of(context)!;
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 32),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(28),
+            decoration: BoxDecoration(
+              color: const Color(0xFFFF9800).withValues(alpha: 0.1),
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(Icons.settings_outlined, size: 80, color: Color(0xFFFF9800)),
+          ),
+          const SizedBox(height: 32),
+          Text(l.language, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 8),
+          SegmentedButton<String>(
+            segments: const [
+              ButtonSegment(value: 'en', label: Text('English')),
+              ButtonSegment(value: 'id', label: Text('Indonesia')),
+            ],
+            selected: {_selectedLocale},
+            onSelectionChanged: (v) {
+              setState(() => _selectedLocale = v.first);
+              widget.onLocaleChanged?.call(Locale(v.first));
+            },
+          ),
+          const SizedBox(height: 24),
+          Text(l.currency, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
+          const SizedBox(height: 8),
+          DropdownButton<String>(
+            value: _selectedCurrency,
+            isExpanded: true,
+            items: currencies.map((c) => DropdownMenuItem(
+              value: c['code'], child: Text(c['label']!),
+            )).toList(),
+            onChanged: (v) => setState(() => _selectedCurrency = v!),
+          ),
+        ],
       ),
     );
   }

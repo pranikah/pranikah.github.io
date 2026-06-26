@@ -23,6 +23,6 @@ flutter build web --base-href / --release
 ```bash
 robocopy build\web docs /MIR
 git add .
-git commit -m "fix banner"
+git commit -m "fix change layout"
 git push
 ```

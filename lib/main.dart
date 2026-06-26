@@ -10,7 +10,6 @@ import 'services/local_storage_service.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/timeline_screen.dart';
 import 'screens/budget_screen.dart';
-import 'screens/setup_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/vendor_list_screen.dart';
@@ -138,8 +137,6 @@ class _AppShellState extends State<AppShell> {
             ],
           )));
         }
-        if (!provider.hasPlan) return const SetupScreen();
-
         return Scaffold(
           appBar: AppBar(
             title: Text(titles[_currentIndex]),
