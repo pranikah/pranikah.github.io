@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/wedding_plan.dart';
 import '../models/wedding_task.dart';
 import '../providers/wedding_provider.dart';
@@ -51,6 +51,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               _buildBudgetSummaryCard(context, provider),
               const SizedBox(height: 20),
               _buildPendingTasksCard(context, provider),
+              const SizedBox(height: 20),
+              _buildTipBanner(context),
             ],
           ),
         );
@@ -178,15 +180,23 @@ class _DashboardScreenState extends State<DashboardScreen> {
         padding: const EdgeInsets.all(20),
         child: Row(
           children: [
-            CircularPercentIndicator(
-              radius: 40,
-              lineWidth: 8,
-              percent: percent,
-              center: Text('${(percent * 100).toInt()}%',
-                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
-              progressColor: AppTheme.success,
-              backgroundColor: AppTheme.secondary,
-              circularStrokeCap: CircularStrokeCap.round,
+            SizedBox(
+              width: 80,
+              height: 80,
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  CircularProgressIndicator(
+                    value: percent,
+                    strokeWidth: 8,
+                    backgroundColor: AppTheme.secondary,
+                    valueColor: const AlwaysStoppedAnimation(AppTheme.success),
+                    strokeCap: StrokeCap.round,
+                  ),
+                  Text('${(percent * 100).toInt()}%',
+                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+                ],
+              ),
             ),
             const SizedBox(width: 20),
             Expanded(
@@ -283,6 +293,44 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ],
                 ),
               )),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTipBanner(BuildContext context) {
+    return GestureDetector(
+      onTap: () => launchUrl(
+        Uri.parse('https://ko-fi.com/mohamadsoleh'),
+        mode: LaunchMode.externalApplication,
+      ),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.pink.shade50, Colors.orange.shade50],
+          ),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.pink.shade100),
+        ),
+        child: Row(
+          children: [
+            const Text('☕', style: TextStyle(fontSize: 28)),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Suka aplikasi ini?',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+                  Text('Traktir kami kopi untuk support development 💕',
+                    style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
+                ],
+              ),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 14, color: Colors.pink.shade300),
           ],
         ),
       ),

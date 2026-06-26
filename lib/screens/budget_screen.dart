@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/budget_item.dart';
@@ -148,13 +147,14 @@ class _BudgetScreenState extends State<BudgetScreen> {
               ],
             ),
             const SizedBox(height: 10),
-            LinearPercentIndicator(
-              padding: EdgeInsets.zero,
-              lineHeight: 8,
-              percent: percent,
-              barRadius: const Radius.circular(4),
-              backgroundColor: AppTheme.secondary,
-              progressColor: percent > 0.9 ? AppTheme.accent : AppTheme.success,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(4),
+              child: LinearProgressIndicator(
+                value: percent,
+                minHeight: 8,
+                backgroundColor: AppTheme.secondary,
+                valueColor: AlwaysStoppedAnimation(percent > 0.9 ? AppTheme.accent : AppTheme.success),
+              ),
             ),
             const SizedBox(height: 8),
             Row(

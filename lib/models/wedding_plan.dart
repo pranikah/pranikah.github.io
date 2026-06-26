@@ -17,7 +17,8 @@ class WeddingPlan {
 
   int get totalDurationDays => weddingDate.difference(startDate).inDays;
   int get daysRemaining {
-    final today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
     final wedding = DateTime(weddingDate.year, weddingDate.month, weddingDate.day);
     return wedding.difference(today).inDays;
   }
