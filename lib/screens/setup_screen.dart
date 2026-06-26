@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,7 +38,7 @@ class _SetupScreenState extends State<SetupScreen> {
               const SizedBox(height: 16),
               Center(
                 child: Text(l.appTitle,
-                  style: GoogleFonts.playfairDisplay(fontSize: 28, fontWeight: FontWeight.bold)),
+                  style: const TextStyle(fontFamily: 'Georgia', fontSize: 28, fontWeight: FontWeight.bold)),
               ),
               const SizedBox(height: 8),
               Center(

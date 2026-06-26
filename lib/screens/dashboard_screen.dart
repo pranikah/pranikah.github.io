@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
@@ -87,18 +86,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
               const SizedBox(height: 8),
               Text(
                 '$days',
-                style: GoogleFonts.playfairDisplay(
+                style: const TextStyle(
+                  fontFamily: 'Georgia',
                   fontSize: 56, fontWeight: FontWeight.bold, color: Colors.white,
                 ),
               ),
               Text(
                 AppLocalizations.of(context)!.daysToGo,
-                style: GoogleFonts.poppins(fontSize: 16, color: Colors.white70),
+                style: const TextStyle(fontSize: 16, color: Colors.white70),
               ),
               const SizedBox(height: 8),
               Text(
                 DateFormat('d MMMM yyyy').format(plan.weddingDate),
-                style: GoogleFonts.poppins(fontSize: 14, color: Colors.white60),
+                style: const TextStyle(fontSize: 14, color: Colors.white60),
               ),
             ],
           ),

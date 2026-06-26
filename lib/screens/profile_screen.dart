@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../screens/admin_screen.dart';
-import '../services/auth_service.dart';
 import '../services/currency_helper.dart';
-import '../theme/app_theme.dart';
 
 class ProfileScreen extends StatefulWidget {
   final ValueChanged<Locale>? onLocaleChanged;
@@ -17,7 +13,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  final _authService = AuthService();
   String _selectedLocale = 'en';
   String _selectedCurrency = 'IDR';
 
@@ -38,8 +33,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    final user = FirebaseAuth.instance.currentUser;
-    final isAdmin = user != null && adminEmails.contains(user.email);
 
     return ListView(
       padding: const EdgeInsets.all(20),
@@ -50,22 +43,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
             padding: const EdgeInsets.all(16),
             child: Row(
               children: [
-                CircleAvatar(
-                  radius: 28,
-                  backgroundImage: user?.photoURL != null ? NetworkImage(user!.photoURL!) : null,
-                  child: user?.photoURL == null ? const Icon(Icons.person, size: 28) : null,
-                ),
+                const CircleAvatar(radius: 28, child: Icon(Icons.person, size: 28)),
                 const SizedBox(width: 16),
                 Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(user?.displayName ?? l.notLoggedIn,
-                        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
-                      if (user?.email != null)
-                        Text(user!.email!, style: const TextStyle(color: AppTheme.textLight, fontSize: 13)),
-                    ],
-                  ),
+                  child: Text(l.profile,
+                    style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 16)),
                 ),
               ],
             ),
@@ -110,50 +92,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ],
           ),
         ),
-        const SizedBox(height: 20),
-
-        // Admin Panel (hanya untuk admin)
-        if (isAdmin) ...[
-          Card(
-            child: ListTile(
-              leading: const Icon(Icons.admin_panel_settings, color: AppTheme.primary),
-              title: Text(l.adminPanel),
-              trailing: const Icon(Icons.chevron_right),
-              onTap: () => Navigator.push(context,
-                MaterialPageRoute(builder: (_) => AdminScreen())),
-            ),
-          ),
-          const SizedBox(height: 20),
-        ],
-
-        // Login/Logout
-        if (user == null)
-          ElevatedButton.icon(
-            onPressed: () async {
-              final messenger = ScaffoldMessenger.of(context);
-              try {
-                await _authService.signInWithGoogle();
-                setState(() {});
-              } catch (e) {
-                if (mounted) {
-                  messenger.showSnackBar(
-                    SnackBar(content: Text(l.loginFailed(e.toString()))),
-                  );
-                }
-              }
-            },
-            icon: const Icon(Icons.login),
-            label: Text(l.loginWithGoogle),
-          )
-        else
-          OutlinedButton.icon(
-            onPressed: () async {
-              await _authService.signOut();
-              setState(() {});
-            },
-            icon: const Icon(Icons.logout, color: Colors.red),
-            label: Text(l.logout, style: const TextStyle(color: Colors.red)),
-          ),
       ],
     );
   }

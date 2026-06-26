@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum TaskStatus { belumMulai, sedangProses, selesai }
 enum TaskPhase { month12, month6, month3, month1, week1 }
 enum TaskPriority { high, medium, low }
@@ -80,12 +78,11 @@ class WeddingTask {
     this.priority = TaskPriority.medium,
   });
 
-  factory WeddingTask.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory WeddingTask.fromMap(String id, Map<String, dynamic> data) {
     return WeddingTask(
-      id: doc.id,
+      id: id,
       title: data['title'] ?? '',
-      dueDate: (data['dueDate'] as Timestamp).toDate(),
+      dueDate: DateTime.parse(data['dueDate']),
       status: TaskStatus.values[data['status'] ?? 0],
       phase: TaskPhase.values[data['phase'] ?? 0],
       priority: TaskPriority.values[data['priority'] ?? 1],
@@ -94,7 +91,7 @@ class WeddingTask {
 
   Map<String, dynamic> toMap() => {
     'title': title,
-    'dueDate': Timestamp.fromDate(dueDate),
+    'dueDate': dueDate.toIso8601String(),
     'status': status.index,
     'phase': phase.index,
     'priority': priority.index,

@@ -23,6 +23,6 @@ flutter build web --base-href / --release
 ```bash
 robocopy build\web docs /MIR
 git add .
-git commit -m "fix tips"
+git commit -m "fix tooltip"
 git push
 ```

@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'firebase_options.dart';
 import 'providers/wedding_provider.dart';
-import 'services/firebase_service.dart';
+import 'services/local_storage_service.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/timeline_screen.dart';
 import 'screens/budget_screen.dart';
-import 'screens/login_screen.dart';
 import 'screens/setup_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
@@ -21,7 +18,6 @@ import 'theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   await initializeDateFormatting('id', null);
   final prefs = await SharedPreferences.getInstance();
   final onboardingDone = prefs.getBool('onboarding_done') ?? false;
@@ -56,7 +52,7 @@ class _PraNikahAppState extends State<PraNikahApp> {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => WeddingProvider(FirebaseService()),
+      create: (_) => WeddingProvider(LocalStorageService()),
       child: MaterialApp(
         title: 'PraNikah',
         theme: AppTheme.theme,
@@ -78,28 +74,13 @@ class _PraNikahAppState extends State<PraNikahApp> {
   }
 
   Widget _buildHome() {
-    // Step 1: Onboarding
     if (_showOnboarding) {
       return OnboardingScreen(
         onComplete: () => setState(() => _showOnboarding = false),
         onLocaleChanged: (locale) => setState(() => _locale = locale),
       );
     }
-
-    // Step 2: Check login — jika belum login, tampilkan LoginScreen
-    return StreamBuilder<User?>(
-      stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
-        }
-        if (snapshot.data == null) {
-          return LoginScreen(onLoginSuccess: () => setState(() {}));
-        }
-        // Step 3: Sudah login → AppShell (setup atau app)
-        return AppShell(onLocaleChanged: (locale) => setState(() => _locale = locale));
-      },
-    );
+    return AppShell(onLocaleChanged: (locale) => setState(() => _locale = locale));
   }
 }
 
@@ -113,13 +94,13 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   int _currentIndex = 0;
+  static const _localUserId = 'local_user';
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final uid = FirebaseAuth.instance.currentUser!.uid;
-      context.read<WeddingProvider>().loadPlan(uid);
+      context.read<WeddingProvider>().loadPlan(_localUserId);
     });
   }
 
@@ -160,7 +141,16 @@ class _AppShellState extends State<AppShell> {
         if (!provider.hasPlan) return const SetupScreen();
 
         return Scaffold(
-          appBar: AppBar(title: Text(titles[_currentIndex])),
+          appBar: AppBar(
+            title: Text(titles[_currentIndex]),
+            actions: [
+              IconButton(
+                icon: const Icon(Icons.favorite, color: Colors.pinkAccent),
+                tooltip: 'Support Us',
+                onPressed: () => _showTipsPopup(context),
+              ),
+            ],
+          ),
           body: screens[_currentIndex],
           bottomNavigationBar: NavigationBar(
             selectedIndex: _currentIndex,
@@ -180,6 +170,61 @@ class _AppShellState extends State<AppShell> {
           ),
         );
       },
+    );
+  }
+
+  void _showTipsPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        contentPadding: const EdgeInsets.all(24),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('☕', style: TextStyle(fontSize: 48)),
+            const SizedBox(height: 12),
+            const Text('Support PraNikah',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+            const SizedBox(height: 8),
+            const Text(
+              'Aplikasi ini gratis sepenuhnya.\nJika bermanfaat, belikan kami kopi ☕',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.grey, fontSize: 13),
+            ),
+            const SizedBox(height: 20),
+            // Bank Mandiri
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade50,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Column(
+                children: [
+                  Text('Bank Mandiri', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
+                  SizedBox(height: 4),
+                  Text('1300 0166 5999 0', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                  Text('a.n. MOHAMAD SOLEH', style: TextStyle(fontSize: 11, color: Colors.grey)),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton.icon(
+                onPressed: () => launchUrl(
+                  Uri.parse('https://ko-fi.com/mohamadsoleh'),
+                  mode: LaunchMode.externalApplication,
+                ),
+                icon: const Text('☕', style: TextStyle(fontSize: 16)),
+                label: const Text('Ko-fi (PayPal/Card)'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

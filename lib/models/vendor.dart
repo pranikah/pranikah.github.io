@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum VendorCategory { wo, catering, dekorasi, fotografer, mua, venue, musik, undangan, lainnya }
 
 extension VendorCategoryExt on VendorCategory {
@@ -33,10 +31,9 @@ class Vendor {
     this.instagram,
   });
 
-  factory Vendor.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory Vendor.fromMap(String id, Map<String, dynamic> data) {
     return Vendor(
-      id: doc.id,
+      id: id,
       name: data['name'] ?? '',
       category: VendorCategory.values[data['category'] ?? 0],
       city: data['city'] ?? '',

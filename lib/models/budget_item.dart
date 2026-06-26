@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 enum BudgetCategory { venue, catering, dekorasi, dokumentasi, busana, undangan, lainnya }
 
 extension BudgetCategoryExt on BudgetCategory {
@@ -44,10 +42,9 @@ class BudgetItem {
   double get remaining => plannedCost - actualCost;
   double get progressPercent => plannedCost > 0 ? (actualCost / plannedCost * 100).clamp(0, 100) : 0;
 
-  factory BudgetItem.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
+  factory BudgetItem.fromMap(String id, Map<String, dynamic> data) {
     return BudgetItem(
-      id: doc.id,
+      id: id,
       category: BudgetCategory.values[data['category'] ?? 6],
       plannedCost: (data['plannedCost'] as num).toDouble(),
       actualCost: (data['actualCost'] as num?)?.toDouble() ?? 0,

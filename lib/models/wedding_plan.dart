@@ -1,5 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 class WeddingPlan {
   final String id;
   final DateTime weddingDate;
@@ -18,7 +16,11 @@ class WeddingPlan {
   });
 
   int get totalDurationDays => weddingDate.difference(startDate).inDays;
-  int get daysRemaining => weddingDate.difference(DateTime.now()).inDays;
+  int get daysRemaining {
+    final today = DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+    final wedding = DateTime(weddingDate.year, weddingDate.month, weddingDate.day);
+    return wedding.difference(today).inDays;
+  }
   double get progressPercentage {
     final total = totalDurationDays;
     if (total <= 0) return 100;
@@ -26,21 +28,9 @@ class WeddingPlan {
     return (elapsed / total * 100).clamp(0, 100);
   }
 
-  factory WeddingPlan.fromFirestore(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    return WeddingPlan(
-      id: doc.id,
-      weddingDate: (data['weddingDate'] as Timestamp).toDate(),
-      startDate: (data['startDate'] as Timestamp).toDate(),
-      totalBudget: (data['totalBudget'] as num).toDouble(),
-      groomName: data['groomName'] ?? '',
-      brideName: data['brideName'] ?? '',
-    );
-  }
-
   Map<String, dynamic> toMap() => {
-    'weddingDate': Timestamp.fromDate(weddingDate),
-    'startDate': Timestamp.fromDate(startDate),
+    'weddingDate': weddingDate.toIso8601String(),
+    'startDate': startDate.toIso8601String(),
     'totalBudget': totalBudget,
     'groomName': groomName,
     'brideName': brideName,

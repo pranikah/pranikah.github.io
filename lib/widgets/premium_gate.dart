@@ -1,87 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:pra_nikah_app/l10n/app_localizations.dart';
-import '../screens/admin_screen.dart';
-import '../screens/donation_screen.dart';
-import '../services/premium_service.dart';
-import '../services/auth_service.dart';
 
-/// Wrap fitur premium dengan widget ini.
-/// Admin bypass langsung. User biasa harus premium.
+/// Offline mode: semua fitur unlocked.
 class PremiumGate extends StatelessWidget {
   final Widget child;
   final Widget? lockedChild;
-  final PremiumService _premiumService = PremiumService();
-  final AuthService _authService = AuthService();
 
-  PremiumGate({super.key, required this.child, this.lockedChild});
+  const PremiumGate({super.key, required this.child, this.lockedChild});
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<User?>(
-      stream: _authService.authStateChanges,
-      builder: (context, authSnapshot) {
-        final user = authSnapshot.data;
-
-        if (user == null) {
-          return _buildDefaultLock(context);
-        }
-
-        // Admin bypass — langsung tampilkan content
-        if (adminEmails.contains(user.email)) {
-          return child;
-        }
-
-        return StreamBuilder<bool>(
-          stream: _premiumService
-              .getPremiumStatus(user.uid)
-              .map((p) => p?.isActive ?? false),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final isPremium = snapshot.data ?? false;
-            if (isPremium) return child;
-            return DonationScreen(user: user);
-          },
-        );
-      },
-    );
-  }
-
-  Widget _buildDefaultLock(BuildContext context) {
-    final l = AppLocalizations.of(context)!;
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.lock_outline, size: 64, color: Colors.grey),
-            const SizedBox(height: 16),
-            Text(l.premiumFeature,
-              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 8),
-            Text(l.premiumDescription, textAlign: TextAlign.center),
-            const SizedBox(height: 24),
-            ElevatedButton.icon(
-              onPressed: () async {
-                try {
-                  await _authService.signInWithGoogle();
-                } catch (e) {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text(l.loginFailed(e.toString()))),
-                    );
-                  }
-                }
-              },
-              icon: const Icon(Icons.login),
-              label: Text(l.loginWithGoogle),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget build(BuildContext context) => child;
 }

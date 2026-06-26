@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/wedding_plan.dart';
@@ -90,7 +89,7 @@ class WeddingProvider extends ChangeNotifier {
     required DateTime startDate,
     required double totalBudget,
   }) async {
-    final planId = FirebaseAuth.instance.currentUser!.uid;
+    const planId = 'local_user';
     final plan = WeddingPlan(
       id: planId,
       weddingDate: weddingDate,
