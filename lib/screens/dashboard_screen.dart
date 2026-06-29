@@ -3,6 +3,7 @@ import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/wedding_plan.dart';
 import '../models/wedding_task.dart';
 import '../providers/wedding_provider.dart';
@@ -44,6 +45,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              _buildKofiBanner(),
+              const SizedBox(height: 16),
               _buildCountdownCard(context, plan, provider),
               const SizedBox(height: 20),
               _buildProgressCard(context, provider),
@@ -55,6 +58,36 @@ class _DashboardScreenState extends State<DashboardScreen> {
           ),
         );
       },
+    );
+  }
+
+  Widget _buildKofiBanner() {
+    return GestureDetector(
+      onTap: () => launchUrl(
+        Uri.parse('https://ko-fi.com/mohamadsoleh'),
+        mode: LaunchMode.externalApplication,
+      ),
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [Colors.pink.shade50, Colors.orange.shade50],
+          ),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Row(
+          children: [
+            const Text('☕', style: TextStyle(fontSize: 18)),
+            const SizedBox(width: 8),
+            const Expanded(
+              child: Text('Gratis selamanya! Traktir kami kopi untuk support 💕',
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500)),
+            ),
+            Icon(Icons.arrow_forward_ios, size: 12, color: Colors.pink.shade300),
+          ],
+        ),
+      ),
     );
   }
 
