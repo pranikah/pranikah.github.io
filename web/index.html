@@ -97,6 +97,8 @@
       animation: spin 0.8s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    /* Space for fixed ad banner at bottom */
+    body { padding-bottom: 60px; }
   </style>
   <div class="loading" id="splash">
     <img src="icons/Icon-192.png" alt="pranikah">
@@ -127,8 +129,21 @@
     window.addEventListener('flutter-first-frame', function () {
       var splash = document.getElementById('splash');
       if (splash) splash.remove();
+      // Show ad banner after app loads
+      var ad = document.getElementById('ad-banner');
+      if (ad) ad.style.display = 'block';
     });
   </script>
+
+  <!-- AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6781504523102344" crossorigin="anonymous"></script>
+
+  <!-- Fixed bottom ad banner (above Flutter canvas) -->
+  <div id="ad-banner" style="display:none;position:fixed;bottom:0;left:0;width:100%;z-index:9999;background:#fff;text-align:center;box-shadow:0 -1px 4px rgba(0,0,0,0.1);">
+    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6781504523102344" data-ad-slot="auto" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+  </div>
+
   <script src="flutter_bootstrap.js" async></script>
 </body>
 </html>
