@@ -12,7 +12,6 @@ import 'screens/timeline_screen.dart';
 import 'screens/budget_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
-import 'screens/vendor_list_screen.dart';
 import 'theme/app_theme.dart';
 
 void main() async {
@@ -106,13 +105,12 @@ class _AppShellState extends State<AppShell> {
   @override
   Widget build(BuildContext context) {
     final l = AppLocalizations.of(context)!;
-    final titles = [l.dashboard, l.timeline, l.budget, l.vendor, l.profile];
+    final titles = [l.dashboard, l.timeline, l.budget, l.profile];
 
     final screens = [
       const DashboardScreen(),
       const TimelineScreen(),
       const BudgetScreen(),
-      const VendorListScreen(),
       ProfileScreen(
         onLocaleChanged: widget.onLocaleChanged,
         onCurrencyChanged: () => setState(() {}),
@@ -139,6 +137,14 @@ class _AppShellState extends State<AppShell> {
             title: Text(titles[_currentIndex]),
             actions: [
               IconButton(
+                icon: const Icon(Icons.language, color: Colors.grey),
+                tooltip: 'Website',
+                onPressed: () => launchUrl(
+                  Uri.parse('https://pranikah.github.io/'),
+                  mode: LaunchMode.externalApplication,
+                ),
+              ),
+              IconButton(
                 icon: const Icon(Icons.favorite, color: Colors.pinkAccent),
                 tooltip: 'Support Us',
                 onPressed: () => _showTipsPopup(context),
@@ -156,8 +162,6 @@ class _AppShellState extends State<AppShell> {
                 selectedIcon: const Icon(Icons.timeline), label: l.timeline),
               NavigationDestination(icon: const Icon(Icons.account_balance_wallet_outlined),
                 selectedIcon: const Icon(Icons.account_balance_wallet), label: l.budget),
-              NavigationDestination(icon: const Icon(Icons.store_outlined),
-                selectedIcon: const Icon(Icons.store), label: l.vendor),
               NavigationDestination(icon: const Icon(Icons.person_outline),
                 selectedIcon: const Icon(Icons.person), label: l.profile),
             ],
