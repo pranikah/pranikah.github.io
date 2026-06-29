@@ -124,37 +124,9 @@ class LocalStorageService implements DataService {
   }
 
   @override
-  Future<void> generateDefaultTasks(String planId, DateTime weddingDate, {DateTime? startDate}) async {
+  Future<void> generateDefaultTasks(String planId, DateTime weddingDate, {DateTime? startDate, String locale = 'id'}) async {
     final cutoff = startDate ?? DateTime.now();
-    final defaultTasks = <Map<String, dynamic>>[
-      // 12 bulan sebelum
-      {'title': 'Tentukan budget keseluruhan', 'phase': TaskPhase.month12},
-      {'title': 'Daftar & konsultasi ke KUA', 'phase': TaskPhase.month12},
-      {'title': 'Ikut kursus pra-nikah (suscatin)', 'phase': TaskPhase.month12},
-      {'title': 'Cari dan booking gedung/venue', 'phase': TaskPhase.month12},
-      // 6 bulan sebelum
-      {'title': 'Siapkan mahar & mas kawin', 'phase': TaskPhase.month6},
-      {'title': 'Booking catering & dekorasi', 'phase': TaskPhase.month6},
-      {'title': 'Booking fotografer & videografer', 'phase': TaskPhase.month6},
-      {'title': 'Buat daftar tamu undangan', 'phase': TaskPhase.month6},
-      {'title': 'Pilih desain undangan', 'phase': TaskPhase.month6},
-      // 3 bulan sebelum
-      {'title': 'Lengkapi berkas nikah ke KUA (N1, N2, N4)', 'phase': TaskPhase.month3},
-      {'title': 'Fitting baju pengantin & akad', 'phase': TaskPhase.month3},
-      {'title': 'Sesi foto prewedding', 'phase': TaskPhase.month3},
-      {'title': 'Kirim undangan', 'phase': TaskPhase.month3},
-      {'title': 'Siapkan seserahan/hantaran', 'phase': TaskPhase.month3},
-      // 1 bulan sebelum
-      {'title': 'Konfirmasi penghulu & saksi nikah', 'phase': TaskPhase.month1},
-      {'title': 'Konfirmasi semua vendor', 'phase': TaskPhase.month1},
-      {'title': 'Fitting baju final', 'phase': TaskPhase.month1},
-      {'title': 'Buat rundown acara (akad & resepsi)', 'phase': TaskPhase.month1},
-      // 1 minggu sebelum
-      {'title': 'Pengajian / doa bersama', 'phase': TaskPhase.week1},
-      {'title': 'Siraman / midodareni (opsional)', 'phase': TaskPhase.week1},
-      {'title': 'Technical meeting vendor', 'phase': TaskPhase.week1},
-      {'title': 'Cek kesiapan mahar & seserahan', 'phase': TaskPhase.week1},
-    ];
+    final defaultTasks = locale == 'id' ? _tasksId : _tasksEn;
 
     final tasks = <WeddingTask>[];
     for (final task in defaultTasks) {
@@ -173,6 +145,56 @@ class LocalStorageService implements DataService {
     await _saveTasks(planId, tasks);
     _emitTasks(planId);
   }
+
+  static final _tasksId = <Map<String, dynamic>>[
+    {'title': 'Tentukan budget keseluruhan', 'phase': TaskPhase.month12},
+    {'title': 'Daftar & konsultasi ke KUA', 'phase': TaskPhase.month12},
+    {'title': 'Ikut kursus pra-nikah (suscatin)', 'phase': TaskPhase.month12},
+    {'title': 'Cari dan booking gedung/venue', 'phase': TaskPhase.month12},
+    {'title': 'Siapkan mahar & mas kawin', 'phase': TaskPhase.month6},
+    {'title': 'Booking catering & dekorasi', 'phase': TaskPhase.month6},
+    {'title': 'Booking fotografer & videografer', 'phase': TaskPhase.month6},
+    {'title': 'Buat daftar tamu undangan', 'phase': TaskPhase.month6},
+    {'title': 'Pilih desain undangan', 'phase': TaskPhase.month6},
+    {'title': 'Lengkapi berkas nikah ke KUA (N1, N2, N4)', 'phase': TaskPhase.month3},
+    {'title': 'Fitting baju pengantin & akad', 'phase': TaskPhase.month3},
+    {'title': 'Sesi foto prewedding', 'phase': TaskPhase.month3},
+    {'title': 'Kirim undangan', 'phase': TaskPhase.month3},
+    {'title': 'Siapkan seserahan/hantaran', 'phase': TaskPhase.month3},
+    {'title': 'Konfirmasi penghulu & saksi nikah', 'phase': TaskPhase.month1},
+    {'title': 'Konfirmasi semua vendor', 'phase': TaskPhase.month1},
+    {'title': 'Fitting baju final', 'phase': TaskPhase.month1},
+    {'title': 'Buat rundown acara (akad & resepsi)', 'phase': TaskPhase.month1},
+    {'title': 'Pengajian / doa bersama', 'phase': TaskPhase.week1},
+    {'title': 'Siraman / midodareni (opsional)', 'phase': TaskPhase.week1},
+    {'title': 'Technical meeting vendor', 'phase': TaskPhase.week1},
+    {'title': 'Cek kesiapan mahar & seserahan', 'phase': TaskPhase.week1},
+  ];
+
+  static final _tasksEn = <Map<String, dynamic>>[
+    {'title': 'Set overall budget', 'phase': TaskPhase.month12},
+    {'title': 'Book wedding venue', 'phase': TaskPhase.month12},
+    {'title': 'Hire wedding planner (optional)', 'phase': TaskPhase.month12},
+    {'title': 'Start guest list', 'phase': TaskPhase.month12},
+    {'title': 'Book catering & decoration', 'phase': TaskPhase.month6},
+    {'title': 'Book photographer & videographer', 'phase': TaskPhase.month6},
+    {'title': 'Choose wedding attire', 'phase': TaskPhase.month6},
+    {'title': 'Book music/entertainment', 'phase': TaskPhase.month6},
+    {'title': 'Design & order invitations', 'phase': TaskPhase.month6},
+    {'title': 'Complete marriage registration documents', 'phase': TaskPhase.month3},
+    {'title': 'Wedding dress/suit fitting', 'phase': TaskPhase.month3},
+    {'title': 'Pre-wedding photoshoot', 'phase': TaskPhase.month3},
+    {'title': 'Send invitations', 'phase': TaskPhase.month3},
+    {'title': 'Choose wedding rings', 'phase': TaskPhase.month3},
+    {'title': 'Confirm officiant & witnesses', 'phase': TaskPhase.month1},
+    {'title': 'Confirm all vendors', 'phase': TaskPhase.month1},
+    {'title': 'Final dress fitting', 'phase': TaskPhase.month1},
+    {'title': 'Create ceremony & reception rundown', 'phase': TaskPhase.month1},
+    {'title': 'Rehearsal dinner', 'phase': TaskPhase.week1},
+    {'title': 'Technical meeting with vendors', 'phase': TaskPhase.week1},
+    {'title': 'Prepare emergency kit', 'phase': TaskPhase.week1},
+    {'title': 'Reconfirm venue & setup', 'phase': TaskPhase.week1},
+  ];
 
   @override
   Future<void> ensureTasksExist(String planId, DateTime weddingDate, {DateTime? startDate}) async {

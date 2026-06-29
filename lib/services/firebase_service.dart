@@ -88,7 +88,7 @@ class FirebaseService implements DataService {
 
   // Generate default tasks — only phases that fit within startDate..weddingDate
   @override
-  Future<void> generateDefaultTasks(String planId, DateTime weddingDate, {DateTime? startDate}) async {
+  Future<void> generateDefaultTasks(String planId, DateTime weddingDate, {DateTime? startDate, String locale = 'id'}) async {
     final cutoff = startDate ?? DateTime.now();
     final defaultTasks = <Map<String, dynamic>>[
       {'title': 'Tentukan budget keseluruhan', 'phase': TaskPhase.month12},

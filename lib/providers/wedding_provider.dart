@@ -88,6 +88,7 @@ class WeddingProvider extends ChangeNotifier {
     required DateTime weddingDate,
     required DateTime startDate,
     required double totalBudget,
+    String locale = 'id',
   }) async {
     const planId = 'local_user';
     final plan = WeddingPlan(
@@ -100,7 +101,7 @@ class WeddingProvider extends ChangeNotifier {
     );
 
     await _service.savePlan(plan);
-    await _service.generateDefaultTasks(planId, weddingDate, startDate: startDate);
+    await _service.generateDefaultTasks(planId, weddingDate, startDate: startDate, locale: locale);
 
     // Generate default budget items
     final defaultBudget = {

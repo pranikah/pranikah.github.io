@@ -23,7 +23,7 @@ flutter build web --base-href /app/ --release
 ```bash
 robocopy build\web docs\app /MIR
 git add .
-git commit -m "desain undangan"
+git commit -m "multi country"
 git push
 ```
 

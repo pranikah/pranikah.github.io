@@ -193,6 +193,7 @@ class _SetupScreenState extends State<SetupScreen> {
         weddingDate: _weddingDate!,
         startDate: _startDate!,
         totalBudget: double.tryParse(_budgetCtrl.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0,
+        locale: Localizations.localeOf(context).languageCode,
       );
       if (mounted) Navigator.pop(context);
     } catch (e) {
