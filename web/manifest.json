@@ -1,6 +1,6 @@
 {
-    "name": "PraNikah - Aplikasi Persiapan Nikah",
-    "short_name": "PraNikah",
+    "name": "pranikah - Aplikasi Persiapan Nikah",
+    "short_name": "pranikah",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#FFFFFF",

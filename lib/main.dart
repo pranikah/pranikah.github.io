@@ -19,18 +19,18 @@ void main() async {
   await initializeDateFormatting('id', null);
   final prefs = await SharedPreferences.getInstance();
   final onboardingDone = prefs.getBool('onboarding_done') ?? false;
-  runApp(PraNikahApp(showOnboarding: !onboardingDone));
+  runApp(PranikahApp(showOnboarding: !onboardingDone));
 }
 
-class PraNikahApp extends StatefulWidget {
+class PranikahApp extends StatefulWidget {
   final bool showOnboarding;
-  const PraNikahApp({super.key, required this.showOnboarding});
+  const PranikahApp({super.key, required this.showOnboarding});
 
   @override
-  State<PraNikahApp> createState() => _PraNikahAppState();
+  State<PranikahApp> createState() => _PranikahAppState();
 }
 
-class _PraNikahAppState extends State<PraNikahApp> {
+class _PranikahAppState extends State<PranikahApp> {
   late bool _showOnboarding;
   Locale? _locale;
 
@@ -52,7 +52,7 @@ class _PraNikahAppState extends State<PraNikahApp> {
     return ChangeNotifierProvider(
       create: (_) => WeddingProvider(LocalStorageService()),
       child: MaterialApp(
-        title: 'PraNikah',
+        title: 'pranikah',
         theme: AppTheme.theme,
         debugShowCheckedModeBanner: false,
         locale: _locale,
@@ -182,7 +182,7 @@ class _AppShellState extends State<AppShell> {
           children: [
             const Text('☕', style: TextStyle(fontSize: 48)),
             const SizedBox(height: 12),
-            const Text('Support PraNikah',
+            const Text('Support pranikah',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             const Text(
