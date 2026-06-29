@@ -132,9 +132,6 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
 
     return Consumer<WeddingProvider>(
       builder: (context, provider, _) {
-        if (provider.isLoading) {
-          return const Scaffold(body: Center(child: CircularProgressIndicator()));
-        }
         if (provider.error != null) {
           final errorMsg = provider.error == 'error_load_data'
               ? l.errorLoadData
@@ -247,27 +244,9 @@ class _AppShellState extends State<AppShell> with SingleTickerProviderStateMixin
               style: TextStyle(color: Colors.grey, fontSize: 13),
             ),
             const SizedBox(height: 20),
-            // Bank Mandiri
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.blue.shade50,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: const Column(
-                children: [
-                  Text('Bank Mandiri', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 13)),
-                  SizedBox(height: 4),
-                  Text('1300 0166 5999 0', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                  Text('a.n. MOHAMAD SOLEH', style: TextStyle(fontSize: 11, color: Colors.grey)),
-                ],
-              ),
-            ),
-            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton.icon(
+              child: FilledButton.icon(
                 onPressed: () => launchUrl(
                   Uri.parse('https://ko-fi.com/mohamadsoleh'),
                   mode: LaunchMode.externalApplication,

@@ -1,140 +1,193 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
-  <base href="/">
-
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Aplikasi persiapan nikah lengkap - kelola timeline, budget, vendor, dan checklist pernikahan dalam satu tempat. Gratis!">
-
-  <!-- Google Sign-In for Flutter Web -->
-  <meta name="google-signin-client_id" content="373730537373-s109l7j2pl108j21apv4c8903faj5m6l.apps.googleusercontent.com">
-
-  <!-- SEO Meta Tags -->
-  <meta name="keywords" content="persiapan nikah, wedding planner, checklist pernikahan, budget nikah, vendor pernikahan, timeline nikah, wedding preparation app">
-  <meta name="author" content="PraNikah App">
+  <title>PraNikah - Aplikasi Persiapan Nikah & Design Undangan</title>
+  <meta name="description" content="Aplikasi persiapan nikah gratis + koleksi design undangan digital modern. Kelola timeline, budget, vendor pernikahan.">
+  <meta name="keywords" content="persiapan nikah, design undangan digital, undangan pernikahan online, wedding planner, checklist nikah, budget nikah">
+  <meta name="author" content="PraNikah">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#E91E63">
+  <link rel="canonical" href="https://pranikah.github.io/">
+  <link rel="icon" type="image/png" href="icons/favicon-96x96.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 
-  <!-- Open Graph / Social Media -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="PraNikah - Wedding Preparation App">
-  <meta property="og:description" content="Plan your wedding easily - manage timeline, budget, and vendors in one app. Free!">
-  <meta property="og:image" content="icons/Icon-512.png">
-  <meta property="og:site_name" content="PraNikah">
+  <meta property="og:title" content="PraNikah - Persiapan Nikah & Design Undangan">
+  <meta property="og:description" content="Aplikasi persiapan nikah gratis + koleksi design undangan digital modern.">
+  <meta property="og:image" content="https://pranikah.github.io/icons/Icon-512.png">
+  <meta property="og:url" content="https://pranikah.github.io/">
   <meta property="og:locale" content="id_ID">
-  <meta property="og:locale:alternate" content="en_US">
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="PraNikah - Wedding Preparation App">
-  <meta name="twitter:description" content="Plan your wedding easily - manage timeline, budget, and vendors in one app.">
-  <meta name="twitter:image" content="icons/Icon-512.png">
+  <!-- Google AdSense -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6781504523102344" crossorigin="anonymous"></script>
 
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="PraNikah">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #333; line-height: 1.6; }
+    a { color: #E91E63; text-decoration: none; }
+    a:hover { text-decoration: underline; }
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png">
+    .hero {
+      background: linear-gradient(135deg, #FCE4EC, #FFF3E0);
+      padding: 60px 20px;
+      text-align: center;
+    }
+    .hero h1 { font-family: Georgia, serif; font-size: 2.5rem; color: #880E4F; margin-bottom: 12px; }
+    .hero p { font-size: 1.1rem; color: #555; max-width: 600px; margin: 0 auto 24px; }
+    .btn { display: inline-block; padding: 14px 32px; background: #E91E63; color: #fff; border-radius: 30px; font-weight: 600; margin: 8px; }
+    .btn:hover { background: #C2185B; text-decoration: none; }
+    .btn-outline { background: transparent; border: 2px solid #E91E63; color: #E91E63; }
+    .btn-outline:hover { background: #FCE4EC; }
 
-  <!-- Preload critical resources -->
-  <link rel="preload" href="main.dart.js" as="script">
-  <link rel="preload" href="flutter_bootstrap.js" as="script">
+    .container { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
+    .section-title { font-size: 1.8rem; font-family: Georgia, serif; text-align: center; margin-bottom: 32px; color: #880E4F; }
 
-  <title>PraNikah - Aplikasi Persiapan Nikah | Wedding Preparation App</title>
-  <link rel="manifest" href="manifest.json">
+    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+    .feature-card { background: #fff; border: 1px solid #f0e0e8; border-radius: 16px; padding: 24px; text-align: center; }
+    .feature-card .icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .feature-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
+    .feature-card p { font-size: 0.9rem; color: #666; }
 
-  <!-- Google AdSense (deferred to not block app load) -->
-  <script defer src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6781504523102344" crossorigin="anonymous"></script>
+    .ad-slot { text-align: center; margin: 32px 0; min-height: 90px; }
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "WebApplication",
-    "name": "PraNikah",
-    "description": "Wedding preparation planner app - manage timeline, budget, and vendors",
-    "applicationCategory": "LifestyleApplication",
-    "operatingSystem": "Web",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
-  }
-  </script>
+    .cta-section { background: #FFF8E1; padding: 40px 20px; text-align: center; border-radius: 16px; margin: 32px 0; }
+    .cta-section h2 { font-family: Georgia, serif; color: #880E4F; margin-bottom: 12px; }
+
+    nav { background: #fff; border-bottom: 1px solid #eee; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; }
+    nav .brand { font-family: Georgia, serif; font-size: 1.3rem; color: #E91E63; font-weight: bold; }
+    nav .links a { margin-left: 20px; font-size: 0.9rem; color: #555; }
+    nav .links a:hover { color: #E91E63; }
+
+    footer { background: #FAFAFA; border-top: 1px solid #eee; padding: 24px 20px; text-align: center; font-size: 0.85rem; color: #888; }
+    footer a { color: #888; margin: 0 8px; }
+  </style>
 </head>
 <body>
-  <!-- Loading splash -->
-  <style>
-    .loading {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      flex-direction: column;
-      background: #FFFBF7;
-    }
-    .loading img {
-      width: 96px;
-      height: 96px;
-      margin-bottom: 16px;
-    }
-    .spinner {
-      width: 28px;
-      height: 28px;
-      border: 3px solid #FAEDE4;
-      border-top-color: #D4A373;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-  </style>
-  <div class="loading" id="splash">
-    <img src="icons/Icon-192.png" alt="PraNikah">
-    <div class="spinner"></div>
-  </div>
 
-  <!-- SEO: Hidden content for crawlers/AI that can't run JavaScript -->
-  <div id="seo-content" style="position:absolute;left:-9999px">
-    <h1>PraNikah - Wedding Preparation App</h1>
-    <p>Plan your wedding easily with PraNikah. Manage timeline, budget, and vendors in one free app.</p>
-    <h2>Features</h2>
-    <ul>
-      <li>Timeline & Checklist - Track every preparation stage from 12 months to 1 week before</li>
-      <li>Budget Management - Set total budget, allocate per category, track actual spending</li>
-      <li>Vendor Directory - Browse and filter wedding vendors by category</li>
-      <li>Priority System - Set task priority (High/Medium/Low) to auto-adjust timeline</li>
-      <li>Multi-language - English and Bahasa Indonesia</li>
-      <li>Multi-currency - IDR, USD, MYR, VND, GBP, EUR, SGD</li>
-    </ul>
-    <h2>Persiapan Nikah</h2>
-    <p>Aplikasi persiapan nikah gratis - kelola timeline, budget, vendor, dan checklist pernikahan. Cocok untuk pasangan yang akan menikah.</p>
+<nav>
+  <a href="/" class="brand">💍 PraNikah</a>
+  <div class="links">
+    <a href="/design-undangan.html">Design Undangan</a>
+    <a href="/app/">Buka App</a>
+    <a href="/privacy-policy.html">Privacy</a>
   </div>
-  <noscript>
-    <h1>PraNikah - Wedding Preparation App</h1>
-    <p>PraNikah helps you plan your wedding. Manage timeline, budget, and vendors. Enable JavaScript to use the app.</p>
-  </noscript>
-  <script>
-    window.addEventListener('flutter-first-frame', function () {
-      var splash = document.getElementById('splash');
-      if (splash) splash.remove();
-    });
-  </script>
-  <script src="flutter_bootstrap.js" async></script>
+</nav>
+
+<section class="hero">
+  <h1>Persiapan Nikah Jadi Mudah 💕</h1>
+  <p>Aplikasi gratis untuk merencanakan pernikahan impianmu. Kelola timeline, budget, vendor — semua dalam satu tempat. Plus koleksi design undangan digital modern!</p>
+  <a href="/app/" class="btn">🚀 Buka Aplikasi</a>
+  <a href="/design-undangan.html" class="btn btn-outline">💌 Lihat Design Undangan</a>
+</section>
+
+<div class="container">
+  <h2 class="section-title">Fitur Aplikasi PraNikah</h2>
+  <div class="features">
+    <div class="feature-card">
+      <div class="icon">📅</div>
+      <h3>Timeline & Checklist</h3>
+      <p>Pantau setiap tahap persiapan dari 12 bulan hingga 1 minggu sebelum hari H. Tidak ada yang terlewat!</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">💰</div>
+      <h3>Budget Management</h3>
+      <p>Tentukan total anggaran, alokasi per kategori, dan pantau pengeluaran aktual secara real-time.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🏪</div>
+      <h3>Direktori Vendor</h3>
+      <p>Cari dan filter vendor pernikahan berdasarkan kategori: venue, catering, dekorasi, fotografer, dan lainnya.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🎯</div>
+      <h3>Sistem Prioritas</h3>
+      <p>Atur prioritas tugas (High/Medium/Low) untuk penyesuaian timeline otomatis sesuai kebutuhanmu.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🌍</div>
+      <h3>Multi Bahasa & Mata Uang</h3>
+      <p>Tersedia dalam Bahasa Indonesia dan English. Mendukung IDR, USD, MYR, EUR, GBP, SGD, VND.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">💌</div>
+      <h3>Design Undangan Digital</h3>
+      <p>Koleksi template undangan pernikahan digital modern yang bisa langsung dipakai. Gratis!</p>
+    </div>
+  </div>
+</div>
+
+<!-- Ad Slot -->
+<div class="ad-slot">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6781504523102344" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<div class="container">
+  <div class="cta-section">
+    <h2>💌 Design Undangan Digital</h2>
+    <p style="color:#666; margin-bottom:20px;">Koleksi template undangan pernikahan modern — minimalis, floral, elegant, rustic. Cocok untuk dibagikan via WhatsApp!</p>
+    <a href="/design-undangan.html" class="btn">Lihat Koleksi →</a>
+  </div>
+</div>
+
+<div class="container">
+  <h2 class="section-title">Kenapa PraNikah?</h2>
+  <div class="features" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+    <div class="feature-card">
+      <div class="icon">✅</div>
+      <h3>100% Gratis</h3>
+      <p>Tidak ada biaya tersembunyi. Semua fitur bisa diakses tanpa bayar.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">📱</div>
+      <h3>Akses Dari Mana Saja</h3>
+      <p>Buka langsung di browser HP atau laptop. Tidak perlu install aplikasi.</p>
+    </div>
+    <div class="feature-card">
+      <div class="icon">🔒</div>
+      <h3>Data Tersimpan Lokal</h3>
+      <p>Data persiapanmu tersimpan di perangkatmu sendiri. Privasi terjaga.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Ad Slot -->
+<div class="ad-slot">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6781504523102344" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<div class="container" style="text-align:center;">
+  <h2 class="section-title">Mulai Persiapan Nikahmu Sekarang</h2>
+  <p style="color:#666; margin-bottom:24px;">Gratis, tanpa registrasi, langsung pakai.</p>
+  <a href="/app/" class="btn">🚀 Buka Aplikasi PraNikah</a>
+</div>
+
+<footer>
+  <p>© 2024 PraNikah. Dibuat dengan ❤️ untuk pasangan Indonesia.</p>
+  <p>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="/design-undangan.html">Design Undangan</a>
+    <a href="/app/">Aplikasi</a>
+  </p>
+</footer>
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "PraNikah",
+  "url": "https://pranikah.github.io/",
+  "description": "Aplikasi persiapan nikah gratis + koleksi design undangan digital modern",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://pranikah.github.io/app/"
+  }
+}
+</script>
 </body>
 </html>
