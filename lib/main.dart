@@ -16,6 +16,8 @@ import 'screens/timeline_screen.dart';
 import 'screens/budget_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
+import 'screens/invitation_design_screen.dart';
+import 'screens/vendor_list_screen.dart';
 import 'theme/app_theme.dart';
 import 'widgets/banner_ad_widget.dart';
 
@@ -176,6 +178,45 @@ class _AppShellState extends State<AppShell> {
           appBar: AppBar(
             title: Text(titles[_currentIndex]),
             actions: [
+              PopupMenuButton<String>(
+                icon: const Icon(Icons.more_vert),
+                tooltip: 'Menu',
+                onSelected: (value) {
+                  if (value == 'design_undangan') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const InvitationDesignScreen(),
+                      ),
+                    );
+                  } else if (value == 'vendor') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const VendorListScreen(),
+                      ),
+                    );
+                  }
+                },
+                itemBuilder: (context) => [
+                  const PopupMenuItem(
+                    value: 'design_undangan',
+                    child: ListTile(
+                      leading: Icon(Icons.mail_outline),
+                      title: Text('Design Undangan'),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'vendor',
+                    child: ListTile(
+                      leading: Icon(Icons.store_outlined),
+                      title: Text('Vendor'),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                ],
+              ),
               IconButton(
                 icon: const Icon(Icons.favorite, color: Colors.pinkAccent),
                 tooltip: 'Support Us',
