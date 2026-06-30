@@ -2,13 +2,70 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:ui' as ui;
 import 'dart:convert';
 import 'dart:typed_data';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import '../models/invitation.dart';
+import '../providers/wedding_provider.dart';
 import '../theme/app_theme.dart';
+
+// Template themes
+enum InvitationTheme { elegant, floral, minimalist, rustic, islamic }
+
+extension InvitationThemeExt on InvitationTheme {
+  String get label {
+    switch (this) {
+      case InvitationTheme.elegant: return 'Elegant';
+      case InvitationTheme.floral: return 'Floral';
+      case InvitationTheme.minimalist: return 'Minimalist';
+      case InvitationTheme.rustic: return 'Rustic';
+      case InvitationTheme.islamic: return 'Islamic';
+    }
+  }
+
+  String get icon {
+    switch (this) {
+      case InvitationTheme.elegant: return '✨';
+      case InvitationTheme.floral: return '🌸';
+      case InvitationTheme.minimalist: return '◽';
+      case InvitationTheme.rustic: return '🍂';
+      case InvitationTheme.islamic: return '🕌';
+    }
+  }
+
+  Color get primaryColor {
+    switch (this) {
+      case InvitationTheme.elegant: return const Color(0xFF880E4F);
+      case InvitationTheme.floral: return const Color(0xFFE91E63);
+      case InvitationTheme.minimalist: return const Color(0xFF37474F);
+      case InvitationTheme.rustic: return const Color(0xFF5D4037);
+      case InvitationTheme.islamic: return const Color(0xFF1B5E20);
+    }
+  }
+
+  Color get accentColor {
+    switch (this) {
+      case InvitationTheme.elegant: return const Color(0xFFD4AF37);
+      case InvitationTheme.floral: return const Color(0xFFFF80AB);
+      case InvitationTheme.minimalist: return const Color(0xFF78909C);
+      case InvitationTheme.rustic: return const Color(0xFF8D6E63);
+      case InvitationTheme.islamic: return const Color(0xFF4CAF50);
+    }
+  }
+
+  Color get bgColor {
+    switch (this) {
+      case InvitationTheme.elegant: return const Color(0xFFFFF8E1);
+      case InvitationTheme.floral: return const Color(0xFFFCE4EC);
+      case InvitationTheme.minimalist: return Colors.white;
+      case InvitationTheme.rustic: return const Color(0xFFF5F0EB);
+      case InvitationTheme.islamic: return const Color(0xFFE8F5E9);
+    }
+  }
+}
 
 class InvitationDesignScreen extends StatefulWidget {
   const InvitationDesignScreen({super.key});
@@ -38,12 +95,14 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
 
   DateTime _weddingDate = DateTime.now().add(const Duration(days: 90));
   TimeOfDay _weddingTime = const TimeOfDay(hour: 8, minute: 0);
+  InvitationTheme _selectedTheme = InvitationTheme.elegant;
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
     _loadSaved();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _loadFromPlan());
   }
 
   @override
@@ -80,6 +139,24 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
         _brideParentsCtrl.text = inv.brideParents;
         _additionalInfoCtrl.text = inv.additionalInfo;
       });
+    }
+  }
+
+  void _loadFromPlan() {
+    final provider = context.read<WeddingProvider>();
+    final plan = provider.plan;
+    if (plan != null) {
+      // Only set defaults if fields are empty (don't overwrite saved draft)
+      if (_groomNameCtrl.text.isEmpty && plan.groomName.isNotEmpty) {
+        _groomNameCtrl.text = plan.groomName;
+      }
+      if (_brideNameCtrl.text.isEmpty && plan.brideName.isNotEmpty) {
+        _brideNameCtrl.text = plan.brideName;
+      }
+      if (_groomNameCtrl.text.isEmpty || _brideNameCtrl.text.isEmpty) {
+        // If no saved draft, also use wedding date from plan
+        setState(() => _weddingDate = plan.weddingDate);
+      }
     }
   }
 
@@ -253,6 +330,29 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
               _buildTextField(_brideParentsCtrl, 'Orang Tua Wanita (Bapak & Ibu)', Icons.family_restroom),
               const SizedBox(height: 12),
               _buildTextField(_additionalInfoCtrl, 'Informasi Tambahan', Icons.info_outline, maxLines: 3),
+              const SizedBox(height: 16),
+              const Text('Pilih Tema', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14)),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 48,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: InvitationTheme.values.length,
+                  itemBuilder: (_, i) {
+                    final theme = InvitationTheme.values[i];
+                    final isSelected = theme == _selectedTheme;
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: ChoiceChip(
+                        label: Text('${theme.icon} ${theme.label}'),
+                        selected: isSelected,
+                        selectedColor: theme.primaryColor.withValues(alpha: 0.2),
+                        onSelected: (_) => setState(() => _selectedTheme = theme),
+                      ),
+                    );
+                  },
+                ),
+              ),
             ],
           ),
         ),
@@ -347,22 +447,21 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
   // ─── COVER PREVIEW ───────────────────────────────────────────────────────
   Widget _buildCoverPreview(Invitation inv) {
     final dateStr = DateFormat('dd MMMM yyyy', 'id').format(inv.weddingDate);
+    final t = _selectedTheme;
     return RepaintBoundary(
       key: _coverKey,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3), width: 2),
+          color: t.bgColor,
+          border: Border.all(color: t.primaryColor.withValues(alpha: 0.3), width: 2),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Stack(
           children: [
-            // Decorative corner borders
-            Positioned(top: 12, left: 12, child: _cornerDecor(true, true)),
-            Positioned(top: 12, right: 12, child: _cornerDecor(true, false)),
-            Positioned(bottom: 12, left: 12, child: _cornerDecor(false, true)),
-            Positioned(bottom: 12, right: 12, child: _cornerDecor(false, false)),
-            // Content
+            Positioned(top: 12, left: 12, child: _cornerDecor(true, true, t.accentColor)),
+            Positioned(top: 12, right: 12, child: _cornerDecor(true, false, t.accentColor)),
+            Positioned(bottom: 12, left: 12, child: _cornerDecor(false, true, t.accentColor)),
+            Positioned(bottom: 12, right: 12, child: _cornerDecor(false, false, t.accentColor)),
             Center(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 40),
@@ -370,22 +469,22 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'The Wedding of',
+                      t == InvitationTheme.islamic ? 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم' : 'The Wedding of',
                       style: TextStyle(
                         fontFamily: 'Georgia',
-                        fontSize: 14,
-                        color: AppTheme.textLight,
+                        fontSize: t == InvitationTheme.islamic ? 16 : 14,
+                        color: t.primaryColor.withValues(alpha: 0.7),
                         fontStyle: FontStyle.italic,
                       ),
                     ),
                     const SizedBox(height: 16),
                     Text(
                       inv.groomName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Georgia',
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.primaryDark,
+                        color: t.primaryColor,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -395,34 +494,30 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
                       style: TextStyle(
                         fontFamily: 'Georgia',
                         fontSize: 28,
-                        color: AppTheme.primary,
+                        color: t.accentColor,
                         fontStyle: FontStyle.italic,
                       ),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       inv.brideName,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontFamily: 'Georgia',
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
-                        color: AppTheme.primaryDark,
+                        color: t.primaryColor,
                       ),
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 24),
-                    Container(
-                      width: 60,
-                      height: 1,
-                      color: AppTheme.primary,
-                    ),
+                    Container(width: 60, height: 1, color: t.accentColor),
                     const SizedBox(height: 16),
                     Text(
                       dateStr,
                       style: TextStyle(
                         fontFamily: 'Georgia',
                         fontSize: 14,
-                        color: AppTheme.textLight,
+                        color: t.primaryColor.withValues(alpha: 0.7),
                         letterSpacing: 1.2,
                       ),
                     ),
@@ -436,7 +531,7 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
     );
   }
 
-  Widget _cornerDecor(bool isTop, bool isLeft) {
+  Widget _cornerDecor(bool isTop, bool isLeft, [Color? color]) {
     return SizedBox(
       width: 30,
       height: 30,
@@ -444,7 +539,7 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
         painter: _CornerPainter(
           isTop: isTop,
           isLeft: isLeft,
-          color: AppTheme.primary,
+          color: color ?? _selectedTheme.accentColor,
         ),
       ),
     );
@@ -454,13 +549,14 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
   Widget _buildContentPreview(Invitation inv) {
     final dateStr = DateFormat('EEEE, dd MMMM yyyy', 'id').format(inv.weddingDate);
     final timeStr = inv.weddingTime;
+    final t = _selectedTheme;
 
     return RepaintBoundary(
       key: _contentKey,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3), width: 2),
+          color: t.bgColor,
+          border: Border.all(color: t.primaryColor.withValues(alpha: 0.3), width: 2),
           borderRadius: BorderRadius.circular(8),
         ),
         padding: const EdgeInsets.all(24),
@@ -469,114 +565,47 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
             children: [
               Text(
                 'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppTheme.primaryDark,
-                ),
+                style: TextStyle(fontSize: 16, color: t.primaryColor),
               ),
               const SizedBox(height: 12),
               Text(
                 'Dengan memohon rahmat dan ridho Allah SWT,\nkami bermaksud menyelenggarakan pernikahan putra-putri kami:',
-                style: TextStyle(
-                  fontFamily: 'Georgia',
-                  fontSize: 11,
-                  color: AppTheme.textLight,
-                  height: 1.5,
-                ),
+                style: TextStyle(fontFamily: 'Georgia', fontSize: 11, color: t.primaryColor.withValues(alpha: 0.7), height: 1.5),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
               if (inv.groomParents.isNotEmpty)
-                Text(
-                  'Putra dari ${inv.groomParents}',
-                  style: TextStyle(fontSize: 11, color: AppTheme.textLight),
-                  textAlign: TextAlign.center,
-                ),
-              Text(
-                inv.groomName,
-                style: const TextStyle(
-                  fontFamily: 'Georgia',
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.primaryDark,
-                ),
-                textAlign: TextAlign.center,
-              ),
+                Text('Putra dari ${inv.groomParents}', style: TextStyle(fontSize: 11, color: t.primaryColor.withValues(alpha: 0.6)), textAlign: TextAlign.center),
+              Text(inv.groomName, style: TextStyle(fontFamily: 'Georgia', fontSize: 22, fontWeight: FontWeight.bold, color: t.primaryColor), textAlign: TextAlign.center),
               const SizedBox(height: 6),
-              Text(
-                'dengan',
-                style: TextStyle(
-                  fontFamily: 'Georgia',
-                  fontSize: 13,
-                  fontStyle: FontStyle.italic,
-                  color: AppTheme.textLight,
-                ),
-              ),
+              Text('dengan', style: TextStyle(fontFamily: 'Georgia', fontSize: 13, fontStyle: FontStyle.italic, color: t.accentColor)),
               const SizedBox(height: 6),
-              Text(
-                inv.brideName,
-                style: const TextStyle(
-                  fontFamily: 'Georgia',
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: AppTheme.primaryDark,
-                ),
-                textAlign: TextAlign.center,
-              ),
+              Text(inv.brideName, style: TextStyle(fontFamily: 'Georgia', fontSize: 22, fontWeight: FontWeight.bold, color: t.primaryColor), textAlign: TextAlign.center),
               if (inv.brideParents.isNotEmpty)
-                Text(
-                  'Putri dari ${inv.brideParents}',
-                  style: TextStyle(fontSize: 11, color: AppTheme.textLight),
-                  textAlign: TextAlign.center,
-                ),
+                Text('Putri dari ${inv.brideParents}', style: TextStyle(fontSize: 11, color: t.primaryColor.withValues(alpha: 0.6)), textAlign: TextAlign.center),
               const SizedBox(height: 20),
-              Container(width: 40, height: 1, color: AppTheme.primary),
+              Container(width: 40, height: 1, color: t.accentColor),
               const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.calendar_today, size: 14, color: AppTheme.primary),
-                  const SizedBox(width: 6),
-                  Text(
-                    dateStr,
-                    style: const TextStyle(fontFamily: 'Georgia', fontSize: 12, color: AppTheme.textDark),
-                  ),
-                ],
-              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Icon(Icons.calendar_today, size: 14, color: t.accentColor),
+                const SizedBox(width: 6),
+                Text(dateStr, style: TextStyle(fontFamily: 'Georgia', fontSize: 12, color: t.primaryColor)),
+              ]),
               const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.access_time, size: 14, color: AppTheme.primary),
-                  const SizedBox(width: 6),
-                  Text(
-                    'Pukul $timeStr WIB',
-                    style: const TextStyle(fontFamily: 'Georgia', fontSize: 12, color: AppTheme.textDark),
-                  ),
-                ],
-              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Icon(Icons.access_time, size: 14, color: t.accentColor),
+                const SizedBox(width: 6),
+                Text('Pukul $timeStr WIB', style: TextStyle(fontFamily: 'Georgia', fontSize: 12, color: t.primaryColor)),
+              ]),
               const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.location_on, size: 14, color: AppTheme.primary),
-                  const SizedBox(width: 6),
-                  Flexible(
-                    child: Text(
-                      '${inv.venueName}\n${inv.venueAddress}',
-                      style: const TextStyle(fontFamily: 'Georgia', fontSize: 12, color: AppTheme.textDark),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ],
-              ),
+              Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                Icon(Icons.location_on, size: 14, color: t.accentColor),
+                const SizedBox(width: 6),
+                Flexible(child: Text('${inv.venueName}\n${inv.venueAddress}', style: TextStyle(fontFamily: 'Georgia', fontSize: 12, color: t.primaryColor), textAlign: TextAlign.center)),
+              ]),
               if (inv.additionalInfo.isNotEmpty) ...[
                 const SizedBox(height: 16),
-                Text(
-                  inv.additionalInfo,
-                  style: TextStyle(fontSize: 11, color: AppTheme.textLight, fontStyle: FontStyle.italic),
-                  textAlign: TextAlign.center,
-                ),
+                Text(inv.additionalInfo, style: TextStyle(fontSize: 11, color: t.primaryColor.withValues(alpha: 0.6), fontStyle: FontStyle.italic), textAlign: TextAlign.center),
               ],
             ],
           ),
@@ -587,12 +616,13 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
 
   // ─── BACK (BELAKANG) PREVIEW ──────────────────────────────────────────────
   Widget _buildBackPreview(Invitation inv) {
+    final t = _selectedTheme;
     return RepaintBoundary(
       key: _backKey,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(color: AppTheme.primary.withValues(alpha: 0.3), width: 2),
+          color: t.bgColor,
+          border: Border.all(color: t.primaryColor.withValues(alpha: 0.3), width: 2),
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
@@ -601,70 +631,21 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(
-                  Icons.favorite,
-                  size: 48,
-                  color: AppTheme.primary.withValues(alpha: 0.6),
-                ),
+                Icon(Icons.favorite, size: 48, color: t.accentColor.withValues(alpha: 0.6)),
                 const SizedBox(height: 24),
-                const Text(
-                  'Terima Kasih',
-                  style: TextStyle(
-                    fontFamily: 'Georgia',
-                    fontSize: 22,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.primaryDark,
-                  ),
-                ),
+                Text('Terima Kasih', style: TextStyle(fontFamily: 'Georgia', fontSize: 22, fontWeight: FontWeight.bold, color: t.primaryColor)),
                 const SizedBox(height: 12),
                 Text(
                   'Merupakan suatu kebahagiaan dan kehormatan\nbagi kami apabila Bapak/Ibu/Saudara/i\nberkenan hadir di acara pernikahan kami.',
-                  style: TextStyle(
-                    fontFamily: 'Georgia',
-                    fontSize: 12,
-                    color: AppTheme.textLight,
-                    height: 1.6,
-                  ),
+                  style: TextStyle(fontFamily: 'Georgia', fontSize: 12, color: t.primaryColor.withValues(alpha: 0.7), height: 1.6),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
-                Container(width: 40, height: 1, color: AppTheme.primary),
+                Container(width: 40, height: 1, color: t.accentColor),
                 const SizedBox(height: 24),
-                Text(
-                  'Hormat kami,',
-                  style: TextStyle(
-                    fontFamily: 'Georgia',
-                    fontSize: 12,
-                    color: AppTheme.textLight,
-                    fontStyle: FontStyle.italic,
-                  ),
-                ),
+                Text('Hormat kami,', style: TextStyle(fontFamily: 'Georgia', fontSize: 12, color: t.primaryColor.withValues(alpha: 0.7), fontStyle: FontStyle.italic)),
                 const SizedBox(height: 8),
-                Text(
-                  '${inv.groomName} & ${inv.brideName}',
-                  style: const TextStyle(
-                    fontFamily: 'Georgia',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.primaryDark,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 32),
-                // Simple decorative element instead of QR
-                Container(
-                  width: 60,
-                  height: 60,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: AppTheme.primary.withValues(alpha: 0.4), width: 1.5),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Icon(
-                    Icons.qr_code_2,
-                    size: 36,
-                    color: AppTheme.primary.withValues(alpha: 0.5),
-                  ),
-                ),
+                Text('${inv.groomName} & ${inv.brideName}', style: TextStyle(fontFamily: 'Georgia', fontSize: 16, fontWeight: FontWeight.w600, color: t.primaryColor), textAlign: TextAlign.center),
               ],
             ),
           ),
