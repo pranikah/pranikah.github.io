@@ -53,14 +53,21 @@
   <link rel="icon" type="image/png" href="favicon.png">
 
   <!-- Preload critical resources -->
-  <link rel="preload" href="main.dart.js" as="script">
   <link rel="preload" href="flutter_bootstrap.js" as="script">
 
   <title>pranikah - Aplikasi Persiapan Nikah | Wedding Preparation App</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Google AdSense -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6781504523102344" crossorigin="anonymous"></script>
+  <!-- Google AdSense - defer load to not block main content -->
+  <script>
+    window.addEventListener('load', function() {
+      var s = document.createElement('script');
+      s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6781504523102344';
+      s.async = true;
+      s.crossOrigin = 'anonymous';
+      document.head.appendChild(s);
+    });
+  </script>
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -76,20 +83,19 @@
   </script>
 </head>
 <body>
-  <!-- Top Ad Banner -->
-  <div id="ad-top" style="text-align:center;background:#f9f9f9;min-height:50px;z-index:9999;position:relative;">
+  <!-- Top Ad Banner - shown after app loads -->
+  <div id="ad-top" style="text-align:center;background:#f9f9f9;min-height:0;z-index:9999;position:relative;display:none;">
     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6781504523102344" data-ad-slot="4480652123" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <!-- Loading splash -->
   <style>
-    body { padding-bottom: 60px; }
+    body { margin: 0; padding-bottom: 60px; }
     .loading {
       display: flex;
       justify-content: center;
       align-items: center;
-      height: calc(100vh - 100px);
+      height: 100vh;
       flex-direction: column;
       background: #FFFBF7;
     }
@@ -135,17 +141,27 @@
   </noscript>
   <script src="flutter_bootstrap.js" async></script>
 
-  <!-- Bottom Anchor Ad -->
-  <div id="ad-bottom" style="position:fixed;bottom:0;left:0;right:0;text-align:center;background:#f9f9f9;z-index:9999;">
+  <!-- Bottom Anchor Ad - shown after app loads -->
+  <div id="ad-bottom" style="position:fixed;bottom:0;left:0;right:0;text-align:center;background:#f9f9f9;z-index:9999;display:none;">
     <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6781504523102344" data-ad-slot="4480652123" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
-    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
   </div>
 
   <script>
-    // Adjust Flutter app area to account for bottom ad
     window.addEventListener('flutter-first-frame', function() {
       var splash = document.getElementById('splash');
       if (splash) splash.remove();
+
+      // Show ads after Flutter is ready (delay 2s to let app settle)
+      setTimeout(function() {
+        var adTop = document.getElementById('ad-top');
+        var adBottom = document.getElementById('ad-bottom');
+        if (adTop) adTop.style.display = 'block';
+        if (adBottom) adBottom.style.display = 'block';
+        try {
+          (adsbygoogle = window.adsbygoogle || []).push({});
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        } catch(e) {}
+      }, 2000);
     });
   </script>
 </body>
