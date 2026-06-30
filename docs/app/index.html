@@ -58,16 +58,8 @@
   <title>pranikah - Aplikasi Persiapan Nikah | Wedding Preparation App</title>
   <link rel="manifest" href="manifest.json">
 
-  <!-- Google AdSense - defer load to not block main content -->
-  <script>
-    window.addEventListener('load', function() {
-      var s = document.createElement('script');
-      s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6781504523102344';
-      s.async = true;
-      s.crossOrigin = 'anonymous';
-      document.head.appendChild(s);
-    });
-  </script>
+  <!-- Google AdSense - Auto Ads will handle placement -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6781504523102344" crossorigin="anonymous"></script>
 
   <!-- Structured Data -->
   <script type="application/ld+json">
@@ -83,11 +75,6 @@
   </script>
 </head>
 <body>
-  <!-- Top Ad Banner - shown after app loads -->
-  <div id="ad-top" style="text-align:center;background:#f9f9f9;min-height:0;z-index:9999;position:relative;display:none;">
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6781504523102344" data-ad-slot="4480652123" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
-  </div>
-
   <!-- Loading splash -->
   <style>
     body { margin: 0; }
@@ -141,24 +128,10 @@
   </noscript>
   <script src="flutter_bootstrap.js" async></script>
 
-  <!-- Bottom Ad - NOT fixed, placed below Flutter content so it doesn't block touch -->
-  <div id="ad-bottom" style="text-align:center;background:#f9f9f9;display:none;">
-    <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6781504523102344" data-ad-slot="4480652123" data-ad-format="horizontal" data-full-width-responsive="true"></ins>
-  </div>
-
   <script>
     window.addEventListener('flutter-first-frame', function() {
       var splash = document.getElementById('splash');
       if (splash) splash.remove();
-
-      // Show top ad after Flutter is ready (delay 2s to let app settle)
-      setTimeout(function() {
-        var adTop = document.getElementById('ad-top');
-        if (adTop) adTop.style.display = 'block';
-        try {
-          (adsbygoogle = window.adsbygoogle || []).push({});
-        } catch(e) {}
-      }, 3000);
     });
   </script>
 </body>
