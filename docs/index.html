@@ -13,63 +13,244 @@
   <link rel="canonical" href="https://pranikah.github.io/">
   <link rel="icon" type="image/png" href="icons/favicon-96x96.png">
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
-
-  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="pranikah - Persiapan Nikah & Design Undangan">
   <meta property="og:description" content="Aplikasi persiapan nikah gratis + koleksi design undangan digital modern.">
   <meta property="og:image" content="https://pranikah.github.io/icons/Icon-512.png">
   <meta property="og:url" content="https://pranikah.github.io/">
   <meta property="og:locale" content="id_ID">
-
-  <!-- Google AdSense -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6781504523102344" crossorigin="anonymous"></script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #333; line-height: 1.6; }
+    body { font-family: 'Inter', -apple-system, sans-serif; color: #333; line-height: 1.6; overflow-x: hidden; }
     a { color: #E91E63; text-decoration: none; }
-    a:hover { text-decoration: underline; }
 
-    .hero {
-      background: linear-gradient(135deg, #FCE4EC, #FFF3E0);
-      padding: 60px 20px;
-      text-align: center;
+    /* Navigation */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(255,255,255,0.3);
+      padding: 16px 24px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: all 0.3s ease;
     }
-    .hero h1 { font-family: Georgia, serif; font-size: 2.5rem; color: #880E4F; margin-bottom: 12px; }
-    .hero p { font-size: 1.1rem; color: #555; max-width: 600px; margin: 0 auto 24px; }
-    .btn { display: inline-block; padding: 14px 32px; background: #E91E63; color: #fff; border-radius: 30px; font-weight: 600; margin: 8px; }
-    .btn:hover { background: #C2185B; text-decoration: none; }
-    .btn-outline { background: transparent; border: 2px solid #E91E63; color: #E91E63; }
-    .btn-outline:hover { background: #FCE4EC; }
-
-    .container { max-width: 960px; margin: 0 auto; padding: 40px 20px; }
-    .section-title { font-size: 1.8rem; font-family: Georgia, serif; text-align: center; margin-bottom: 32px; color: #880E4F; }
-
-    .features { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
-    .feature-card { background: #fff; border: 1px solid #f0e0e8; border-radius: 16px; padding: 24px; text-align: center; }
-    .feature-card .icon { font-size: 2.5rem; margin-bottom: 12px; }
-    .feature-card h3 { font-size: 1.1rem; margin-bottom: 8px; }
-    .feature-card p { font-size: 0.9rem; color: #666; }
-
-    .ad-slot { text-align: center; margin: 32px 0; min-height: 90px; }
-
-    .cta-section { background: #FFF8E1; padding: 40px 20px; text-align: center; border-radius: 16px; margin: 32px 0; }
-    .cta-section h2 { font-family: Georgia, serif; color: #880E4F; margin-bottom: 12px; }
-
-    nav { background: #fff; border-bottom: 1px solid #eee; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    nav .brand { font-family: Georgia, serif; font-size: 1.3rem; color: #E91E63; font-weight: bold; }
-    nav .links a { margin-left: 12px; font-size: 0.85rem; color: #555; }
+    nav.scrolled { background: rgba(255,255,255,0.95); box-shadow: 0 4px 30px rgba(0,0,0,0.08); }
+    nav .brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #E91E63; font-weight: 700; }
+    nav .links a { margin-left: 24px; font-size: 0.9rem; color: #555; font-weight: 500; transition: color 0.3s; }
     nav .links a:hover { color: #E91E63; }
 
-    footer { background: #FAFAFA; border-top: 1px solid #eee; padding: 24px 20px; text-align: center; font-size: 0.85rem; color: #888; }
-    footer a { color: #888; margin: 0 8px; }
-  @media(max-width:600px){nav{flex-direction:column;align-items:flex-start}nav .links{margin-top:8px}nav .links a{margin-left:0;margin-right:12px}}
+    /* Hero Section */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      background: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80') center/cover no-repeat;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(136,14,79,0.7), rgba(233,30,99,0.5), rgba(255,138,101,0.4));
+    }
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 70%);
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      display: flex; align-items: center; justify-content: center;
+      gap: 60px; padding: 100px 40px 60px;
+      max-width: 1200px; width: 100%;
+      flex-wrap: wrap;
+    }
+    .hero-text { flex: 1; min-width: 300px; color: #fff; }
+    .hero-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3.2rem; line-height: 1.2;
+      margin-bottom: 16px;
+      animation: fadeInUp 0.8s ease;
+    }
+    .hero-text p {
+      font-size: 1.15rem; opacity: 0.9; margin-bottom: 32px;
+      max-width: 480px; font-weight: 300;
+      animation: fadeInUp 0.8s ease 0.2s both;
+    }
+    .hero-buttons { animation: fadeInUp 0.8s ease 0.4s both; display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px; border-radius: 50px; font-weight: 600;
+      font-size: 0.95rem; transition: all 0.3s ease; border: none; cursor: pointer;
+    }
+    .btn-primary { background: #fff; color: #E91E63; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .btn-glass {
+      background: rgba(255,255,255,0.15); color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+    }
+    .btn-glass:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+
+    /* Phone Mockup */
+    .phone-mockup {
+      position: relative;
+      animation: fadeInUp 1s ease 0.3s both;
+    }
+    .phone-frame {
+      width: 280px; height: 570px;
+      background: #1a1a1a;
+      border-radius: 44px;
+      padding: 12px;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,255,255,0.1);
+      position: relative;
+      transform: perspective(1000px) rotateY(-5deg) rotateX(2deg);
+      transition: transform 0.5s ease;
+    }
+    .phone-frame:hover { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+    .phone-screen {
+      width: 100%; height: 100%;
+      background: linear-gradient(180deg, #FCE4EC 0%, #fff 30%, #FFF8E1 100%);
+      border-radius: 34px;
+      overflow: hidden;
+      position: relative;
+    }
+    .phone-notch {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 120px; height: 28px;
+      background: #1a1a1a; border-radius: 0 0 20px 20px;
+      z-index: 5;
+    }
+    .phone-ui {
+      padding: 40px 16px 16px;
+      font-size: 11px;
+    }
+    .phone-ui .app-header {
+      text-align: center; margin-bottom: 12px;
+    }
+    .phone-ui .app-header h3 { font-size: 14px; color: #880E4F; font-family: 'Playfair Display', serif; }
+    .phone-ui .app-header p { font-size: 10px; color: #888; }
+    .phone-ui .mini-card {
+      background: #fff; border-radius: 12px; padding: 10px;
+      margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .phone-ui .mini-card .label { font-size: 9px; color: #888; }
+    .phone-ui .mini-card .value { font-size: 13px; font-weight: 600; color: #E91E63; }
+    .phone-ui .progress-bar { height: 4px; background: #f0f0f0; border-radius: 4px; margin-top: 4px; }
+    .phone-ui .progress-fill { height: 100%; background: linear-gradient(90deg, #E91E63, #FF6090); border-radius: 4px; }
+    .phone-glow {
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      width: 300px; height: 600px;
+      background: radial-gradient(ellipse, rgba(233,30,99,0.2), transparent 70%);
+      filter: blur(40px); z-index: -1;
+    }
+
+    /* Glassmorphism Section */
+    .glass-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 80px 20px;
+      position: relative;
+    }
+    .glass-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1920&q=80') center/cover;
+      opacity: 0.15;
+    }
+    .glass-grid {
+      position: relative; z-index: 2;
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;
+    }
+    .glass-card {
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 24px; padding: 32px;
+      transition: all 0.3s ease;
+    }
+    .glass-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.15); box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .glass-card .icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .glass-card h3 { color: #fff; font-size: 1.2rem; margin-bottom: 8px; font-weight: 600; }
+    .glass-card p { color: rgba(255,255,255,0.8); font-size: 0.9rem; font-weight: 300; }
+
+    .section-header { text-align: center; margin-bottom: 48px; position: relative; z-index: 2; }
+    .section-header h2 { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: #fff; margin-bottom: 12px; }
+    .section-header p { color: rgba(255,255,255,0.7); font-size: 1.05rem; font-weight: 300; }
+
+    /* Features White Section */
+    .features-section { padding: 80px 20px; background: #FAFAFA; }
+    .features-section .section-header h2 { color: #880E4F; }
+    .features-section .section-header p { color: #666; }
+    .features-grid {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px;
+    }
+    .feature-item {
+      background: #fff; border-radius: 20px; padding: 32px;
+      border: 1px solid #f0e0e8;
+      transition: all 0.3s ease;
+    }
+    .feature-item:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(233,30,99,0.1); border-color: #E91E63; }
+    .feature-item .icon { font-size: 2.2rem; margin-bottom: 16px; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; background: #FCE4EC; border-radius: 16px; }
+    .feature-item h3 { font-size: 1.1rem; margin-bottom: 8px; color: #333; }
+    .feature-item p { font-size: 0.9rem; color: #666; }
+
+    /* CTA Section */
+    .cta-section {
+      background: linear-gradient(135deg, #880E4F, #E91E63, #FF6090);
+      padding: 80px 20px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1), transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08), transparent 50%);
+    }
+    .cta-section h2 { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: #fff; margin-bottom: 16px; position: relative; }
+    .cta-section p { color: rgba(255,255,255,0.85); font-size: 1.1rem; margin-bottom: 32px; position: relative; font-weight: 300; }
+    .cta-section .btn { position: relative; }
+
+    /* Ad Slot */
+    .ad-slot { text-align: center; margin: 40px auto; max-width: 960px; padding: 0 20px; min-height: 90px; }
+
+    /* Footer */
+    footer {
+      background: #1a1a1a; color: #aaa; padding: 40px 20px; text-align: center; font-size: 0.85rem;
+    }
+    footer a { color: #ccc; margin: 0 12px; transition: color 0.3s; }
+    footer a:hover { color: #E91E63; }
+    footer .footer-brand { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #E91E63; margin-bottom: 16px; }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    .floating { animation: float 4s ease-in-out infinite; }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav .links { display: none; }
+      .hero-content { flex-direction: column-reverse; padding: 100px 20px 40px; gap: 32px; text-align: center; }
+      .hero-text h1 { font-size: 2.2rem; }
+      .hero-text p { margin: 0 auto 24px; }
+      .hero-buttons { justify-content: center; }
+      .phone-frame { width: 220px; height: 450px; transform: none; }
+      .phone-frame:hover { transform: none; }
+      .section-header h2 { font-size: 1.8rem; }
+      .cta-section h2 { font-size: 1.8rem; }
+    }
   </style>
 </head>
+
 <body>
 
-<nav>
+<nav id="navbar">
   <a href="/" class="brand">💍 pranikah</a>
   <div class="links">
     <a href="/design-undangan.html">Design Undangan</a>
@@ -80,48 +261,90 @@
 </nav>
 
 <section class="hero">
-  <h1>Persiapan Nikah Jadi Mudah 💕</h1>
-  <p>Aplikasi gratis untuk merencanakan pernikahan impianmu. Kelola timeline, budget, vendor — semua dalam satu tempat. Plus koleksi design undangan digital modern!</p>
-  <a href="/app/" class="btn">🚀 Buka Aplikasi</a>
-  <a href="https://github.com/pranikah/pranikah.github.io/releases/latest/download/pranikah.apk" class="btn btn-outline">📥 Download APK</a>
-  <a href="/design-undangan.html" class="btn btn-outline">💌 Lihat Design Undangan</a>
-</section>
-
-<div class="container">
-  <h2 class="section-title">Fitur Aplikasi pranikah</h2>
-  <div class="features">
-    <div class="feature-card">
-      <div class="icon">📅</div>
-      <h3>Timeline & Checklist</h3>
-      <p>Pantau setiap tahap persiapan dari 12 bulan hingga 1 minggu sebelum hari H. Tidak ada yang terlewat!</p>
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Persiapan Nikah<br>Jadi Lebih Mudah 💕</h1>
+      <p>Rencanakan pernikahan impianmu dalam satu aplikasi. Timeline, budget, vendor — semua terorganisir sempurna.</p>
+      <div class="hero-buttons">
+        <a href="/app/" class="btn btn-primary">🚀 Buka Aplikasi</a>
+        <a href="https://github.com/pranikah/pranikah.github.io/releases/latest/download/pranikah.apk" class="btn btn-glass">📥 Download APK</a>
+      </div>
     </div>
-    <div class="feature-card">
-      <div class="icon">💰</div>
-      <h3>Budget Management</h3>
-      <p>Tentukan total anggaran, alokasi per kategori, dan pantau pengeluaran aktual secara real-time.</p>
-    </div>
-    <div class="feature-card">
-      <div class="icon">🏪</div>
-      <h3>Direktori Vendor</h3>
-      <p>Cari dan filter vendor pernikahan berdasarkan kategori: venue, catering, dekorasi, fotografer, dan lainnya.</p>
-    </div>
-    <div class="feature-card">
-      <div class="icon">🎯</div>
-      <h3>Sistem Prioritas</h3>
-      <p>Atur prioritas tugas (High/Medium/Low) untuk penyesuaian timeline otomatis sesuai kebutuhanmu.</p>
-    </div>
-    <div class="feature-card">
-      <div class="icon">🌍</div>
-      <h3>Multi Bahasa & Mata Uang</h3>
-      <p>Tersedia dalam Bahasa Indonesia dan English. Mendukung IDR, USD, MYR, EUR, GBP, SGD, VND.</p>
-    </div>
-    <div class="feature-card">
-      <div class="icon">💌</div>
-      <h3>Design Undangan Digital</h3>
-      <p>Koleksi template undangan pernikahan digital modern yang bisa langsung dipakai. Gratis!</p>
+    <div class="phone-mockup floating">
+      <div class="phone-glow"></div>
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="phone-ui">
+            <div class="app-header">
+              <h3>💍 pranikah</h3>
+              <p>Persiapan Nikah Kamu</p>
+            </div>
+            <div class="mini-card">
+              <div class="label">⏱️ Countdown</div>
+              <div class="value">120 Hari Lagi</div>
+            </div>
+            <div class="mini-card">
+              <div class="label">💰 Budget</div>
+              <div class="value">Rp 85.000.000</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:62%"></div></div>
+            </div>
+            <div class="mini-card">
+              <div class="label">📋 Tasks Selesai</div>
+              <div class="value">18 / 32</div>
+              <div class="progress-bar"><div class="progress-fill" style="width:56%"></div></div>
+            </div>
+            <div class="mini-card">
+              <div class="label">🏪 Vendor Terpilih</div>
+              <div class="value">5 vendor</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-</div>
+</section>
+
+
+<!-- Glassmorphism Features -->
+<section class="glass-section">
+  <div class="section-header">
+    <h2>Semua Yang Kamu Butuhkan</h2>
+    <p>Fitur lengkap untuk persiapan pernikahan tanpa ribet</p>
+  </div>
+  <div class="glass-grid">
+    <div class="glass-card">
+      <div class="icon">📅</div>
+      <h3>Timeline & Checklist</h3>
+      <p>Pantau setiap tahap persiapan dari 12 bulan hingga 1 minggu sebelum hari H.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">💰</div>
+      <h3>Budget Management</h3>
+      <p>Tentukan anggaran, alokasi per kategori, dan pantau pengeluaran real-time.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">🏪</div>
+      <h3>Direktori Vendor</h3>
+      <p>Cari dan filter vendor berdasarkan kategori: venue, catering, dekorasi, fotografer.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">🎯</div>
+      <h3>Sistem Prioritas</h3>
+      <p>Atur prioritas tugas untuk penyesuaian timeline otomatis sesuai kebutuhanmu.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">🌍</div>
+      <h3>Multi Bahasa & Mata Uang</h3>
+      <p>Bahasa Indonesia & English. Support IDR, USD, MYR, EUR, GBP, SGD, VND.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">💌</div>
+      <h3>Design Undangan Digital</h3>
+      <p>Koleksi template undangan pernikahan modern yang bisa langsung dipakai.</p>
+    </div>
+  </div>
+</section>
 
 <!-- Ad Slot -->
 <div class="ad-slot">
@@ -129,34 +352,31 @@
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 
-<div class="container">
-  <div class="cta-section">
-    <h2>💌 Design Undangan Digital</h2>
-    <p style="color:#666; margin-bottom:20px;">Koleksi template undangan pernikahan modern — minimalis, floral, elegant, rustic. Cocok untuk dibagikan via WhatsApp!</p>
-    <a href="/design-undangan.html" class="btn">Lihat Koleksi →</a>
-  </div>
-</div>
 
-<div class="container">
-  <h2 class="section-title">Kenapa pranikah?</h2>
-  <div class="features" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
-    <div class="feature-card">
+<!-- Why pranikah -->
+<section class="features-section">
+  <div class="section-header">
+    <h2>Kenapa pranikah?</h2>
+    <p>Dirancang khusus untuk pasangan Indonesia</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-item">
       <div class="icon">✅</div>
       <h3>100% Gratis</h3>
-      <p>Tidak ada biaya tersembunyi. Semua fitur bisa diakses tanpa bayar.</p>
+      <p>Tidak ada biaya tersembunyi. Semua fitur bisa diakses tanpa bayar sepeser pun.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-item">
       <div class="icon">📱</div>
       <h3>Web & Android</h3>
       <p>Buka di browser atau download APK Android. Pilih yang paling nyaman untukmu.</p>
     </div>
-    <div class="feature-card">
+    <div class="feature-item">
       <div class="icon">🔒</div>
-      <h3>Data Tersimpan Lokal</h3>
-      <p>Data persiapanmu tersimpan di perangkatmu sendiri. Privasi terjaga.</p>
+      <h3>Privasi Terjaga</h3>
+      <p>Data persiapanmu tersimpan di perangkatmu sendiri. Tidak ada yang bisa mengaksesnya.</p>
     </div>
   </div>
-</div>
+</section>
 
 <!-- Ad Slot -->
 <div class="ad-slot">
@@ -164,23 +384,53 @@
   <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
 </div>
 
-<div class="container" style="text-align:center;">
-  <h2 class="section-title">Mulai Persiapan Nikahmu Sekarang</h2>
-  <p style="color:#666; margin-bottom:24px;">Gratis, tanpa registrasi, langsung pakai.</p>
-  <a href="/app/" class="btn">🚀 Buka Aplikasi pranikah</a>
-  <a href="https://github.com/pranikah/pranikah.github.io/releases/latest/download/pranikah.apk" class="btn btn-outline">📥 Download APK Android</a>
-</div>
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Mulai Persiapan Nikahmu Sekarang ✨</h2>
+  <p>Gratis, tanpa registrasi, langsung pakai.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;">
+    <a href="/app/" class="btn btn-primary">🚀 Buka Aplikasi pranikah</a>
+    <a href="https://github.com/pranikah/pranikah.github.io/releases/latest/download/pranikah.apk" class="btn btn-glass">📥 Download APK Android</a>
+    <a href="/design-undangan.html" class="btn btn-glass">💌 Design Undangan</a>
+  </div>
+</section>
 
 <footer>
-  <p>© 2026 pranikah. Dibuat dengan ❤️ untuk pasangan bahagia.</p>
+  <div class="footer-brand">💍 pranikah</div>
+  <p style="margin-bottom:12px;">Dibuat dengan ❤️ untuk pasangan bahagia di Indonesia</p>
   <p>
     <a href="/privacy-policy.html">Privacy Policy</a>
     <a href="/design-undangan.html">Design Undangan</a>
     <a href="/rekomendasi-vendor.html">Vendor</a>
     <a href="/checklist-pernikahan.html">Checklist</a>
-    <a href="/app/">Aplikasi</a>
+    <a href="/about.html">About</a>
   </p>
+  <p style="margin-top:16px; color:#555;">© 2026 pranikah. All rights reserved.</p>
 </footer>
+
+<script>
+  // Navbar scroll effect
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  });
+
+  // Scroll reveal animation
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.glass-card, .feature-item').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'all 0.6s ease';
+    observer.observe(el);
+  });
+</script>
 
 <!-- Structured Data -->
 <script type="application/ld+json">
@@ -190,10 +440,7 @@
   "name": "pranikah",
   "url": "https://pranikah.github.io/",
   "description": "Aplikasi persiapan nikah gratis + koleksi design undangan digital modern",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://pranikah.github.io/app/"
-  }
+  "potentialAction": { "@type": "SearchAction", "target": "https://pranikah.github.io/app/" }
 }
 </script>
 </body>
