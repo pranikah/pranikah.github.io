@@ -392,6 +392,12 @@ abstract class AppLocalizations {
   /// **'Budget Allocated'**
   String get budgetAllocated;
 
+  /// No description provided for @addBudgetItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Budget Item'**
+  String get addBudgetItem;
+
   /// No description provided for @actualCost.
   ///
   /// In en, this message translates to:

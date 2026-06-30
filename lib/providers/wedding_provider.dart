@@ -155,6 +155,11 @@ class WeddingProvider extends ChangeNotifier {
     await _service.deleteTask(_planId!, taskId);
   }
 
+  Future<void> addBudgetItem(BudgetItem item) async {
+    if (_planId == null) return;
+    await _service.addBudgetItem(_planId!, item);
+  }
+
   Future<void> updateBudgetItem(BudgetItem item) async {
     if (_planId == null) return;
     await _service.updateBudgetItem(_planId!, item);

@@ -161,6 +161,9 @@ class AppLocalizationsId extends AppLocalizations {
   String get budgetAllocated => 'Budget Dialokasi';
 
   @override
+  String get addBudgetItem => 'Tambah Item Budget';
+
+  @override
   String get actualCost => 'Biaya Aktual';
 
   @override

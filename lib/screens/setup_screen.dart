@@ -19,7 +19,7 @@ class _SetupScreenState extends State<SetupScreen> {
   final _brideCtrl = TextEditingController();
   final _budgetCtrl = TextEditingController();
   DateTime? _weddingDate;
-  DateTime? _startDate;
+  DateTime? _startDate = DateTime.now();
   bool _loading = false;
   String _selectedCurrency = 'IDR';
 

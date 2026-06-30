@@ -56,27 +56,40 @@ class _BudgetScreenState extends State<BudgetScreen> {
         final totalSpent = items.fold<double>(0, (s, i) => s + i.actualCost);
         final remaining = plan.totalBudget - totalSpent;
 
-        return Column(
+        return Stack(
           children: [
-            _buildSummaryHeader(context, f, plan.totalBudget, totalPlanned, totalSpent, remaining, provider),
-            Expanded(
-              child: items.isEmpty
-                  ? Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('💰', style: TextStyle(fontSize: 48)),
-                          const SizedBox(height: 12),
-                          const Text('Belum ada item budget',
-                            style: TextStyle(color: AppTheme.textLight)),
-                        ],
-                      ),
-                    )
-                  : ListView.builder(
-                      padding: const EdgeInsets.all(16),
-                      itemCount: items.length,
-                      itemBuilder: (_, i) => _buildBudgetCard(context, items[i], f, provider),
-                    ),
+            Column(
+              children: [
+                _buildSummaryHeader(context, f, plan.totalBudget, totalPlanned, totalSpent, remaining, provider),
+                Expanded(
+                  child: items.isEmpty
+                      ? Center(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Text('💰', style: TextStyle(fontSize: 48)),
+                              const SizedBox(height: 12),
+                              const Text('Belum ada item budget',
+                                style: TextStyle(color: AppTheme.textLight)),
+                            ],
+                          ),
+                        )
+                      : ListView.builder(
+                          padding: const EdgeInsets.all(16),
+                          itemCount: items.length,
+                          itemBuilder: (_, i) => _buildBudgetCard(context, items[i], f, provider),
+                        ),
+                ),
+              ],
+            ),
+            Positioned(
+              bottom: 16,
+              right: 16,
+              child: FloatingActionButton(
+                onPressed: () => _showAddDialog(context, provider),
+                backgroundColor: AppTheme.primary,
+                child: const Icon(Icons.add, color: Colors.white),
+              ),
             ),
           ],
         );
@@ -178,6 +191,67 @@ class _BudgetScreenState extends State<BudgetScreen> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500,
                     color: item.remaining >= 0 ? AppTheme.success : Colors.red)),
               ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showAddDialog(BuildContext context, WeddingProvider provider) {
+    final l = AppLocalizations.of(context)!;
+    BudgetCategory selectedCategory = BudgetCategory.lainnya;
+    final plannedCtrl = TextEditingController();
+    final actualCtrl = TextEditingController(text: '0');
+
+    showDialog(
+      context: context,
+      builder: (_) => StatefulBuilder(
+        builder: (context, setDialogState) => AlertDialog(
+          title: Text(l.addBudgetItem),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              DropdownButtonFormField<BudgetCategory>(
+                value: selectedCategory,
+                decoration: const InputDecoration(labelText: 'Kategori'),
+                items: BudgetCategory.values.map((c) => DropdownMenuItem(
+                  value: c,
+                  child: Text('${c.icon} ${c.label}'),
+                )).toList(),
+                onChanged: (v) => setDialogState(() => selectedCategory = v!),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: plannedCtrl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: l.budgetAllocated),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: actualCtrl,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(labelText: l.actualCost),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(onPressed: () => Navigator.pop(context), child: Text(l.cancel)),
+            ElevatedButton(
+              onPressed: () {
+                final planned = double.tryParse(plannedCtrl.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+                final actual = double.tryParse(actualCtrl.text.replaceAll(RegExp(r'[^0-9]'), '')) ?? 0;
+                if (planned > 0) {
+                  provider.addBudgetItem(BudgetItem(
+                    id: '',
+                    category: selectedCategory,
+                    plannedCost: planned,
+                    actualCost: actual,
+                  ));
+                }
+                Navigator.pop(context);
+              },
+              child: Text(l.save),
             ),
           ],
         ),
