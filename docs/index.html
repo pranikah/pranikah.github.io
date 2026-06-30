@@ -46,7 +46,7 @@
       position: relative;
       min-height: 100vh;
       display: flex; align-items: center; justify-content: center;
-      background: url('images/hero-bg.jpg') center/cover no-repeat;
+      background: linear-gradient(135deg, #880E4F, #E91E63, #FF6090, #FFAB91), url('images/hero-bg.jpg') center/cover no-repeat;
       overflow: hidden;
     }
     .hero::before {
@@ -141,7 +141,7 @@
     }
     .glass-section::before {
       content: ''; position: absolute; inset: 0;
-      background: url('images/glass-bg.jpg') center/cover;
+      background: url('images/glass-bg.jpg') center/cover, linear-gradient(135deg, #667eea, #764ba2);
       opacity: 0.15;
     }
     .glass-grid {
