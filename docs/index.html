@@ -111,10 +111,14 @@
     .phone-frame:hover { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
     .phone-screen {
       width: 100%; height: 100%;
-      background: linear-gradient(180deg, #FCE4EC 0%, #fff 30%, #FFF8E1 100%);
       border-radius: 34px;
       overflow: hidden;
       position: relative;
+    }
+    .phone-screen img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 34px;
     }
     .phone-notch {
       position: absolute; top: 0; left: 50%; transform: translateX(-50%);
@@ -122,23 +126,6 @@
       background: #1a1a1a; border-radius: 0 0 20px 20px;
       z-index: 5;
     }
-    .phone-ui {
-      padding: 40px 16px 16px;
-      font-size: 11px;
-    }
-    .phone-ui .app-header {
-      text-align: center; margin-bottom: 12px;
-    }
-    .phone-ui .app-header h3 { font-size: 14px; color: #880E4F; font-family: 'Playfair Display', serif; }
-    .phone-ui .app-header p { font-size: 10px; color: #888; }
-    .phone-ui .mini-card {
-      background: #fff; border-radius: 12px; padding: 10px;
-      margin-bottom: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .phone-ui .mini-card .label { font-size: 9px; color: #888; }
-    .phone-ui .mini-card .value { font-size: 13px; font-weight: 600; color: #E91E63; }
-    .phone-ui .progress-bar { height: 4px; background: #f0f0f0; border-radius: 4px; margin-top: 4px; }
-    .phone-ui .progress-fill { height: 100%; background: linear-gradient(90deg, #E91E63, #FF6090); border-radius: 4px; }
     .phone-glow {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
       width: 300px; height: 600px;
@@ -275,30 +262,7 @@
       <div class="phone-frame">
         <div class="phone-screen">
           <div class="phone-notch"></div>
-          <div class="phone-ui">
-            <div class="app-header">
-              <h3>💍 pranikah</h3>
-              <p>Persiapan Nikah Kamu</p>
-            </div>
-            <div class="mini-card">
-              <div class="label">⏱️ Countdown</div>
-              <div class="value">120 Hari Lagi</div>
-            </div>
-            <div class="mini-card">
-              <div class="label">💰 Budget</div>
-              <div class="value">Rp 85.000.000</div>
-              <div class="progress-bar"><div class="progress-fill" style="width:62%"></div></div>
-            </div>
-            <div class="mini-card">
-              <div class="label">📋 Tasks Selesai</div>
-              <div class="value">18 / 32</div>
-              <div class="progress-bar"><div class="progress-fill" style="width:56%"></div></div>
-            </div>
-            <div class="mini-card">
-              <div class="label">🏪 Vendor Terpilih</div>
-              <div class="value">5 vendor</div>
-            </div>
-          </div>
+          <img src="images/app-screenshot.png" alt="pranikah app preview">
         </div>
       </div>
     </div>
