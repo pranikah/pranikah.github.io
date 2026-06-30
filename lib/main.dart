@@ -177,14 +177,6 @@ class _AppShellState extends State<AppShell> {
             title: Text(titles[_currentIndex]),
             actions: [
               IconButton(
-                icon: const Icon(Icons.language, color: Colors.grey),
-                tooltip: 'Website',
-                onPressed: () => launchUrl(
-                  Uri.parse('https://pranikah.github.io/'),
-                  mode: LaunchMode.externalApplication,
-                ),
-              ),
-              IconButton(
                 icon: const Icon(Icons.favorite, color: Colors.pinkAccent),
                 tooltip: 'Support Us',
                 onPressed: () => _showTipsPopup(context),
