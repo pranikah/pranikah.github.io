@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="google-site-verification" content="7m_hXKSt5rIevpPdACuGG_t7S0Ytx4vBIm_9TWJV1Hs" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>pranikah - Wedding Preparation App & Digital Invitation</title>
+  <meta name="description" content="Free wedding preparation app + modern digital invitation designs. Manage timeline, budget, vendors for your perfect wedding.">
+  <meta name="keywords" content="wedding preparation, digital invitation, wedding planner, wedding checklist, wedding budget, vendor management">
+  <meta name="author" content="pranikah">
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#E91E63">
+  <link rel="canonical" href="https://pranikah.github.io/en/">
+  <link rel="icon" type="image/png" href="../icons/favicon-96x96.png">
+  <link rel="apple-touch-icon" href="../icons/apple-touch-icon.png">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="pranikah - Wedding Preparation App">
+  <meta property="og:description" content="Free wedding preparation app + modern digital invitation designs.">
+  <meta property="og:image" content="https://pranikah.github.io/icons/Icon-512.png">
+  <meta property="og:url" content="https://pranikah.github.io/en/">
+  <meta property="og:locale" content="en_US">
+  <link rel="alternate" hreflang="id" href="https://pranikah.github.io/">
+  <link rel="alternate" hreflang="en" href="https://pranikah.github.io/en/">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6781504523102344" crossorigin="anonymous"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', -apple-system, sans-serif; color: #333; line-height: 1.6; overflow-x: hidden; }
+    a { color: #E91E63; text-decoration: none; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 1000; background: rgba(255,255,255,0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.3); padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; transition: all 0.3s ease; }
+    nav.scrolled { background: rgba(255,255,255,0.95); box-shadow: 0 4px 30px rgba(0,0,0,0.08); }
+    nav .brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: #E91E63; font-weight: 700; }
+    nav .links a { margin-left: 24px; font-size: 0.9rem; color: #555; font-weight: 500; transition: color 0.3s; }
+    nav .links a:hover { color: #E91E63; }
+    .lang-switch { margin-left: 24px; background: rgba(233,30,99,0.08); border-radius: 20px; padding: 4px; display: inline-flex; }
+    .lang-switch a { margin: 0; padding: 4px 12px; border-radius: 16px; font-size: 0.8rem; font-weight: 600; color: #888; }
+    .lang-switch a.lang-active { background: #E91E63; color: #fff; }
+    .hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: url('https://images.unsplash.com/photo-1519741497674-611481863552?w=1920&q=80') center/cover no-repeat; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(136,14,79,0.7), rgba(233,30,99,0.5), rgba(255,138,101,0.4)); }
+    .hero::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 30% 50%, rgba(255,255,255,0.1) 0%, transparent 70%); }
+    .hero-content { position: relative; z-index: 2; display: flex; align-items: center; justify-content: center; gap: 60px; padding: 100px 40px 60px; max-width: 1200px; width: 100%; flex-wrap: wrap; }
+    .hero-text { flex: 1; min-width: 300px; color: #fff; }
+    .hero-text h1 { font-family: 'Playfair Display', serif; font-size: 3.2rem; line-height: 1.2; margin-bottom: 16px; animation: fadeInUp 0.8s ease; }
+    .hero-text p { font-size: 1.15rem; opacity: 0.9; margin-bottom: 32px; max-width: 480px; font-weight: 300; animation: fadeInUp 0.8s ease 0.2s both; }
+    .hero-buttons { animation: fadeInUp 0.8s ease 0.4s both; display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 50px; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; border: none; cursor: pointer; }
+    .btn-primary { background: #fff; color: #E91E63; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+    .btn-glass { background: rgba(255,255,255,0.15); color: #fff; border: 1px solid rgba(255,255,255,0.3); backdrop-filter: blur(10px); }
+    .btn-glass:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+    .phone-mockup { position: relative; animation: fadeInUp 1s ease 0.3s both; }
+    .phone-frame { width: 280px; height: 570px; background: #1a1a1a; border-radius: 44px; padding: 12px; box-shadow: 0 40px 80px rgba(0,0,0,0.4), 0 0 0 2px rgba(255,255,255,0.1); position: relative; transform: perspective(1000px) rotateY(-5deg) rotateX(2deg); transition: transform 0.5s ease; }
+    .phone-frame:hover { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+    .phone-screen { width: 100%; height: 100%; border-radius: 34px; overflow: hidden; position: relative; }
+    .phone-screen img { width: 100%; height: 100%; object-fit: cover; border-radius: 34px; position: absolute; top: 0; left: 0; opacity: 0; animation: slideshow 9s infinite; }
+    .phone-screen img:nth-child(2) { animation-delay: 0s; }
+    .phone-screen img:nth-child(3) { animation-delay: 3s; }
+    .phone-screen img:nth-child(4) { animation-delay: 6s; }
+    @keyframes slideshow { 0% { opacity: 0; } 5% { opacity: 1; } 33% { opacity: 1; } 38% { opacity: 0; } 100% { opacity: 0; } }
+    .phone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 120px; height: 28px; background: #1a1a1a; border-radius: 0 0 20px 20px; z-index: 5; }
+    .phone-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 600px; background: radial-gradient(ellipse, rgba(233,30,99,0.2), transparent 70%); filter: blur(40px); z-index: -1; }
+    .glass-section { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 80px 20px; position: relative; }
+    .glass-section::before { content: ''; position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=1920&q=80') center/cover; opacity: 0.15; }
+    .glass-grid { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; }
+    .glass-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2); border-radius: 24px; padding: 32px; transition: all 0.3s ease; }
+    .glass-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.15); box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+    .glass-card .icon { font-size: 2.5rem; margin-bottom: 16px; }
+    .glass-card h3 { color: #fff; font-size: 1.2rem; margin-bottom: 8px; font-weight: 600; }
+    .glass-card p { color: rgba(255,255,255,0.8); font-size: 0.9rem; font-weight: 300; }
+    .section-header { text-align: center; margin-bottom: 48px; position: relative; z-index: 2; }
+    .section-header h2 { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: #fff; margin-bottom: 12px; }
+    .section-header p { color: rgba(255,255,255,0.7); font-size: 1.05rem; font-weight: 300; }
+    .features-section { padding: 80px 20px; background: #FAFAFA; }
+    .features-section .section-header h2 { color: #880E4F; }
+    .features-section .section-header p { color: #666; }
+    .features-grid { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .feature-item { background: #fff; border-radius: 20px; padding: 32px; border: 1px solid #f0e0e8; transition: all 0.3s ease; }
+    .feature-item:hover { transform: translateY(-4px); box-shadow: 0 20px 60px rgba(233,30,99,0.1); border-color: #E91E63; }
+    .feature-item .icon { font-size: 2.2rem; margin-bottom: 16px; width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; background: #FCE4EC; border-radius: 16px; }
+    .feature-item h3 { font-size: 1.1rem; margin-bottom: 8px; color: #333; }
+    .feature-item p { font-size: 0.9rem; color: #666; }
+    .cta-section { background: linear-gradient(135deg, #880E4F, #E91E63, #FF6090); padding: 80px 20px; text-align: center; position: relative; overflow: hidden; }
+    .cta-section::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1), transparent 50%), radial-gradient(circle at 80% 20%, rgba(255,255,255,0.08), transparent 50%); }
+    .cta-section h2 { font-family: 'Playfair Display', serif; font-size: 2.4rem; color: #fff; margin-bottom: 16px; position: relative; }
+    .cta-section p { color: rgba(255,255,255,0.85); font-size: 1.1rem; margin-bottom: 32px; position: relative; font-weight: 300; }
+    .cta-section .btn { position: relative; }
+    .ad-slot { text-align: center; margin: 40px auto; max-width: 960px; padding: 0 20px; min-height: 90px; }
+    footer { background: #1a1a1a; color: #aaa; padding: 40px 20px; text-align: center; font-size: 0.85rem; }
+    footer a { color: #ccc; margin: 0 12px; transition: color 0.3s; }
+    footer a:hover { color: #E91E63; }
+    footer .footer-brand { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: #E91E63; margin-bottom: 16px; }
+    @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-10px); } }
+    .floating { animation: float 4s ease-in-out infinite; }
+    @media (max-width: 768px) { nav .links { display: none; } .hero-content { flex-direction: column-reverse; padding: 100px 20px 40px; gap: 32px; text-align: center; } .hero-text h1 { font-size: 2.2rem; } .hero-text p { margin: 0 auto 24px; } .hero-buttons { justify-content: center; } .phone-frame { width: 220px; height: 450px; transform: none; } .phone-frame:hover { transform: none; } .section-header h2 { font-size: 1.8rem; } .cta-section h2 { font-size: 1.8rem; } }
+  </style>
+</head>
+
+<body>
+
+<nav id="navbar">
+  <a href="/" class="brand">💍 pranikah</a>
+  <div class="links">
+    <a href="/design-undangan.html">Invitations</a>
+    <a href="/rekomendasi-vendor.html">Vendors</a>
+    <a href="/checklist-pernikahan.html">Checklist</a>
+    <a href="/app/">Open App</a>
+    <span class="lang-switch">
+      <a href="/">ID</a>
+      <a href="/en/" class="lang-active">EN</a>
+    </span>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-text">
+      <h1>Wedding Preparation<br>Made Simple 💕</h1>
+      <p>Plan your dream wedding in one app. Timeline, budget, vendors — everything perfectly organized.</p>
+      <div class="hero-buttons">
+        <a href="/app/" class="btn btn-primary">🚀 Open App</a>
+        <a href="https://github.com/pranikah/pranikah.github.io/releases/latest/download/pranikah.apk" class="btn btn-glass">📥 Download APK</a>
+      </div>
+    </div>
+    <div class="phone-mockup floating">
+      <div class="phone-glow"></div>
+      <div class="phone-frame">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <img src="../images/screen-dashboard.png" alt="pranikah dashboard">
+          <img src="../images/screen-timeline.png" alt="pranikah timeline">
+          <img src="../images/screen-budget.png" alt="pranikah budget">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="glass-section">
+  <div class="section-header">
+    <h2>Everything You Need</h2>
+    <p>Complete features for hassle-free wedding preparation</p>
+  </div>
+  <div class="glass-grid">
+    <div class="glass-card">
+      <div class="icon">📅</div>
+      <h3>Timeline & Checklist</h3>
+      <p>Track every preparation stage from 12 months to 1 week before the big day.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">💰</div>
+      <h3>Budget Management</h3>
+      <p>Set your budget, allocate per category, and monitor spending in real-time.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">🏪</div>
+      <h3>Vendor Directory</h3>
+      <p>Search and filter vendors by category: venue, catering, decoration, photographer.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">🎯</div>
+      <h3>Priority System</h3>
+      <p>Set task priorities for automatic timeline adjustments based on your needs.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">🌍</div>
+      <h3>Multi Language & Currency</h3>
+      <p>Available in Bahasa Indonesia & English. Supports IDR, USD, MYR, EUR, GBP, SGD, VND.</p>
+    </div>
+    <div class="glass-card">
+      <div class="icon">💌</div>
+      <h3>Digital Invitations</h3>
+      <p>Modern wedding invitation templates ready to use. Free!</p>
+    </div>
+  </div>
+</section>
+
+<div class="ad-slot">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6781504523102344" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<section class="features-section">
+  <div class="section-header">
+    <h2>Why pranikah?</h2>
+    <p>Designed for couples in Southeast Asia</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="icon">✅</div>
+      <h3>100% Free</h3>
+      <p>No hidden costs. All features accessible without paying a single cent.</p>
+    </div>
+    <div class="feature-item">
+      <div class="icon">📱</div>
+      <h3>Web & Android</h3>
+      <p>Open in browser or download Android APK. Choose what's most convenient for you.</p>
+    </div>
+    <div class="feature-item">
+      <div class="icon">🔒</div>
+      <h3>Privacy First</h3>
+      <p>Your data is stored locally on your device. No one else can access it.</p>
+    </div>
+  </div>
+</section>
+
+<div class="ad-slot">
+  <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6781504523102344" data-ad-slot="auto" data-ad-format="auto" data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+</div>
+
+<section class="features-section">
+  <div class="section-header">
+    <h2>How to Install APK</h2>
+    <p>Easy! Just 3 steps</p>
+  </div>
+  <div class="features-grid">
+    <div class="feature-item">
+      <div class="icon">📥</div>
+      <h3>1. Download APK</h3>
+      <p>Tap the "Download APK" button and wait for the file to finish downloading.</p>
+    </div>
+    <div class="feature-item">
+      <div class="icon">⚙️</div>
+      <h3>2. Allow Installation</h3>
+      <p>If a warning appears, tap <strong>"Settings"</strong> → enable <strong>"Allow from this source"</strong> → go back and tap <strong>"Install"</strong>.</p>
+    </div>
+    <div class="feature-item">
+      <div class="icon">🎉</div>
+      <h3>3. Open & Start!</h3>
+      <p>App is ready to use. No registration needed, start planning your wedding right away.</p>
+    </div>
+  </div>
+  <p style="text-align:center;color:#888;font-size:0.85rem;margin-top:24px;">💡 This app is safe — open source on GitHub. The warning appears because it's not yet on Play Store.</p>
+</section>
+
+<section class="cta-section">
+  <h2>Start Your Wedding Preparation Now ✨</h2>
+  <p>Free, no registration, ready to use.</p>
+  <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative;">
+    <a href="/app/" class="btn btn-primary">🚀 Open pranikah App</a>
+    <a href="https://github.com/pranikah/pranikah.github.io/releases/latest/download/pranikah.apk" class="btn btn-glass">📥 Download APK Android</a>
+    <a href="/design-undangan.html" class="btn btn-glass">💌 Digital Invitations</a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-brand">💍 pranikah</div>
+  <p style="margin-bottom:12px;">Made with ❤️ for happy couples in Southeast Asia</p>
+  <p>
+    <a href="/privacy-policy.html">Privacy Policy</a>
+    <a href="/design-undangan.html">Invitations</a>
+    <a href="/rekomendasi-vendor.html">Vendors</a>
+    <a href="/checklist-pernikahan.html">Checklist</a>
+    <a href="/about.html">About</a>
+  </p>
+  <p style="margin-top:16px; color:#555;">© 2026 pranikah. All rights reserved.</p>
+</footer>
+
+<script>
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+  });
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.style.opacity = '1'; entry.target.style.transform = 'translateY(0)'; }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.glass-card, .feature-item').forEach(el => {
+    el.style.opacity = '0'; el.style.transform = 'translateY(20px)'; el.style.transition = 'all 0.6s ease'; observer.observe(el);
+  });
+</script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "pranikah",
+  "url": "https://pranikah.github.io/en/",
+  "description": "Free wedding preparation app + modern digital invitation designs",
+  "potentialAction": { "@type": "SearchAction", "target": "https://pranikah.github.io/app/" }
+}
+</script>
+</body>
+</html>
