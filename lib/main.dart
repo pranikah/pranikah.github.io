@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
@@ -7,15 +9,21 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'providers/wedding_provider.dart';
 import 'services/local_storage_service.dart';
+import 'services/interstitial_ad_service.dart';
+import 'services/app_open_ad_service.dart';
 import 'screens/dashboard_screen.dart';
 import 'screens/timeline_screen.dart';
 import 'screens/budget_screen.dart';
 import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
 import 'theme/app_theme.dart';
+import 'widgets/banner_ad_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  if (!kIsWeb) {
+    MobileAds.instance.initialize();
+  }
   await initializeDateFormatting('id', null);
   final prefs = await SharedPreferences.getInstance();
   final onboardingDone = prefs.getBool('onboarding_done') ?? false;
@@ -30,15 +38,37 @@ class PranikahApp extends StatefulWidget {
   State<PranikahApp> createState() => _PranikahAppState();
 }
 
-class _PranikahAppState extends State<PranikahApp> {
+class _PranikahAppState extends State<PranikahApp> with WidgetsBindingObserver {
   late bool _showOnboarding;
   Locale? _locale;
+  final AppOpenAdService _appOpenAdService = AppOpenAdService();
 
   @override
   void initState() {
     super.initState();
     _showOnboarding = widget.showOnboarding;
     _loadLocale();
+    WidgetsBinding.instance.addObserver(this);
+    if (!kIsWeb) {
+      _appOpenAdService.loadAd();
+    }
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _appOpenAdService.dispose();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (kIsWeb) return;
+    if (state == AppLifecycleState.paused) {
+      _appOpenAdService.onAppPaused();
+    } else if (state == AppLifecycleState.resumed) {
+      _appOpenAdService.onAppResumed();
+    }
   }
 
   Future<void> _loadLocale() async {
@@ -93,13 +123,23 @@ class AppShell extends StatefulWidget {
 class _AppShellState extends State<AppShell> {
   int _currentIndex = 0;
   static const _localUserId = 'local_user';
+  final InterstitialAdService _interstitialAdService = InterstitialAdService();
 
   @override
   void initState() {
     super.initState();
+    if (!kIsWeb) {
+      _interstitialAdService.loadAd();
+    }
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<WeddingProvider>().loadPlan(_localUserId);
     });
+  }
+
+  @override
+  void dispose() {
+    _interstitialAdService.dispose();
+    super.dispose();
   }
 
   @override
@@ -151,10 +191,20 @@ class _AppShellState extends State<AppShell> {
               ),
             ],
           ),
-          body: screens[_currentIndex],
+          body: Column(
+            children: [
+              Expanded(child: screens[_currentIndex]),
+              const BannerAdWidget(),
+            ],
+          ),
           bottomNavigationBar: NavigationBar(
             selectedIndex: _currentIndex,
-            onDestinationSelected: (i) => setState(() => _currentIndex = i),
+            onDestinationSelected: (i) {
+              if (i != _currentIndex) {
+                _interstitialAdService.onTabSwitch();
+              }
+              setState(() => _currentIndex = i);
+            },
             destinations: [
               NavigationDestination(icon: const Icon(Icons.dashboard_outlined),
                 selectedIcon: const Icon(Icons.dashboard), label: l.dashboard),

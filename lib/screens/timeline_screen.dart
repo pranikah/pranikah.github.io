@@ -1,24 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'dart:js_interop' if (dart.library.io) 'dart:js_interop';
 import '../models/wedding_task.dart';
 import '../providers/wedding_provider.dart';
 import '../theme/app_theme.dart';
-
-@JS('showInterstitialAd')
-external void _showInterstitialAd();
-
-int _taskUpdateCount = 0;
-
-void _maybeShowAd() {
-  _taskUpdateCount++;
-  if (_taskUpdateCount % 3 == 0 && kIsWeb) {
-    _showInterstitialAd();
-  }
-}
 
 class TimelineScreen extends StatelessWidget {
   const TimelineScreen({super.key});
@@ -187,10 +173,7 @@ class TimelineScreen extends StatelessWidget {
                   },
                   itemBuilder: (_) => [
                     ...TaskStatus.values.map((s) => PopupMenuItem(
-                      onTap: () {
-                        provider.updateTaskStatus(task.id, s);
-                        _maybeShowAd();
-                      },
+                      onTap: () => provider.updateTaskStatus(task.id, s),
                       child: Row(children: [
                         Icon(_statusIconData(s), size: 16, color: _statusColor(s)),
                         const SizedBox(width: 8),
