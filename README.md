@@ -178,3 +178,5 @@ pranikah/
 - **url_launcher** - External links
 - **GitHub Pages** - Hosting
 - **Google AdSense** - Monetization
+
+ https://github.com/pranikah/pranikah.github.io/releases/new
