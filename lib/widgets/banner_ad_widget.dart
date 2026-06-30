@@ -14,9 +14,9 @@ class _BannerAdWidgetState extends State<BannerAdWidget> {
   bool _isLoaded = false;
 
   // Ad Unit ID - Banner
-  // Production: ca-app-pub-6781504523102344/3227832518
+  // Production: ca-app-pub-6781504523102344/9690931991
   // Test:       ca-app-pub-3940256099942544/6300978111
-  static const String _adUnitId = 'ca-app-pub-6781504523102344/3227832518';
+  static const String _adUnitId = 'ca-app-pub-6781504523102344/9690931991';
 
   @override
   void initState() {

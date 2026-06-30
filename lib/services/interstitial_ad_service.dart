@@ -11,9 +11,9 @@ class InterstitialAdService {
   // Tampilkan interstitial setiap N kali pindah tab
   static const int _showEveryNTabs = 4;
 
-  // Production: ca-app-pub-6781504523102344/8201791744
+  // Production: ca-app-pub-6781504523102344/1812441975
   // Test:       ca-app-pub-3940256099942544/1033173712
-  static const String _adUnitId = 'ca-app-pub-6781504523102344/8201791744';
+  static const String _adUnitId = 'ca-app-pub-6781504523102344/1812441975';
 
   /// Load interstitial ad
   void loadAd() {
