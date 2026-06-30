@@ -125,7 +125,6 @@ class LocalStorageService implements DataService {
 
   @override
   Future<void> generateDefaultTasks(String planId, DateTime weddingDate, {DateTime? startDate, String locale = 'id'}) async {
-    final cutoff = startDate ?? DateTime.now();
     final defaultTasks = locale == 'id' ? _tasksId : _tasksEn;
 
     final tasks = <WeddingTask>[];
@@ -134,7 +133,6 @@ class LocalStorageService implements DataService {
       final dueDate = phase == TaskPhase.week1
           ? weddingDate.subtract(const Duration(days: 7))
           : DateTime(weddingDate.year, weddingDate.month - phase.monthsBefore, weddingDate.day);
-      if (dueDate.isBefore(cutoff)) continue;
       tasks.add(WeddingTask(
         id: _genId(),
         title: task['title'] as String,
