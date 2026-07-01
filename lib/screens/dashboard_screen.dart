@@ -10,6 +10,7 @@ import '../providers/wedding_provider.dart';
 import '../screens/setup_screen.dart';
 import '../services/currency_helper.dart';
 import '../services/update_checker_service.dart';
+import '../screens/update_screen.dart';
 import '../theme/app_theme.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -28,8 +29,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
     _loadCurrency();
     // Check for app updates after frame renders
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      UpdateCheckerService.checkForUpdate(context);
+      _checkUpdate();
     });
+  }
+
+  Future<void> _checkUpdate() async {
+    final releaseInfo = await UpdateCheckerService.checkForUpdate();
+    if (releaseInfo != null && mounted) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => UpdateScreen(releaseInfo: releaseInfo),
+        ),
+      );
+    }
   }
 
   Future<void> _loadCurrency() async {
