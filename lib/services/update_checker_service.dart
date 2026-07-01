@@ -110,13 +110,28 @@ class UpdateCheckerService {
     try {
       final client = http.Client();
       final request = http.Request('GET', Uri.parse(url));
+      request.headers['Cache-Control'] = 'no-cache, no-store';
+      request.headers['Pragma'] = 'no-cache';
       final response = await client.send(request);
 
       final totalBytes = response.contentLength ?? 0;
       int receivedBytes = 0;
 
       final dir = await getTemporaryDirectory();
-      final file = File('${dir.path}/pranikah_update.apk');
+      // Use unique filename to avoid stale cache
+      final timestamp = DateTime.now().millisecondsSinceEpoch;
+      final file = File('${dir.path}/pranikah_update_$timestamp.apk');
+
+      // Delete old APK files first
+      try {
+        final files = dir.listSync();
+        for (final f in files) {
+          if (f is File && f.path.contains('pranikah_update') && f.path.endsWith('.apk')) {
+            f.deleteSync();
+          }
+        }
+      } catch (_) {}
+
       final sink = file.openWrite();
 
       await for (final chunk in response.stream) {
