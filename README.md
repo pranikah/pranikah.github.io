@@ -1,4 +1,4 @@
-# pranikah - Aplikasi Persiapan Nikah
+# Pranikah - Aplikasi Persiapan Nikah
 
 Wedding Preparation Planner App built with Flutter.
 

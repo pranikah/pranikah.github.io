@@ -66,7 +66,7 @@ class _AboutScreenState extends State<AboutScreen> {
             const SizedBox(height: 16),
             // App name
             const Text(
-              'pranikah',
+              'Pranikah',
               style: TextStyle(
                 fontFamily: 'Georgia',
                 fontSize: 24,
@@ -101,7 +101,7 @@ class _AboutScreenState extends State<AboutScreen> {
             _buildInfoCard(
               icon: Icons.info_outline,
               title: 'Tentang Aplikasi',
-              description: 'pranikah membantu pasangan merencanakan pernikahan. '
+              description: 'Pranikah membantu pasangan merencanakan pernikahan. '
                   'Kelola timeline, budget, vendor, dan buat undangan digital — semua dalam satu aplikasi.',
             ),
             const SizedBox(height: 12),
@@ -118,7 +118,7 @@ class _AboutScreenState extends State<AboutScreen> {
               title: 'Kontak',
               description: 'Ada saran atau bug? Hubungi kami.',
               actionText: 'Kirim Email',
-              onAction: () => _openUrl('mailto:medinacreativo8@gmail.com?subject=Feedback pranikah v$_version'),
+              onAction: () => _openUrl('mailto:medinacreativo8@gmail.com?subject=Feedback Pranikah v$_version'),
             ),
             const SizedBox(height: 32),
             // Tech stack
@@ -140,7 +140,7 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
             const SizedBox(height: 24),
             Text(
-              '© 2026 pranikah. Dibuat dengan ❤️',
+              '© 2026 Pranikah. Dibuat dengan ❤️',
               style: TextStyle(fontSize: 12, color: Colors.grey.shade400),
             ),
             const SizedBox(height: 40),

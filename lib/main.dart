@@ -2,11 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:pra_nikah_app/l10n/app_localizations.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'firebase_options.dart';
 import 'providers/wedding_provider.dart';
 import 'services/local_storage_service.dart';
 import 'services/interstitial_ad_service.dart';
@@ -24,6 +27,10 @@ import 'widgets/banner_ad_widget.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
   if (!kIsWeb) {
     MobileAds.instance.initialize();
   }
@@ -85,7 +92,7 @@ class _PranikahAppState extends State<PranikahApp> with WidgetsBindingObserver {
     return ChangeNotifierProvider(
       create: (_) => WeddingProvider(LocalStorageService()),
       child: MaterialApp(
-        title: 'pranikah',
+        title: 'Pranikah',
         theme: AppTheme.theme,
         debugShowCheckedModeBanner: false,
         locale: _locale,
@@ -284,7 +291,7 @@ class _AppShellState extends State<AppShell> {
           children: [
             const Text('☕', style: TextStyle(fontSize: 48)),
             const SizedBox(height: 12),
-            const Text('Support pranikah',
+            const Text('Support Pranikah',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 8),
             const Text(

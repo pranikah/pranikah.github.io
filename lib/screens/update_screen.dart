@@ -164,7 +164,7 @@ class _UpdateScreenState extends State<UpdateScreen>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Text(
-                  'pranikah',
+                  'Pranikah',
                   style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -366,7 +366,7 @@ class _UpdateScreenState extends State<UpdateScreen>
           _buildInfoRow(Icons.phone_android, 'Versi Saat Ini', widget.releaseInfo.currentVersion),
           if (widget.releaseInfo.fileSize > 0)
             _buildInfoRow(Icons.storage, 'Ukuran Download', _formatBytes(widget.releaseInfo.fileSize)),
-          _buildInfoRow(Icons.verified_user, 'Developer', 'pranikah'),
+          _buildInfoRow(Icons.verified_user, 'Developer', 'Pranikah'),
         ],
       ),
     );
