@@ -106,14 +106,6 @@ class _AboutScreenState extends State<AboutScreen> {
             ),
             const SizedBox(height: 12),
             _buildInfoCard(
-              icon: Icons.code,
-              title: 'Open Source',
-              description: 'Kode sumber terbuka di GitHub. Kontribusi dan feedback sangat diterima!',
-              actionText: 'Buka GitHub',
-              onAction: () => _openUrl('https://github.com/pranikah/pranikah.github.io'),
-            ),
-            const SizedBox(height: 12),
-            _buildInfoCard(
               icon: Icons.privacy_tip_outlined,
               title: 'Privasi',
               description: 'Data kamu tersimpan lokal di perangkat. Tidak ada data yang dikirim ke server.',
