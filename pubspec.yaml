@@ -1,7 +1,7 @@
 name: pra_nikah_app
 description: "Aplikasi Persiapan Nikah - Wedding Preparation Planner"
 publish_to: 'none'
-version: 1.1.0+2
+version: 1.2.0+3
 
 environment:
   sdk: ^3.11.5
