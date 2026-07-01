@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../services/update_checker_service.dart';
 import '../theme/app_theme.dart';
@@ -67,12 +68,14 @@ class _UpdateScreenState extends State<UpdateScreen>
   }
 
   Future<void> _installApk() async {
-    // Open file with Android intent
-    if (_apkFile != null) {
-      // Fallback: open download URL in browser for install
-      final uri = Uri.parse(widget.releaseInfo.downloadUrl);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
+    if (_apkFile != null && _apkFile!.existsSync()) {
+      final result = await OpenFilex.open(_apkFile!.path, type: 'application/vnd.android.package-archive');
+      if (result.type != ResultType.done) {
+        // Fallback: open URL in browser if local install fails
+        final uri = Uri.parse(widget.releaseInfo.downloadUrl);
+        if (await canLaunchUrl(uri)) {
+          await launchUrl(uri, mode: LaunchMode.externalApplication);
+        }
       }
     }
   }

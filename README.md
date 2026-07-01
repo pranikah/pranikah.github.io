@@ -118,7 +118,7 @@ git add .
 git commit -m "deploy"
 git push
 ```
-
+out
 ---
 
 ## Struktur Project
