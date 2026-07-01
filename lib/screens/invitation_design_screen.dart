@@ -516,3 +516,226 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
   bool _isDark(Color color) {
     return ThemeData.estimateBrightnessForColor(color) == Brightness.dark;
   }
+
+
+  // ─── TAB 3: PREVIEW ─────────────────────────────────────────────────────
+  Widget _buildPreviewTab() {
+    final groom = _groomNameCtrl.text.isEmpty ? 'Nama Mempelai Pria' : _groomNameCtrl.text;
+    final bride = _brideNameCtrl.text.isEmpty ? 'Nama Mempelai Wanita' : _brideNameCtrl.text;
+    final dateStr = DateFormat('EEEE, dd MMMM yyyy', 'id').format(_weddingDate);
+    final timeStr = '${_weddingTime.hour.toString().padLeft(2, '0')}:${_weddingTime.minute.toString().padLeft(2, '0')}';
+    final venue = _venueNameCtrl.text.isEmpty ? 'Nama Gedung' : _venueNameCtrl.text;
+    final address = _venueAddressCtrl.text.isEmpty ? 'Alamat Lengkap' : _venueAddressCtrl.text;
+    final message = _additionalInfoCtrl.text;
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        children: [
+          // Preview card
+          RepaintBoundary(
+            key: _previewKey,
+            child: Container(
+              width: double.infinity,
+              constraints: const BoxConstraints(minHeight: 500),
+              decoration: BoxDecoration(
+                color: _bgColor,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.1),
+                    blurRadius: 20,
+                    offset: const Offset(0, 8),
+                  ),
+                ],
+              ),
+              child: Stack(
+                children: [
+                  // Background decoration layer
+                  if (_bgDecoration != BgDecoration.none)
+                    Positioned.fill(
+                      child: Opacity(
+                        opacity: 0.12,
+                        child: Center(
+                          child: Wrap(
+                            spacing: 12,
+                            runSpacing: 12,
+                            alignment: WrapAlignment.center,
+                            children: List.generate(20, (_) =>
+                              Text(_bgDecoration.icon, style: const TextStyle(fontSize: 28)),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  // Content
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
+                    child: Column(
+                      children: [
+                        Text(
+                          'بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم',
+                          style: TextStyle(fontSize: 14, color: _textColor.withValues(alpha: 0.7)),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Dengan memohon rahmat Allah SWT\nkami mengundang Bapak/Ibu/Saudara/i',
+                          style: TextStyle(fontSize: 12, color: _textColor.withValues(alpha: 0.6), height: 1.5),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        Text(
+                          groom,
+                          style: TextStyle(
+                            fontFamily: 'Georgia',
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: _textColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '&',
+                          style: TextStyle(
+                            fontFamily: 'Georgia',
+                            fontSize: 20,
+                            fontStyle: FontStyle.italic,
+                            color: _textColor.withValues(alpha: 0.6),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          bride,
+                          style: TextStyle(
+                            fontFamily: 'Georgia',
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: _textColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 24),
+                        Container(width: 50, height: 1.5, color: _textColor.withValues(alpha: 0.3)),
+                        const SizedBox(height: 24),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.calendar_today, size: 14, color: _textColor.withValues(alpha: 0.6)),
+                            const SizedBox(width: 8),
+                            Text(dateStr, style: TextStyle(fontSize: 13, color: _textColor)),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.access_time, size: 14, color: _textColor.withValues(alpha: 0.6)),
+                            const SizedBox(width: 8),
+                            Text('Pukul $timeStr WIB', style: TextStyle(fontSize: 13, color: _textColor)),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.location_on, size: 14, color: _textColor.withValues(alpha: 0.6)),
+                            const SizedBox(width: 8),
+                            Flexible(
+                              child: Text(
+                                '$venue\n$address',
+                                style: TextStyle(fontSize: 13, color: _textColor),
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                          ],
+                        ),
+                        if (message.isNotEmpty) ...[
+                          const SizedBox(height: 24),
+                          Text(
+                            message,
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontStyle: FontStyle.italic,
+                              color: _textColor.withValues(alpha: 0.7),
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 20),
+          // Action buttons
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _downloadPng,
+                  icon: const Icon(Icons.image),
+                  label: const Text('Download PNG'),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: AppTheme.primary,
+                    side: const BorderSide(color: AppTheme.primary),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: _saveAll,
+                  icon: const Icon(Icons.save),
+                  label: const Text('Simpan'),
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _downloadPng() async {
+    try {
+      final boundary = _previewKey.currentContext?.findRenderObject() as RenderRepaintBoundary?;
+      if (boundary == null) {
+        _showMsg('Gagal mengambil gambar', isError: true);
+        return;
+      }
+      final image = await boundary.toImage(pixelRatio: 3.0);
+      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      if (byteData == null) {
+        _showMsg('Gagal konversi gambar', isError: true);
+        return;
+      }
+      final pngBytes = byteData.buffer.asUint8List();
+      if (kIsWeb) {
+        _showMsg('PNG siap: undangan.png (${pngBytes.length} bytes)');
+      } else {
+        _showMsg('Fitur download untuk mobile segera hadir');
+      }
+    } catch (e) {
+      _showMsg('Error: $e', isError: true);
+    }
+  }
+
+  void _showMsg(String msg, {bool isError = false}) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(msg),
+          backgroundColor: isError ? Colors.red : null,
+        ),
+      );
+    }
+  }
+}
