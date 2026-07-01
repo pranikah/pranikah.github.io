@@ -207,23 +207,25 @@ class _AppShellState extends State<AppShell> {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
-                    value: 'design_undangan',
-                    child: ListTile(
-                      leading: Icon(Icons.mail_outline),
-                      title: Text('Design Undangan'),
-                      contentPadding: EdgeInsets.zero,
+                  if (!kIsWeb)
+                    const PopupMenuItem(
+                      value: 'design_undangan',
+                      child: ListTile(
+                        leading: Icon(Icons.mail_outline),
+                        title: Text('Design Undangan'),
+                        contentPadding: EdgeInsets.zero,
+                      ),
                     ),
-                  ),
-                  const PopupMenuItem(
-                    value: 'vendor',
-                    child: ListTile(
-                      leading: Icon(Icons.store_outlined),
-                      title: Text('Vendor'),
-                      contentPadding: EdgeInsets.zero,
+                  if (!kIsWeb)
+                    const PopupMenuItem(
+                      value: 'vendor',
+                      child: ListTile(
+                        leading: Icon(Icons.store_outlined),
+                        title: Text('Vendor'),
+                        contentPadding: EdgeInsets.zero,
+                      ),
                     ),
-                  ),
-                  const PopupMenuDivider(),
+                  if (!kIsWeb) const PopupMenuDivider(),
                   const PopupMenuItem(
                     value: 'about',
                     child: ListTile(

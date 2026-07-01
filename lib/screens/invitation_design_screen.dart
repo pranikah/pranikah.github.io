@@ -91,6 +91,7 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
   // Design state
   Color _bgColor = Colors.white;
   Color _textColor = const Color(0xFF333333);
+  Color _nameColor = const Color(0xFF880E4F);
   BgDecoration _bgDecoration = BgDecoration.none;
 
   // Color palette options
@@ -167,6 +168,8 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
     final bgDecIdx = prefs.getInt('inv_bgDecoration');
     if (bgColorVal != null) _bgColor = Color(bgColorVal);
     if (textColorVal != null) _textColor = Color(textColorVal);
+    final nameColorVal = prefs.getInt('inv_nameColor');
+    if (nameColorVal != null) _nameColor = Color(nameColorVal);
     if (bgDecIdx != null && bgDecIdx < BgDecoration.values.length) {
       _bgDecoration = BgDecoration.values[bgDecIdx];
     }
@@ -210,6 +213,7 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
     // Save design prefs
     await prefs.setInt('inv_bgColor', _bgColor.toARGB32());
     await prefs.setInt('inv_textColor', _textColor.toARGB32());
+    await prefs.setInt('inv_nameColor', _nameColor.toARGB32());
     await prefs.setInt('inv_bgDecoration', _bgDecoration.index);
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -452,6 +456,39 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
           ),
           const SizedBox(height: 24),
 
+          // Name color (separate from text color)
+          const Text('💍 Warna Nama Pengantin', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
+          const SizedBox(height: 12),
+          Wrap(
+            spacing: 10,
+            runSpacing: 10,
+            children: _textColorOptions.map((color) {
+              final isSelected = _nameColor.toARGB32() == color.toARGB32();
+              return GestureDetector(
+                onTap: () => setState(() => _nameColor = color),
+                child: Container(
+                  width: 44,
+                  height: 44,
+                  decoration: BoxDecoration(
+                    color: color,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isSelected ? AppTheme.primary : Colors.grey.shade300,
+                      width: isSelected ? 3 : 1,
+                    ),
+                    boxShadow: isSelected
+                        ? [BoxShadow(color: AppTheme.primary.withValues(alpha: 0.3), blurRadius: 8)]
+                        : null,
+                  ),
+                  child: isSelected
+                      ? Icon(Icons.check, size: 20, color: _isDark(color) ? Colors.white : Colors.black)
+                      : null,
+                ),
+              );
+            }).toList(),
+          ),
+          const SizedBox(height: 24),
+
           // Background decoration
           const Text('🖼️ Background Hiasan', style: TextStyle(fontWeight: FontWeight.w600, fontSize: 15)),
           const SizedBox(height: 12),
@@ -595,7 +632,7 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
                             fontFamily: 'Georgia',
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: _textColor,
+                            color: _nameColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
@@ -616,7 +653,7 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
                             fontFamily: 'Georgia',
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: _textColor,
+                            color: _nameColor,
                           ),
                           textAlign: TextAlign.center,
                         ),
