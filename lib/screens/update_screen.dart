@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:open_filex/open_filex.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../services/update_checker_service.dart';
 import '../theme/app_theme.dart';
 
@@ -46,6 +47,9 @@ class _UpdateScreenState extends State<UpdateScreen>
       _progress = 0.0;
     });
 
+    // Keep screen awake during download
+    WakelockPlus.enable();
+
     final file = await UpdateCheckerService.downloadApk(
       widget.releaseInfo.downloadUrl,
       onProgress: (received, total) {
@@ -56,6 +60,9 @@ class _UpdateScreenState extends State<UpdateScreen>
         });
       },
     );
+
+    // Release wakelock
+    WakelockPlus.disable();
 
     if (file != null && file.existsSync()) {
       setState(() {
