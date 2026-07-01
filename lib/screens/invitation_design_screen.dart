@@ -554,16 +554,29 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
                   // Background decoration layer
                   if (_bgDecoration != BgDecoration.none)
                     Positioned.fill(
-                      child: Opacity(
-                        opacity: 0.12,
-                        child: Center(
-                          child: Wrap(
-                            spacing: 12,
-                            runSpacing: 12,
-                            alignment: WrapAlignment.center,
-                            children: List.generate(20, (_) =>
-                              Text(_bgDecoration.icon, style: const TextStyle(fontSize: 28)),
-                            ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Opacity(
+                          opacity: 0.12,
+                          child: LayoutBuilder(
+                            builder: (context, constraints) {
+                              final cols = (constraints.maxWidth / 40).floor();
+                              final rows = (constraints.maxHeight / 40).floor();
+                              final count = cols * rows;
+                              return Wrap(
+                                spacing: 0,
+                                runSpacing: 0,
+                                children: List.generate(count, (_) =>
+                                  SizedBox(
+                                    width: constraints.maxWidth / cols,
+                                    height: constraints.maxHeight / rows,
+                                    child: Center(
+                                      child: Text(_bgDecoration.icon, style: const TextStyle(fontSize: 24)),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ),
