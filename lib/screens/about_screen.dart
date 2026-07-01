@@ -118,7 +118,7 @@ class _AboutScreenState extends State<AboutScreen> {
               title: 'Kontak',
               description: 'Ada saran atau bug? Hubungi kami.',
               actionText: 'Kirim Email',
-              onAction: () => _openUrl('mailto:pranikah.app@gmail.com?subject=Feedback pranikah v$_version'),
+              onAction: () => _openUrl('mailto:medinacreativo8@gmail.com?subject=Feedback pranikah v$_version'),
             ),
             const SizedBox(height: 32),
             // Tech stack
