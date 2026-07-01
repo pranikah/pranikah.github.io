@@ -42,6 +42,20 @@ android {
     }
 }
 
+// Auto-rename APK output to pranikah.apk
+tasks.whenTaskAdded {
+    if (name == "assembleRelease") {
+        doLast {
+            val source = file("${project.buildDir}/outputs/flutter-apk/app-release.apk")
+            val dest = file("${project.buildDir}/outputs/flutter-apk/pranikah.apk")
+            if (source.exists()) {
+                source.copyTo(dest, overwrite = true)
+                println("✅ APK copied to: ${dest.absolutePath}")
+            }
+        }
+    }
+}
+
 flutter {
     source = "../.."
 }
