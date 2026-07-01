@@ -113,9 +113,15 @@ Output:
 ### Deploy to GitHub Pages
 
 ```powershell
+
+flutter clean
+flutter pub get
+flutter build web --base-href /app/ --release
+flutter build apk --release
+
 robocopy build\web docs\app /MIR
 git add .
-git commit -m "deploy"
+git commit -m "fix: removing apk naming"
 git push
 ```
 out

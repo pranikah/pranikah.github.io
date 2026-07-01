@@ -107030,7 +107030,7 @@ $0(){return this.a.t3("https://pranikah.github.io/privacy-policy.html")},
 $S:0}
 A.awB.prototype={
 $0(){var s=this.a
-return s.t3("mailto:pranikah.app@gmail.com?subject=Feedback pranikah v"+s.d)},
+return s.t3("mailto:medinacreativo8@gmail.com?subject=Feedback pranikah v"+s.d)},
 $S:0}
 A.An.prototype={
 ac(){return new A.a0x(A.aOJ(0,"id","Rp "))}}
