@@ -557,26 +557,18 @@ class _InvitationDesignScreenState extends State<InvitationDesignScreen>
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: Opacity(
-                          opacity: 0.12,
-                          child: LayoutBuilder(
-                            builder: (context, constraints) {
-                              final cols = (constraints.maxWidth / 40).floor();
-                              final rows = (constraints.maxHeight / 40).floor();
-                              final count = cols * rows;
-                              return Wrap(
-                                spacing: 0,
-                                runSpacing: 0,
-                                children: List.generate(count, (_) =>
-                                  SizedBox(
-                                    width: constraints.maxWidth / cols,
-                                    height: constraints.maxHeight / rows,
-                                    child: Center(
-                                      child: Text(_bgDecoration.icon, style: const TextStyle(fontSize: 24)),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            },
+                          opacity: 0.15,
+                          child: GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            padding: EdgeInsets.zero,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 6,
+                              childAspectRatio: 1,
+                            ),
+                            itemCount: 60,
+                            itemBuilder: (_, __) => Center(
+                              child: Text(_bgDecoration.icon, style: const TextStyle(fontSize: 22)),
+                            ),
                           ),
                         ),
                       ),

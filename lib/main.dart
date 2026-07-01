@@ -18,6 +18,7 @@ import 'screens/onboarding_screen.dart';
 import 'screens/profile_screen.dart';
 import 'screens/invitation_design_screen.dart';
 import 'screens/vendor_list_screen.dart';
+import 'screens/about_screen.dart';
 import 'theme/app_theme.dart';
 import 'widgets/banner_ad_widget.dart';
 
@@ -196,6 +197,13 @@ class _AppShellState extends State<AppShell> {
                         builder: (_) => const VendorListScreen(),
                       ),
                     );
+                  } else if (value == 'about') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const AboutScreen(),
+                      ),
+                    );
                   }
                 },
                 itemBuilder: (context) => [
@@ -212,6 +220,15 @@ class _AppShellState extends State<AppShell> {
                     child: ListTile(
                       leading: Icon(Icons.store_outlined),
                       title: Text('Vendor'),
+                      contentPadding: EdgeInsets.zero,
+                    ),
+                  ),
+                  const PopupMenuDivider(),
+                  const PopupMenuItem(
+                    value: 'about',
+                    child: ListTile(
+                      leading: Icon(Icons.info_outline),
+                      title: Text('About'),
                       contentPadding: EdgeInsets.zero,
                     ),
                   ),
