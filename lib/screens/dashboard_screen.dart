@@ -9,6 +9,7 @@ import '../models/wedding_task.dart';
 import '../providers/wedding_provider.dart';
 import '../screens/setup_screen.dart';
 import '../services/currency_helper.dart';
+import '../services/update_checker_service.dart';
 import '../theme/app_theme.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -25,6 +26,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     _loadCurrency();
+    // Check for app updates after frame renders
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      UpdateCheckerService.checkForUpdate(context);
+    });
   }
 
   Future<void> _loadCurrency() async {
