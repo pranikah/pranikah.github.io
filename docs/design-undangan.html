@@ -4,46 +4,76 @@
   <meta charset="UTF-8">
   <meta name="google-site-verification" content="7m_hXKSt5rIevpPdACuGG_t7S0Ytx4vBIm_9TWJV1Hs" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Katalog Design Undangan Pernikahan - Template Cetak | pranikah</title>
-  <meta name="description" content="Katalog design undangan pernikahan untuk cetak - minimalis, floral, islami, rustic, adat. Pilih desain lalu serahkan ke percetakan.">
-  <meta name="keywords" content="design undangan nikah, undangan cetak, template undangan pernikahan, undangan minimalis, undangan floral, undangan islami">
-  <meta name="robots" content="index, follow">
+  <title>Design Undangan Pernikahan - Builder Interaktif | pranikah</title>
+  <meta name="description" content="Buat design undangan pernikahan digital interaktif. Pilih warna, background, dan preview langsung.">
   <link rel="canonical" href="https://pranikah.github.io/design-undangan.html">
   <link rel="icon" type="image/png" href="icons/favicon-96x96.png">
-  <meta property="og:title" content="Katalog Design Undangan Pernikahan - pranikah">
-  <meta property="og:description" content="Koleksi design undangan pernikahan untuk cetak. Pilih tema favorit!">
-  <meta property="og:url" content="https://pranikah.github.io/design-undangan.html">
   <style>
     *{margin:0;padding:0;box-sizing:border-box}
-    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#333;line-height:1.6}
-    a{color:#E91E63;text-decoration:none}a:hover{text-decoration:underline}
-    nav { background: #fff; border-bottom: 1px solid #eee; padding: 12px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#333;line-height:1.6;background:#f8f5f2}
+    a{color:#E91E63;text-decoration:none}
+    nav{background:#fff;border-bottom:1px solid #eee;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
     nav .brand{font-family:Georgia,serif;font-size:1.3rem;color:#E91E63;font-weight:bold}
     nav .links a{margin-left:20px;font-size:.9rem;color:#555}
-    .hero{background:linear-gradient(135deg,#F3E5F5,#FCE4EC);padding:48px 20px;text-align:center}
-    .hero h1{font-family:Georgia,serif;font-size:2rem;color:#880E4F;margin-bottom:12px}
-    .hero p{font-size:1rem;color:#555;max-width:600px;margin:0 auto}
-    .container{max-width:960px;margin:0 auto;padding:40px 20px}
-    .section-title{font-family:Georgia,serif;font-size:1.5rem;color:#880E4F;margin:32px 0 8px}
-    .section-desc{font-size:.9rem;color:#666;margin-bottom:16px}
-    .tema-card{border:1px solid #f0e0e8;border-radius:16px;overflow:hidden;margin-bottom:32px;background:#fff}
-    .tema-header{padding:20px;border-bottom:1px solid #f5f5f5}
-    .tema-header h3{font-size:1.2rem;color:#4A148C;margin-bottom:4px}
-    .tema-header p{font-size:.85rem;color:#888}
-    .tema-images{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;padding:16px}
-    .tema-images .img-slot{aspect-ratio:3/4;background:#F5F5F5;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;border:2px dashed #ddd;overflow:hidden}
-    .tema-images .img-slot img{width:100%;height:100%;object-fit:cover;border-radius:6px}
-    .tema-images .img-slot .placeholder{color:#aaa;font-size:.8rem;text-align:center;padding:12px}
-    .tag{display:inline-block;background:#FCE4EC;color:#E91E63;padding:2px 10px;border-radius:12px;font-size:.75rem;margin-right:4px}
-    .ad-slot{text-align:center;margin:32px 0;min-height:90px}
-    .info-box{background:#FFF8E1;border-radius:12px;padding:24px;margin:32px 0}
-    .info-box h3{font-size:1.1rem;margin-bottom:8px;color:#E65100}
-    .info-box p,.info-box li{font-size:.9rem;color:#555}
-    .info-box ul{padding-left:20px;margin-top:8px}
-    .cta{text-align:center;margin:40px 0}
-    .cta .btn{display:inline-block;padding:12px 28px;background:#E91E63;color:#fff;border-radius:30px;font-weight:600}
-    footer{background:#FAFAFA;border-top:1px solid #eee;padding:24px 20px;text-align:center;font-size:.85rem;color:#888}
+    .container{max-width:900px;margin:0 auto;padding:24px 16px}
+    h1{font-family:Georgia,serif;font-size:1.6rem;color:#880E4F;text-align:center;margin-bottom:24px}
+
+    /* Tabs */
+    .tabs{display:flex;gap:0;margin-bottom:0;border-bottom:2px solid #E91E63;border-radius:12px 12px 0 0;overflow:hidden}
+    .tab-btn{flex:1;padding:14px 8px;text-align:center;background:#fff;border:none;font-size:.95rem;font-weight:600;cursor:pointer;color:#888;transition:all .2s}
+    .tab-btn.active{background:#E91E63;color:#fff}
+    .tab-btn:hover:not(.active){background:#FCE4EC;color:#E91E63}
+
+    .tab-content{display:none;background:#fff;border-radius:0 0 12px 12px;padding:24px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+    .tab-content.active{display:block}
+
+    /* Form */
+    .form-group{margin-bottom:16px}
+    .form-group label{display:block;font-weight:600;margin-bottom:4px;font-size:.9rem;color:#555}
+    .form-group input,.form-group textarea,.form-group select{width:100%;padding:10px 12px;border:1px solid #ddd;border-radius:8px;font-size:.95rem;transition:border .2s}
+    .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:#E91E63}
+    .form-group textarea{resize:vertical;min-height:60px}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+    /* Design Tab */
+    .design-section{margin-bottom:24px}
+    .design-section h3{font-size:1rem;color:#880E4F;margin-bottom:12px}
+    .color-options{display:flex;flex-wrap:wrap;gap:10px}
+    .color-opt{width:44px;height:44px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:all .2s;position:relative}
+    .color-opt:hover{transform:scale(1.1)}
+    .color-opt.selected{border-color:#333;box-shadow:0 0 0 2px #fff,0 0 0 4px #333}
+
+    .bg-options{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:12px}
+    .bg-opt{border-radius:12px;overflow:hidden;cursor:pointer;border:3px solid transparent;transition:all .2s;aspect-ratio:3/4;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px;font-size:.8rem;color:#666}
+    .bg-opt:hover{transform:scale(1.03);box-shadow:0 4px 12px rgba(0,0,0,.1)}
+    .bg-opt.selected{border-color:#E91E63;box-shadow:0 0 0 2px #FCE4EC}
+    .bg-opt .bg-icon{font-size:2rem;margin-bottom:6px}
+
+    /* Preview */
+    .preview-frame{width:100%;min-height:500px;border-radius:12px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center}
+    .preview-card{width:100%;max-width:400px;min-height:480px;border-radius:16px;padding:40px 24px;text-align:center;position:relative;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.1)}
+    .preview-card .bg-layer{position:absolute;inset:0;opacity:.15;pointer-events:none;display:flex;align-items:center;justify-content:center;font-size:6rem}
+    .preview-card .content{position:relative;z-index:1}
+    .preview-card .bismillah{font-size:1.1rem;margin-bottom:16px;opacity:.8}
+    .preview-card .couple-names{font-family:Georgia,serif;font-size:1.8rem;margin:16px 0}
+    .preview-card .ampersand{font-size:1.2rem;margin:8px 0;opacity:.7}
+    .preview-card .event-info{margin-top:20px;font-size:.9rem;line-height:1.8}
+    .preview-card .event-info .date{font-size:1.1rem;font-weight:600;margin:8px 0}
+    .preview-card .message{margin-top:20px;font-style:italic;font-size:.85rem;opacity:.8}
+
+    .btn-download{display:inline-block;margin-top:20px;padding:12px 28px;background:#E91E63;color:#fff;border:none;border-radius:30px;font-weight:600;font-size:.95rem;cursor:pointer;transition:all .2s}
+    .btn-download:hover{background:#C2185B;transform:translateY(-1px)}
+
+    footer{background:#FAFAFA;border-top:1px solid #eee;padding:24px 20px;text-align:center;font-size:.85rem;color:#888;margin-top:40px}
     footer a{color:#888;margin:0 8px}
+
+    @media(max-width:600px){
+      .form-row{grid-template-columns:1fr}
+      .tabs{font-size:.85rem}
+      .tab-btn{padding:12px 4px;font-size:.85rem}
+      .preview-card{padding:28px 16px}
+      .preview-card .couple-names{font-size:1.4rem}
+    }
   </style>
 </head>
 <body>
@@ -57,104 +87,314 @@
   </div>
 </nav>
 
-<section class="hero">
-  <h1>💌 Katalog Design Undangan Pernikahan</h1>
-  <p>Pilih desain undangan cetak favorit kamu. Setiap tema tersedia dalam beberapa halaman (cover, isi, belakang) yang siap diserahkan ke percetakan.</p>
-</section>
-
 <div class="container">
+  <h1>💌 Buat Design Undangan Pernikahan</h1>
 
-  <!-- Tema 1: Minimalis -->
-  <div class="tema-card">
-    <div class="tema-header">
-      <h3>Tema Minimalis</h3>
-      <p>Design bersih dan modern. Cocok untuk pasangan yang suka kesederhanaan elegan.</p>
-      <span class="tag">Minimalis</span><span class="tag">Modern</span>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('input')">📝 Input Data</button>
+    <button class="tab-btn" onclick="switchTab('design')">🎨 Design</button>
+    <button class="tab-btn" onclick="switchTab('preview')">👁️ Preview</button>
+  </div>
+
+  <!-- TAB 1: INPUT DATA -->
+  <div id="tab-input" class="tab-content active">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nama Mempelai Pria</label>
+        <input type="text" id="groomName" placeholder="Contoh: Muhammad Ahmad" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>Nama Mempelai Wanita</label>
+        <input type="text" id="brideName" placeholder="Contoh: Siti Fatimah" oninput="updatePreview()">
+      </div>
     </div>
-    <div class="tema-images">
-      <div class="img-slot"><div class="placeholder">Cover<br><small>images/tema-minimalis/cover.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Isi<br><small>images/tema-minimalis/isi.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Belakang<br><small>images/tema-minimalis/belakang.jpg</small></div></div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tanggal Akad</label>
+        <input type="date" id="akadDate" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>Waktu Akad</label>
+        <input type="time" id="akadTime" value="08:00" oninput="updatePreview()">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Tanggal Resepsi</label>
+        <input type="date" id="resepsiDate" oninput="updatePreview()">
+      </div>
+      <div class="form-group">
+        <label>Waktu Resepsi</label>
+        <input type="time" id="resepsiTime" value="11:00" oninput="updatePreview()">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Lokasi / Alamat</label>
+      <textarea id="location" placeholder="Contoh: Gedung Serbaguna, Jl. Mawar No.10, Jakarta" oninput="updatePreview()"></textarea>
+    </div>
+    <div class="form-group">
+      <label>Pesan / Doa (Opsional)</label>
+      <textarea id="message" placeholder="Contoh: Merupakan suatu kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir..." oninput="updatePreview()"></textarea>
     </div>
   </div>
 
-  <!-- Tema 2: Floral -->
-  <div class="tema-card">
-    <div class="tema-header">
-      <h3>Tema Floral</h3>
-      <p>Sentuhan bunga yang romantis dan feminin. Pilihan populer untuk pernikahan outdoor.</p>
-      <span class="tag">Floral</span><span class="tag">Romantic</span>
+  <!-- TAB 2: DESIGN -->
+  <div id="tab-design" class="tab-content">
+    <div class="design-section">
+      <h3>🎨 Warna Background Undangan</h3>
+      <div class="color-options" id="bgColors">
+        <div class="color-opt selected" style="background:#FFFFFF" data-color="#FFFFFF" onclick="selectBgColor(this)"></div>
+        <div class="color-opt" style="background:#FFF8E1" data-color="#FFF8E1" onclick="selectBgColor(this)"></div>
+        <div class="color-opt" style="background:#FCE4EC" data-color="#FCE4EC" onclick="selectBgColor(this)"></div>
+        <div class="color-opt" style="background:#E8F5E9" data-color="#E8F5E9" onclick="selectBgColor(this)"></div>
+        <div class="color-opt" style="background:#E3F2FD" data-color="#E3F2FD" onclick="selectBgColor(this)"></div>
+        <div class="color-opt" style="background:#F3E5F5" data-color="#F3E5F5" onclick="selectBgColor(this)"></div>
+        <div class="color-opt" style="background:#1A1A2E" data-color="#1A1A2E" onclick="selectBgColor(this)"></div>
+        <div class="color-opt" style="background:#2C3E50" data-color="#2C3E50" onclick="selectBgColor(this)"></div>
+        <div class="color-opt" style="background:#4A0E2E" data-color="#4A0E2E" onclick="selectBgColor(this)"></div>
+      </div>
     </div>
-    <div class="tema-images">
-      <div class="img-slot"><div class="placeholder">Cover<br><small>images/tema-floral/cover.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Isi<br><small>images/tema-floral/isi.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Belakang<br><small>images/tema-floral/belakang.jpg</small></div></div>
+
+    <div class="design-section">
+      <h3>✏️ Warna Teks</h3>
+      <div class="color-options" id="textColors">
+        <div class="color-opt selected" style="background:#333333" data-color="#333333" onclick="selectTextColor(this)"></div>
+        <div class="color-opt" style="background:#880E4F" data-color="#880E4F" onclick="selectTextColor(this)"></div>
+        <div class="color-opt" style="background:#4A148C" data-color="#4A148C" onclick="selectTextColor(this)"></div>
+        <div class="color-opt" style="background:#1B5E20" data-color="#1B5E20" onclick="selectTextColor(this)"></div>
+        <div class="color-opt" style="background:#0D47A1" data-color="#0D47A1" onclick="selectTextColor(this)"></div>
+        <div class="color-opt" style="background:#B8860B" data-color="#B8860B" onclick="selectTextColor(this)"></div>
+        <div class="color-opt" style="background:#FFFFFF;border:1px solid #ccc" data-color="#FFFFFF" onclick="selectTextColor(this)"></div>
+        <div class="color-opt" style="background:#F5F5DC" data-color="#F5F5DC" onclick="selectTextColor(this)"></div>
+      </div>
+    </div>
+
+    <div class="design-section">
+      <h3>🖼️ Pilih Background Hiasan</h3>
+      <div class="bg-options" id="bgPatterns">
+        <div class="bg-opt selected" data-bg="none" onclick="selectBgPattern(this)">
+          <div class="bg-icon">⬜</div>
+          <span>Polos</span>
+        </div>
+        <div class="bg-opt" data-bg="bunga-sakura" onclick="selectBgPattern(this)">
+          <div class="bg-icon">🌸</div>
+          <span>Bunga Sakura</span>
+        </div>
+        <div class="bg-opt" data-bg="bunga-mawar" onclick="selectBgPattern(this)">
+          <div class="bg-icon">🌹</div>
+          <span>Bunga Mawar</span>
+        </div>
+        <div class="bg-opt" data-bg="bunga-melati" onclick="selectBgPattern(this)">
+          <div class="bg-icon">🤍</div>
+          <span>Bunga Melati</span>
+        </div>
+        <div class="bg-opt" data-bg="daun-tropis" onclick="selectBgPattern(this)">
+          <div class="bg-icon">🌿</div>
+          <span>Daun Tropis</span>
+        </div>
+        <div class="bg-opt" data-bg="rumah-joglo" onclick="selectBgPattern(this)">
+          <div class="bg-icon">🏛️</div>
+          <span>Rumah Joglo</span>
+        </div>
+        <div class="bg-opt" data-bg="rumah-gadang" onclick="selectBgPattern(this)">
+          <div class="bg-icon">🏠</div>
+          <span>Rumah Gadang</span>
+        </div>
+        <div class="bg-opt" data-bg="ornamen-islami" onclick="selectBgPattern(this)">
+          <div class="bg-icon">🕌</div>
+          <span>Ornamen Islami</span>
+        </div>
+        <div class="bg-opt" data-bg="batik" onclick="selectBgPattern(this)">
+          <div class="bg-icon">🎭</div>
+          <span>Batik</span>
+        </div>
+        <div class="bg-opt" data-bg="mandala" onclick="selectBgPattern(this)">
+          <div class="bg-icon">☸️</div>
+          <span>Mandala</span>
+        </div>
+        <div class="bg-opt" data-bg="geometris" onclick="selectBgPattern(this)">
+          <div class="bg-icon">💎</div>
+          <span>Geometris</span>
+        </div>
+        <div class="bg-opt" data-bg="bintang" onclick="selectBgPattern(this)">
+          <div class="bg-icon">✨</div>
+          <span>Bintang</span>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- Tema 3: Islami -->
-  <div class="tema-card">
-    <div class="tema-header">
-      <h3>Tema Islami</h3>
-      <p>Nuansa Islami dengan ornamen khas. Cocok untuk walimatul 'urs yang syar'i.</p>
-      <span class="tag">Islami</span><span class="tag">Elegant</span>
+  <!-- TAB 3: PREVIEW -->
+  <div id="tab-preview" class="tab-content">
+    <div class="preview-frame" id="previewFrame">
+      <div class="preview-card" id="previewCard">
+        <div class="bg-layer" id="bgLayer"></div>
+        <div class="content">
+          <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+          <p style="font-size:.85rem;opacity:.7">Dengan memohon rahmat Allah SWT<br>kami mengundang Bapak/Ibu/Saudara/i</p>
+          <div class="couple-names" id="prevGroom">Nama Pria</div>
+          <div class="ampersand">&amp;</div>
+          <div class="couple-names" id="prevBride">Nama Wanita</div>
+          <div class="event-info">
+            <p><strong>Akad Nikah</strong></p>
+            <p class="date" id="prevAkad">-- Belum diisi --</p>
+            <p><strong>Resepsi</strong></p>
+            <p class="date" id="prevResepsi">-- Belum diisi --</p>
+            <p style="margin-top:12px" id="prevLocation">📍 Lokasi belum diisi</p>
+          </div>
+          <div class="message" id="prevMessage"></div>
+        </div>
+      </div>
     </div>
-    <div class="tema-images">
-      <div class="img-slot"><div class="placeholder">Cover<br><small>images/tema-islami/cover.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Isi<br><small>images/tema-islami/isi.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Belakang<br><small>images/tema-islami/belakang.jpg</small></div></div>
-    </div>
-  </div>
-
-  <!-- Tema 4: Rustic -->
-  <div class="tema-card">
-    <div class="tema-header">
-      <h3>Tema Rustic</h3>
-      <p>Nuansa natural dengan warna earth tone. Cocok untuk garden party atau outdoor wedding.</p>
-      <span class="tag">Rustic</span><span class="tag">Nature</span>
-    </div>
-    <div class="tema-images">
-      <div class="img-slot"><div class="placeholder">Cover<br><small>images/tema-rustic/cover.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Isi<br><small>images/tema-rustic/isi.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Belakang<br><small>images/tema-rustic/belakang.jpg</small></div></div>
-    </div>
-  </div>
-
-  <!-- Tema 5: Adat Jawa -->
-  <div class="tema-card">
-    <div class="tema-header">
-      <h3>Tema Adat Jawa</h3>
-      <p>Motif batik dan ornamen Jawa tradisional. Kesan mewah dan kental budaya.</p>
-      <span class="tag">Adat</span><span class="tag">Jawa</span><span class="tag">Tradisional</span>
-    </div>
-    <div class="tema-images">
-      <div class="img-slot"><div class="placeholder">Cover<br><small>images/tema-adat-jawa/cover.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Isi<br><small>images/tema-adat-jawa/isi.jpg</small></div></div>
-      <div class="img-slot"><div class="placeholder">Belakang<br><small>images/tema-adat-jawa/belakang.jpg</small></div></div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn-download" onclick="downloadPreview()">📥 Download sebagai Gambar</button>
     </div>
   </div>
 
-  <!-- Info Box -->
-  <div class="info-box">
-    <h3>📋 Cara Menggunakan Katalog Ini</h3>
-    <ul>
-      <li>Pilih tema yang kamu suka</li>
-      <li>Screenshot atau simpan gambar desain</li>
-      <li>Serahkan ke percetakan undangan pilihanmu</li>
-      <li>Minta percetakan menyesuaikan nama, tanggal, dan lokasi acara</li>
-    </ul>
-    <p style="margin-top:12px"><strong>Tips:</strong> Tanyakan ke percetakan soal jenis kertas, ukuran, dan jumlah minimum order sebelum memutuskan.</p>
-  </div>
-
-  <div class="cta">
-    <p style="color:#666;margin-bottom:12px;">Butuh bantuan mengatur persiapan nikah lainnya?</p>
-    <a href="/app/" class="btn">🚀 Buka Aplikasi pranikah</a>
-  </div>
 </div>
 
 <footer>
   <p>&copy; 2026 pranikah. Dibuat dengan ❤️ untuk pasangan bahagia.</p>
   <p><a href="/">Home</a><a href="/rekomendasi-vendor.html">Vendor</a><a href="/checklist-pernikahan.html">Checklist</a><a href="/privacy-policy.html">Privacy</a><a href="/app/">App</a></p>
 </footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script>
+// State
+let state = {
+  bgColor: '#FFFFFF',
+  textColor: '#333333',
+  bgPattern: 'none'
+};
+
+// Tab switching
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['input','design','preview'][i] === tab);
+  });
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'preview') updatePreview();
+}
+
+// Color selection
+function selectBgColor(el) {
+  document.querySelectorAll('#bgColors .color-opt').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.bgColor = el.dataset.color;
+  updatePreview();
+}
+
+function selectTextColor(el) {
+  document.querySelectorAll('#textColors .color-opt').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.textColor = el.dataset.color;
+  updatePreview();
+}
+
+// Background pattern
+function selectBgPattern(el) {
+  document.querySelectorAll('#bgPatterns .bg-opt').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.bgPattern = el.dataset.bg;
+  updatePreview();
+}
+
+// Get pattern emoji
+function getPatternEmoji(pattern) {
+  const map = {
+    'none': '',
+    'bunga-sakura': '🌸',
+    'bunga-mawar': '🌹',
+    'bunga-melati': '🤍',
+    'daun-tropis': '🌿',
+    'rumah-joglo': '🏛️',
+    'rumah-gadang': '🏠',
+    'ornamen-islami': '🕌',
+    'batik': '🎭',
+    'mandala': '☸️',
+    'geometris': '💎',
+    'bintang': '✨'
+  };
+  return map[pattern] || '';
+}
+
+// Format date
+function formatDate(dateStr) {
+  if (!dateStr) return '';
+  const d = new Date(dateStr);
+  return d.toLocaleDateString('id-ID', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+}
+
+// Update preview
+function updatePreview() {
+  const card = document.getElementById('previewCard');
+  const groom = document.getElementById('groomName').value || 'Nama Pria';
+  const bride = document.getElementById('brideName').value || 'Nama Wanita';
+  const akadDate = document.getElementById('akadDate').value;
+  const akadTime = document.getElementById('akadTime').value;
+  const resepsiDate = document.getElementById('resepsiDate').value;
+  const resepsiTime = document.getElementById('resepsiTime').value;
+  const location = document.getElementById('location').value;
+  const message = document.getElementById('message').value;
+
+  // Apply colors
+  card.style.backgroundColor = state.bgColor;
+  card.style.color = state.textColor;
+
+  // Apply bg pattern
+  const bgLayer = document.getElementById('bgLayer');
+  const emoji = getPatternEmoji(state.bgPattern);
+  if (emoji) {
+    bgLayer.innerHTML = (emoji + ' ').repeat(20);
+    bgLayer.style.opacity = '0.12';
+    bgLayer.style.fontSize = '3rem';
+    bgLayer.style.flexWrap = 'wrap';
+    bgLayer.style.display = 'flex';
+    bgLayer.style.alignContent = 'center';
+    bgLayer.style.justifyContent = 'center';
+    bgLayer.style.gap = '8px';
+  } else {
+    bgLayer.innerHTML = '';
+  }
+
+  // Apply data
+  document.getElementById('prevGroom').textContent = groom;
+  document.getElementById('prevBride').textContent = bride;
+
+  let akadStr = '-- Belum diisi --';
+  if (akadDate) {
+    akadStr = formatDate(akadDate);
+    if (akadTime) akadStr += ' | ' + akadTime + ' WIB';
+  }
+  document.getElementById('prevAkad').textContent = akadStr;
+
+  let resepsiStr = '-- Belum diisi --';
+  if (resepsiDate) {
+    resepsiStr = formatDate(resepsiDate);
+    if (resepsiTime) resepsiStr += ' | ' + resepsiTime + ' WIB';
+  }
+  document.getElementById('prevResepsi').textContent = resepsiStr;
+
+  document.getElementById('prevLocation').textContent = location ? '📍 ' + location : '📍 Lokasi belum diisi';
+  document.getElementById('prevMessage').textContent = message || '';
+}
+
+// Download as image
+function downloadPreview() {
+  const card = document.getElementById('previewCard');
+  html2canvas(card, { scale: 2, useCORS: true }).then(canvas => {
+    const link = document.createElement('a');
+    link.download = 'undangan-pernikahan.png';
+    link.href = canvas.toDataURL();
+    link.click();
+  }).catch(err => {
+    alert('Gagal download. Coba screenshot manual ya.');
+  });
+}
+
+// Init
+updatePreview();
+</script>
 </body>
 </html>
