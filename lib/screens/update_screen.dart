@@ -245,48 +245,100 @@ class _UpdateScreenState extends State<UpdateScreen>
   }
 
   Widget _buildChangelogContent(String changelog) {
-    // Parse markdown-style changelog into readable format
+    // Parse markdown-style changelog into styled widgets
     final lines = changelog.split('\n').where((l) => l.trim().isNotEmpty).toList();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: lines.take(10).map((line) {
-        final cleaned = line.replaceFirst(RegExp(r'^[-*•]\s*'), '');
-        final isHeading = line.startsWith('#');
-        if (isHeading) {
+      children: lines.take(20).map((line) {
+        final trimmed = line.trim();
+
+        // Heading (## or ###)
+        if (trimmed.startsWith('#')) {
+          final text = trimmed.replaceAll(RegExp(r'^#+\s*'), '');
           return Padding(
-            padding: const EdgeInsets.only(top: 8, bottom: 4),
+            padding: const EdgeInsets.only(top: 12, bottom: 6),
             child: Text(
-              cleaned.replaceAll('#', '').trim(),
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              text,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w700,
+                color: AppTheme.textDark,
+              ),
             ),
           );
         }
+
+        // Bullet point (- or *)
+        if (trimmed.startsWith('-') || trimmed.startsWith('*')) {
+          final text = trimmed.replaceFirst(RegExp(r'^[-*]\s*'), '');
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Container(
+                  margin: const EdgeInsets.only(top: 7),
+                  width: 6,
+                  height: 6,
+                  decoration: const BoxDecoration(
+                    color: AppTheme.primary,
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(child: _buildRichText(text)),
+              ],
+            ),
+          );
+        }
+
+        // Regular paragraph
         return Padding(
           padding: const EdgeInsets.only(bottom: 6),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                margin: const EdgeInsets.only(top: 7),
-                width: 5,
-                height: 5,
-                decoration: const BoxDecoration(
-                  color: AppTheme.primary,
-                  shape: BoxShape.circle,
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Text(
-                  cleaned,
-                  style: TextStyle(fontSize: 14, color: Colors.grey.shade700, height: 1.4),
-                ),
-              ),
-            ],
-          ),
+          child: _buildRichText(trimmed),
         );
       }).toList(),
     );
+  }
+
+  /// Parse **bold** and render as RichText
+  Widget _buildRichText(String text) {
+    final spans = <TextSpan>[];
+    final regex = RegExp(r'\*\*(.+?)\*\*');
+    int lastEnd = 0;
+
+    for (final match in regex.allMatches(text)) {
+      // Text before bold
+      if (match.start > lastEnd) {
+        spans.add(TextSpan(
+          text: text.substring(lastEnd, match.start),
+          style: TextStyle(fontSize: 13.5, color: Colors.grey.shade700, height: 1.5),
+        ));
+      }
+      // Bold text
+      spans.add(TextSpan(
+        text: match.group(1),
+        style: TextStyle(fontSize: 13.5, color: AppTheme.textDark, fontWeight: FontWeight.w600, height: 1.5),
+      ));
+      lastEnd = match.end;
+    }
+
+    // Remaining text after last bold
+    if (lastEnd < text.length) {
+      spans.add(TextSpan(
+        text: text.substring(lastEnd),
+        style: TextStyle(fontSize: 13.5, color: Colors.grey.shade700, height: 1.5),
+      ));
+    }
+
+    if (spans.isEmpty) {
+      spans.add(TextSpan(
+        text: text,
+        style: TextStyle(fontSize: 13.5, color: Colors.grey.shade700, height: 1.5),
+      ));
+    }
+
+    return RichText(text: TextSpan(children: spans));
   }
 
   Widget _buildAppInfo() {
